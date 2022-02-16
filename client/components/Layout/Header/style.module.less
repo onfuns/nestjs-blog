@@ -1,0 +1,49 @@
+.header {
+  position: fixed;
+  top: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  background: #fff;
+  width: 100%;
+  box-shadow: 0 1px 5px rgb(0 0 0 / 10%);
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+  &.up {
+    animation-name: slideUp;
+  }
+  &.down {
+    animation-name: slideDown;
+  }
+  @keyframes slideUp {
+    0% {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-70px);
+    }
+  }
+  @keyframes slideDown {
+    0% {
+      transform: translateY(-70px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  .headerContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    a {
+      font-family: 'Comic Sans MS', cursive, LiSu, sans-serif;
+      color: #333;
+    }
+    .headerLink {
+      a {
+        margin-left: 20px;
+      }
+    }
+  }
+}

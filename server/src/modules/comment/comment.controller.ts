@@ -1,0 +1,35 @@
+import { Inject, Controller, Post, Get, Body, SetMetadata, Query } from '@nestjs/common'
+import { CommentService } from './comment.service'
+import { Comment } from './comment.entity'
+
+@Controller('/comment')
+export class CommentController {
+  constructor(@Inject(CommentService) private readonly service: CommentService) {}
+
+  @Get('list')
+  async findAll(@Query() query) {
+    return this.service.findAll(query)
+  }
+
+  @Get('client/list')
+  @SetMetadata('roles', ['all'])
+  async getClientList(@Query('aid') aid) {
+    return this.service.findAll({ aid, status: 1, pageSize: 100 })
+  }
+
+  @Post('add')
+  @SetMetadata('roles', ['all'])
+  async add(@Body() body: Comment) {
+    return this.service.create(body)
+  }
+
+  @Post('update')
+  async update(@Body() body) {
+    return this.service.update(body)
+  }
+
+  @Post('delete')
+  async delete(@Body() body) {
+    return this.service.delete(body)
+  }
+}
