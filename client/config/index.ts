@@ -1,18 +1,24 @@
+import BaseConfig from './base'
 import ProdConfig from './prod'
 import DevConfig from './dev'
 import getConfig from 'next/config'
 const { publicRuntimeConfig = {} } = getConfig()
 
-let config = {}
+interface IConfig {
+  base?: string
+  server_api?: string
+}
+
+let Config: IConfig = {}
 switch (publicRuntimeConfig.NODE_ENV) {
   case 'development':
-    config = DevConfig
+    Config = DevConfig
     break
   case 'production':
-    config = ProdConfig
+    Config = ProdConfig
     break
   default:
-    config = DevConfig
+    Config = DevConfig
     break
 }
-export default config
+export default { ...BaseConfig, ...Config } as IConfig

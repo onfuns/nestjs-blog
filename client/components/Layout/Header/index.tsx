@@ -4,6 +4,7 @@ import classnames from 'classnames'
 
 export default function Header() {
   const ref = useRef()
+
   useEffect(() => {
     let top = window.scrollY
     const onScroll = () => {
@@ -27,19 +28,17 @@ export default function Header() {
     <div className={styles.header} ref={ref}>
       <div className={classnames('container', styles.headerContent)}>
         <a href="/" className={styles.logo}>
-          ONFUNS'BLOG
+          Nest-Blog
         </a>
         <div className={styles.headerLink}>
           <a href="/">首页</a>
-          <a href="https://coderfuns.com">前端导航</a>
-          <a href="https://book.coderfuns.com">前端小册</a>
+          <a href="https://coderfuns.com" target="_blank">
+            前端导航
+          </a>
+          <a href="https://book.coderfuns.com" target="_blank">
+            前端小册
+          </a>
         </div>
-
-        {/* <Input.Search
-          placeholder="关键字"
-          onSearch={value => console.log(value)}
-          style={{ width: 180 }}
-        /> */}
       </div>
     </div>
   )

@@ -20,6 +20,14 @@ const nextConfig = withAntdLess({
   publicRuntimeConfig: {
     NODE_ENV: process.env.NODE_ENV,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://localhost:4000/api/:path*',
+      },
+    ]
+  },
 })
 
 module.exports = withPlugins([], nextConfig)

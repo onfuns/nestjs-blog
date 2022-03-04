@@ -41,10 +41,7 @@ const Comment = ({ articeId, commentStore }: IProps) => {
     <div className={styles.comment}>
       <div className={styles.header}>评论</div>
       <div className={styles.content}>
-        <img
-          className={styles.avatar}
-          src="https://p6-passport.byteacctimg.com/img/user-avatar/e6a5e6bfe9096262331dfc9a885b1c57~300x300.image"
-        />
+        <img className={styles.avatar} src="https://image.onfuns.com/blog/default-avatar.png" />
         <Form className={styles.form} form={form}>
           <Row gutter={16}>
             <Col span={12}>
@@ -85,7 +82,7 @@ const Comment = ({ articeId, commentStore }: IProps) => {
               <div className={styles.listItem} key={index}>
                 <img
                   className={styles.avatar}
-                  src="https://tva1.sinaimg.cn/large/008i3skNly1gxsggowfh1j30h00h03z7.jpg"
+                  src="https://image.onfuns.com/blog/default-avatar.png"
                 />
                 <div className={styles.listRow}>
                   <div className={styles.listMeta}>

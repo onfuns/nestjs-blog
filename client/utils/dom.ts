@@ -5,8 +5,6 @@ export const parseHtml = html => {
   let list = []
   $('h1,h2,h3,h4,h5').each(function (index: any, ele) {
     const text = $(this).text()
-    $(this).attr('data-index', index)
-    $(this).html(`<span>${text}</span>`)
     list.push({ title: text, tagName: ele.name, index })
   })
   return { anchor: list, html: $.html() }

@@ -11,7 +11,7 @@ import 'highlight.js/styles/atom-one-dark.css'
 
 const ArticleDetail = ({ detail }) => {
   const { id, title, content, category, tags, created_at, comment_flag } = detail || {}
-  const { anchor, html } = parseHtml(content)
+  const { anchor } = parseHtml(content)
 
   return (
     <div className={classnames('container', styles.detailPage)}>
@@ -37,7 +37,7 @@ const ArticleDetail = ({ detail }) => {
           </div>
           <div
             className={classnames(styles.htmlContent, 'markdown-body')}
-            dangerouslySetInnerHTML={{ __html: html }}
+            dangerouslySetInnerHTML={{ __html: content }}
           ></div>
         </div>
         <Anchor list={anchor} />

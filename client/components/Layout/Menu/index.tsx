@@ -5,11 +5,7 @@ import { useRouter } from 'next/router'
 const MenuPanel = ({ list = [] }) => {
   const router = useRouter()
   const url = router.asPath
-  const isActive = item => {
-    return url.includes('/category')
-      ? url.replace('/category', '') === item.ename
-      : url === item.url
-  }
+  const isActive = item => url.replace('/category', '') === item.ename || url === item.url
   const renderMenu = data => {
     const renderMenuItem = (item, children = []) => (
       <li
@@ -42,9 +38,7 @@ const MenuPanel = ({ list = [] }) => {
         ) : null}
       </li>
     )
-    return data.map(item => {
-      return renderMenuItem(item, item.children)
-    })
+    return data.map(item => renderMenuItem(item, item.children))
   }
 
   const defauluMenu = [

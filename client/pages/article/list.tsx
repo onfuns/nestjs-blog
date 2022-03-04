@@ -37,7 +37,6 @@ export const getServerSideProps = async ({ req }) => {
         acticle.description = markdownIt().render(acticle.content.substring(0, moreIndex))
       }
     }
-
     return acticle
   })
 
