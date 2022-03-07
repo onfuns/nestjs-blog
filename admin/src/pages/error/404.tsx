@@ -1,4 +1,4 @@
-import styles from './style.module.less'
+import styles from './style.less'
 
 export default () => {
   return (

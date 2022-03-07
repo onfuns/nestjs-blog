@@ -9,7 +9,7 @@ import dayjs from 'dayjs'
 const formatDate = 'YYYY-MM-DD HH:mm:ss'
 import CategoryCascader from '@/components/Portal/Category/Cascader'
 import { useHistory } from 'umi'
-import styles from './add.moudle.less'
+import styles from './add.less'
 
 interface IProps {
   articleStore: ArticleStore

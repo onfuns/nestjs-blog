@@ -1,6 +1,6 @@
 import { Tabs } from 'antd'
 import { UserList, RoleList, AuthList } from '@/components/Setting/User'
-import styles from './style.module.less'
+import styles from './style.less'
 const { TabPane } = Tabs
 
 const User = () => {

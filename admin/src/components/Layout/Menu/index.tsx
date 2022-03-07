@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'umi'
 import { Menu } from 'antd'
-import styles from './style.module.less'
+import styles from './style.less'
 import { adminRoutes } from '@/routes'
 import { inject, observer } from 'mobx-react'
 import { HeaderStore } from '@/store'
@@ -53,7 +53,7 @@ const MenuComp = ({ headerStore }: { headerStore?: HeaderStore }) => {
 
   return (
     <div className={headerStore.menuCollapsed ? styles.collapsedMenu : styles.menu}>
-      <div className={styles.logoText}>NestBlog</div>
+      <div className={styles.logoText}>Nest-Blog</div>
       <Menu
         style={{ flex: 1 }}
         mode="inline"

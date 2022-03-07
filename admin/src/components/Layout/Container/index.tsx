@@ -4,7 +4,7 @@ import { Provider } from 'mobx-react'
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN'
 import store from '@/store'
-import styles from './style.module.less'
+import styles from './style.less'
 import 'reset-css/reset.css'
 
 const Container = props => {

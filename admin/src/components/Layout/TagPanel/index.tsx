@@ -1,44 +1,52 @@
-import { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Tag } from 'antd'
 import { inject, observer } from 'mobx-react'
-import styles from './style.module.less'
 import { HeaderStore } from '@/store'
-import { Link, useLocation } from 'umi'
-
+import { useLocation, useHistory, Link } from 'umi'
+import styles from './style.module.less'
 interface IProps {
   headerStore?: HeaderStore
-  [key: string]: any
+  route: { routes: any[] }
+  children?: React.ReactChildren
 }
 
 const TagPanel = (props: IProps) => {
-  const { headerStore, history, route } = props
-  const { pathname } = useLocation()
+  //!!! 注意，这里必须用 umi 提供的location，不要用window.localtion，因为basename会读取
+  const location = useLocation()
+  const history = useHistory()
+  const { pathname } = location
+  const { headerStore, route } = props
 
   useEffect(() => {
     const pathInfo = route?.routes?.find((item: any) => item.path === pathname) || {}
     headerStore.updateTagsPanel({ ...pathInfo })
   }, [pathname])
 
-  const onClose = (item: any) => {
-    headerStore.updateTagsPanel(item, 'remove')
+  const onChange = (path: string) => {
+    history.push(path)
+  }
+
+  const onClose = path => {
+    headerStore.updateTagsPanel({ path }, 'remove')
     const { tagsPanel = [] } = headerStore
     //关闭当前标签，回退上一个
-    if (item.path === pathname) {
-      const { path = '/dashboard' } = tagsPanel[tagsPanel.length - 1] || {}
-      history.push(path)
+    if (path === pathname) {
+      const { path } = tagsPanel[tagsPanel.length - 1] || {}
+      onChange(path)
     }
   }
+
   const { tagsPanel = [] } = headerStore
   return (
     <div className={styles.tagsPanel}>
-      {tagsPanel.slice().map((item, index) => (
+      {tagsPanel.map(({ path, name }) => (
         <Tag
-          className={item.path === pathname ? styles.active : ''}
-          key={index}
+          className={path === pathname ? styles.active : ''}
+          key={name}
           closable
-          onClose={() => onClose(item)}
+          onClose={() => onClose(path)}
         >
-          <Link to={`${item.path}`}>{item.name}</Link>
+          <Link to={path}>{name}</Link>
         </Tag>
       ))}
     </div>

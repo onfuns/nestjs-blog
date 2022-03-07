@@ -7,7 +7,7 @@ import { useHistory } from 'umi'
 import Search from '@/components/Search'
 import { Button, Popconfirm, Switch, message } from 'antd'
 import { Link } from 'umi'
-import styles from './list.module.less'
+import styles from './index.less'
 interface IProps {
   articleStore: ArticleStore
 }

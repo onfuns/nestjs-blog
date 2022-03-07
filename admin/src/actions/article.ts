@@ -1,8 +1,8 @@
-import { request } from '@/utils/request'
+import request from '@/utils/request'
 
 export const getArticleList = async (params = {}) => {
   return request({
-    url: '/api/article/list',
+    url: '/article/list',
     method: 'GET',
     params,
   })
@@ -10,7 +10,7 @@ export const getArticleList = async (params = {}) => {
 
 export const addArticle = async (params = {}) => {
   return request({
-    url: '/api/article/create',
+    url: '/article/create',
     method: 'POST',
     params,
   })
@@ -18,7 +18,7 @@ export const addArticle = async (params = {}) => {
 
 export const updateArticle = async (params = {}) => {
   return request({
-    url: '/api/article/update',
+    url: '/article/update',
     method: 'POST',
     params,
   })
@@ -26,7 +26,7 @@ export const updateArticle = async (params = {}) => {
 
 export const deleteArticle = async (params = {}) => {
   return request({
-    url: '/api/article/delete',
+    url: '/article/delete',
     method: 'POST',
     params,
   })
@@ -34,7 +34,7 @@ export const deleteArticle = async (params = {}) => {
 
 export const getArticleInfoById = async (params = {}) => {
   return request({
-    url: '/api/article/info',
+    url: '/article/info',
     method: 'GET',
     params,
   })

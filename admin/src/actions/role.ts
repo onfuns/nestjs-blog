@@ -1,8 +1,8 @@
-import { request } from '@/utils/request'
+import request from '@/utils/request'
 
 export const getRoleList = async (params = {}) => {
   return request({
-    url: '/api/role/list',
+    url: '/role/list',
     method: 'GET',
     params,
   })
@@ -10,7 +10,7 @@ export const getRoleList = async (params = {}) => {
 
 export const getRoleInfoById = async (params = {}) => {
   return request({
-    url: '/api/role/info',
+    url: '/role/info',
     method: 'GET',
     params,
   })
@@ -18,7 +18,7 @@ export const getRoleInfoById = async (params = {}) => {
 
 export const addRole = async (params = {}) => {
   return request({
-    url: '/api/role/add',
+    url: '/role/add',
     method: 'POST',
     params,
   })
@@ -26,7 +26,7 @@ export const addRole = async (params = {}) => {
 
 export const updateRole = async (params = {}) => {
   return request({
-    url: '/api/role/update',
+    url: '/role/update',
     method: 'POST',
     params,
   })
@@ -34,7 +34,7 @@ export const updateRole = async (params = {}) => {
 
 export const deleteRole = async (params = {}) => {
   return request({
-    url: '/api/role/delete',
+    url: '/role/delete',
     method: 'POST',
     params,
   })

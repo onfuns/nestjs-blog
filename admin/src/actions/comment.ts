@@ -1,8 +1,8 @@
-import { request } from '@/utils/request'
+import request from '@/utils/request'
 
 export const getCommentList = async (params = {}) => {
   return request({
-    url: '/api/comment/list',
+    url: '/comment/list',
     method: 'GET',
     params,
   })
@@ -10,7 +10,7 @@ export const getCommentList = async (params = {}) => {
 
 export const addComment = async (params = {}) => {
   return request({
-    url: '/api/comment/add',
+    url: '/comment/add',
     method: 'POST',
     params,
   })
@@ -18,7 +18,7 @@ export const addComment = async (params = {}) => {
 
 export const updateComment = async (params = {}) => {
   return request({
-    url: '/api/comment/update',
+    url: '/comment/update',
     method: 'POST',
     params,
   })
@@ -26,7 +26,7 @@ export const updateComment = async (params = {}) => {
 
 export const deleteComment = async (params = {}) => {
   return request({
-    url: '/api/comment/delete',
+    url: '/comment/delete',
     method: 'POST',
     params,
   })

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Form, Input, Button, message } from 'antd'
 import { LOCAL_USER_TOKEN_KEY, LOCAL_USER_NAME_KEY } from '@/constants'
-import styles from './style.module.less'
+import styles from './style.less'
 import { useHistory } from 'umi'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { inject } from 'mobx-react'
@@ -39,17 +39,17 @@ const LoginPage = ({ userStore }: IPros) => {
   }
   return (
     <div className={styles.loginPage}>
-      <h1 className={styles.title}>NestBlog</h1>
+      <h1 className={styles.title}>Nest-Blog</h1>
       <Form className={styles.form} labelCol={{ span: 0 }} wrapperCol={{ span: 24 }} form={form}>
-        <Form.Item label="用户名" name="name" rules={[{ required: true, message: '请输入用户名' }]}>
-          <Input size="large" prefix={<UserOutlined />} placeholder="请输入用户名" />
+        <Form.Item label="用户名" name="name" rules={[{ required: true }]}>
+          <Input size="large" prefix={<UserOutlined />} placeholder="用户名" />
         </Form.Item>
-        <Form.Item label="密码" name="password" rules={[{ required: true, message: '请输入密码' }]}>
+        <Form.Item label="密码" name="password" rules={[{ required: true }]}>
           <Input
             size="large"
             prefix={<LockOutlined />}
             type="password"
-            placeholder="请输入密码"
+            placeholder="密码"
             onPressEnter={onSubmit}
           />
         </Form.Item>

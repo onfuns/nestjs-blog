@@ -1,5 +1,5 @@
 import { Row, Col, Card, List } from 'antd'
-import styles from './style.module.less'
+import styles from './style.less'
 
 interface ICount {
   title: string

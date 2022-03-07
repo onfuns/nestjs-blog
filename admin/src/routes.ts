@@ -13,7 +13,7 @@ export const adminRoutes = [
       {
         name: '文章管理',
         path: '/portal/article',
-        component: '@/pages/portal/article/list',
+        component: '@/pages/portal/article',
         children: [
           {
             name: '文章信息',
@@ -25,13 +25,13 @@ export const adminRoutes = [
       {
         name: '分类管理',
         path: '/portal/category',
-        component: '@/pages/portal/category/list',
+        component: '@/pages/portal/category',
       },
-      { name: '标签管理', path: '/portal/tag', component: '@/pages/portal/tag/list' },
+      { name: '标签管理', path: '/portal/tag', component: '@/pages/portal/tag' },
       {
         name: '评论管理',
         path: '/portal/comment',
-        component: '@/pages/portal/comment/list',
+        component: '@/pages/portal/comment',
       },
     ],
   },
@@ -39,7 +39,7 @@ export const adminRoutes = [
     name: '系统管理',
     path: '/setting',
     icon: 'setting',
-    children: [{ name: '用户管理', path: '/setting/user', component: '@/pages/setting/user/list' }],
+    children: [{ name: '用户管理', path: '/setting/user', component: '@/pages/setting/user' }],
   },
 ]
 

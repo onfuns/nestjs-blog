@@ -13,6 +13,13 @@ export default defineConfig({
   publicPath: '/admin-static/',
   theme: theme,
   //dynamicImport: {},
+  proxy: {
+    '/api': {
+      target: 'http://localhost:4000',
+      changeOrigin: true,
+      pathRewrite: {},
+    },
+  },
   chainWebpack(config) {
     //prettier-ignore
     config

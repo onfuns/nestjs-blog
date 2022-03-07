@@ -1,8 +1,8 @@
-import { request } from '@/utils/request'
+import request from '@/utils/request'
 
 export const getUserList = async (params = {}) => {
   return request({
-    url: '/api/user/list',
+    url: '/user/list',
     method: 'GET',
     params,
   })
@@ -10,7 +10,7 @@ export const getUserList = async (params = {}) => {
 
 export const addUser = async (params = {}) => {
   return request({
-    url: '/api/user/add',
+    url: '/user/add',
     method: 'POST',
     params,
   })
@@ -18,7 +18,7 @@ export const addUser = async (params = {}) => {
 
 export const updateUser = async (params = {}) => {
   return request({
-    url: '/api/user/update',
+    url: '/user/update',
     method: 'POST',
     params,
   })
@@ -26,7 +26,7 @@ export const updateUser = async (params = {}) => {
 
 export const deleteUser = async (params = {}) => {
   return request({
-    url: '/api/user/delete',
+    url: '/user/delete',
     method: 'POST',
     params,
   })
@@ -34,7 +34,7 @@ export const deleteUser = async (params = {}) => {
 
 export const loginUser = async (params = {}) => {
   return request({
-    url: '/api/user/login',
+    url: '/user/login',
     method: 'POST',
     params,
   })
