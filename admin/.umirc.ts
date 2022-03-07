@@ -12,7 +12,7 @@ export default defineConfig({
   base: '/admin-website',
   publicPath: '/admin-static/',
   theme: theme,
-  //dynamicImport: {},
+  dynamicImport: {},
   proxy: {
     '/api': {
       target: 'http://localhost:4000',
@@ -23,19 +23,19 @@ export default defineConfig({
   chainWebpack(config) {
     //prettier-ignore
     config
-      //.output
-        // .set('chunkFilename','js/[id].[contenthash:8].chunk.js')
-        // .end()
+      .output
+        .set('chunkFilename','js/[id].[contenthash:8].chunk.js')
+        .end()
       .plugin('antd-dayjs-webpack-plugin')
         .use('antd-dayjs-webpack-plugin')
         .end()
-    // .plugin('extract-css')
-    //   .tap(args => [
-    //     {
-    //       ...args[0],
-    //       chunkFilename: `css/[id].[contenthash:8].chunk.css`,
-    //     },
-    //   ])
-    //   .end()
+    .plugin('extract-css')
+      .tap(args => [
+        {
+          ...args[0],
+          chunkFilename: `css/[id].[contenthash:8].chunk.css`,
+        },
+      ])
+      .end()
   },
 })

@@ -1,9 +1,9 @@
 import { useEffect, useState, useMemo } from 'react'
-import { Button, Checkbox, Tabs, message } from 'antd'
+import { Button, Checkbox, Tabs, message, Popconfirm } from 'antd'
 import { inject, observer } from 'mobx-react'
 import { AuthStore, RoleStore } from '@/store'
 import AuthAddModal from './AuthAddModal'
-import styles from './Auth.module.less'
+import styles from './Auth.less'
 import { toTree } from '@/utils/util'
 
 const { Group: CheckboxGroup } = Checkbox
@@ -71,7 +71,7 @@ const AuthList = ({ authStore, roleStore }: IProps) => {
   }
 
   const renderData = data => {
-    return data.map(({ name, id, children = [] }) => (
+    return data.map(({ name, id, code, children = [] }) => (
       <div className={styles.row} key={id}>
         <Checkbox
           key={id}
@@ -81,11 +81,20 @@ const AuthList = ({ authStore, roleStore }: IProps) => {
           checked={selected[id]?.length === children.length}
         >
           {name}
+          <i className={styles.code}>({code})</i>
         </Checkbox>
         <div className={styles.children}>
           {children?.length ? (
             <CheckboxGroup
-              options={children.map(({ name, id }) => ({ label: name, value: id }))}
+              options={children.map(({ name, code, id }) => ({
+                label: (
+                  <>
+                    {name}
+                    <i className={styles.code}>({code})</i>
+                  </>
+                ),
+                value: id,
+              }))}
               value={selected[id] || []}
               onChange={list => onChange(list, id)}
             />
@@ -133,9 +142,11 @@ const AuthList = ({ authStore, roleStore }: IProps) => {
             >
               新增权限
             </Button>
-            <Button type="primary" size="small" onClick={onSave}>
-              保存
-            </Button>
+            <Popconfirm title="确定保存？" onConfirm={onSave}>
+              <Button type="primary" size="small">
+                保存
+              </Button>
+            </Popconfirm>
           </>
         }
       >

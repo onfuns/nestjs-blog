@@ -1,5 +1,5 @@
 import { Select, Input } from 'antd'
-import styles from './style.module.less'
+import styles from './style.less'
 import classnames from 'classnames'
 
 interface IData {

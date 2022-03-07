@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { inject, observer } from 'mobx-react'
 import { RoleStore } from '@/store'
-import styles from './Role.module.less'
+import styles from './Role.less'
 import { Button } from 'antd'
 import classnames from 'classnames'
 import RoleAddModal from '@/components/Setting/User/RoleAddModal'

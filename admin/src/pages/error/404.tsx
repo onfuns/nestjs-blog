@@ -1,9 +1,15 @@
-import styles from './style.less'
+import { Result, Button } from 'antd'
+import { Link } from 'umi'
 
-export default () => {
-  return (
-    <div className={styles.error}>
-      <h1>抱歉！您访问的页面不存在</h1>
-    </div>
-  )
-}
+export default () => (
+  <Result
+    status="404"
+    title="404"
+    subTitle="页面不见啦，请返回主页~"
+    extra={
+      <Link to="/">
+        <Button type="primary">回到首页</Button>
+      </Link>
+    }
+  />
+)

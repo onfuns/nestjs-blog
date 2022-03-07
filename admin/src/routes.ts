@@ -12,7 +12,7 @@ export const adminRoutes = [
     children: [
       {
         name: '文章管理',
-        path: '/portal/article',
+        path: '/portal/article/list',
         component: '@/pages/portal/article',
         children: [
           {
@@ -66,6 +66,10 @@ export const routes = [
         layout: false,
       },
       ...getRoutes(adminRoutes),
+      {
+        path: '*',
+        component: '@/pages/error/404',
+      },
     ],
   },
 ]
