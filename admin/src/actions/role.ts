@@ -8,14 +8,6 @@ export const getRoleList = async (params = {}) => {
   })
 }
 
-export const getRoleInfoById = async (params = {}) => {
-  return request({
-    url: '/role/info',
-    method: 'GET',
-    params,
-  })
-}
-
 export const addRole = async (params = {}) => {
   return request({
     url: '/role/add',

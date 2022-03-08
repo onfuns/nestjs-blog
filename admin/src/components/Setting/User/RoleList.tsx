@@ -1,30 +1,50 @@
 import { useEffect, useState } from 'react'
 import { inject, observer } from 'mobx-react'
-import { RoleStore } from '@/store'
+import { RoleStore, UserStore } from '@/store'
 import styles from './Role.less'
-import { Button } from 'antd'
+import { Button, Popconfirm, message, Menu, Dropdown } from 'antd'
 import classnames from 'classnames'
 import RoleAddModal from '@/components/Setting/User/RoleAddModal'
+import { DownOutlined } from '@ant-design/icons'
 
 interface IProps {
   roleStore?: RoleStore
+  userStore?: UserStore
 }
 
-const RoleList = ({ roleStore }: IProps) => {
-  const [modalProps, setModalProps] = useState({ visible: false, type: null })
-  const [reloadId, setReloadId] = useState(null)
+interface IModalProps {
+  visible?: boolean
+  type?: 'add' | 'edit' | undefined
+  record?: Record<string, any>
+}
+
+const RoleList = ({ roleStore, userStore }: IProps) => {
+  const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
 
   useEffect(() => {
     roleStore.get()
-  }, [reloadId])
+  }, [])
 
-  const onShow = (type: null | 'add' | 'edit' = null) => {
-    const { visible } = modalProps
-    setModalProps({ visible: !visible, type })
+  const onSetModalProps = (props: IModalProps = {}) => {
+    setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
   }
 
-  const onChange = (id: number) => {
-    roleStore.getInfoById({ id })
+  const onChange = record => {
+    roleStore.setCurrentDetail(record)
+  }
+
+  const onDelete = async id => {
+    if (userStore?.result?.length) {
+      return message.warn('请先移出角色下用户后再删除')
+    }
+    const { success } = await roleStore.delete({ id })
+    if (success) {
+      message.success('删除成功')
+      roleStore.get()
+      onChange(roleStore?.result?.[0])
+    } else {
+      message.success('删除失败')
+    }
   }
 
   const { result, detail } = roleStore
@@ -33,33 +53,50 @@ const RoleList = ({ roleStore }: IProps) => {
     <div className={styles.page}>
       <div className={styles.header}>
         <h1>角色管理</h1>
-        <Button type="primary" onClick={() => onShow('add')}>
+        <Button type="primary" onClick={() => onSetModalProps({ type: 'add' })}>
           创建角色
         </Button>
-        {modalProps.visible && (
-          <RoleAddModal
-            detail={modalProps.type === 'edit' ? detail : {}}
-            onSuccess={() => {
-              setReloadId(new Date())
-              onShow()
-            }}
-            onCancel={onShow}
-          />
-        )}
       </div>
       <ul className={styles.list}>
         {result.map(item => (
           <li
             key={item.id}
             className={classnames(styles.item, { [styles.active]: detail.id === item.id })}
-            onClick={() => onChange(item.id)}
+            onClick={() => onChange(item)}
           >
             {item.name}
+            <Dropdown
+              trigger={['click']}
+              overlay={
+                <Menu>
+                  <Menu.Item>
+                    <a onClick={() => onSetModalProps({ record: item, type: 'edit' })}>编辑</a>
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Popconfirm title="确定删除？" onConfirm={() => onDelete(item.id)}>
+                      <a>删除</a>
+                    </Popconfirm>
+                  </Menu.Item>
+                </Menu>
+              }
+            >
+              <DownOutlined style={{ color: '#ccc' }} />
+            </Dropdown>
           </li>
         ))}
       </ul>
+      {modalProps.visible && (
+        <RoleAddModal
+          detail={modalProps.record || {}}
+          onSuccess={() => {
+            roleStore.get()
+            onSetModalProps()
+          }}
+          onCancel={onSetModalProps}
+        />
+      )}
     </div>
   )
 }
 
-export default inject('roleStore')(observer(RoleList))
+export default inject('roleStore', 'userStore')(observer(RoleList))

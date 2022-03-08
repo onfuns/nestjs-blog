@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { getRoleList, getRoleInfoById, addRole, updateRole, deleteRole } from '@/actions/role'
+import { getRoleList, addRole, updateRole, deleteRole } from '@/actions/role'
 
 export class RoleStore {
   result: any[] = []
@@ -17,15 +17,12 @@ export class RoleStore {
     const { success, data } = await getRoleList(params)
     if (success) {
       this.result = data
-      if (!this.detail.id && data.length) this.set('detail', data[0])
+      if (!this.detail.id && data.length) this.setCurrentDetail(data[0])
     }
   }
 
-  async getInfoById(params = {}) {
-    const data = await getRoleInfoById(params)
-    if (data.success) {
-      this.set('detail', data.data)
-    }
+  setCurrentDetail(record) {
+    this.set('detail', record)
   }
 
   async update(params = {}) {
