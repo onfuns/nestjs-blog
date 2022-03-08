@@ -15,34 +15,34 @@ export class ArticleStore {
     makeAutoObservable(this)
   }
 
-  async get(params = {}) {
-    const data = await getArticleList(params)
-    if (data.success) {
-      this.result = data.data
+  set(key: string, value: any) {
+    this[key] = value
+  }
+
+  async get(params?: Record<string, any>) {
+    const { success, data } = await getArticleList(params)
+    if (success) {
+      this.set('result', data)
     }
   }
 
-  async update(params = {}) {
+  async update(params?: Record<string, any>) {
     return await updateArticle(params)
   }
 
-  async add(params = {}) {
+  async add(params?: Record<string, any>) {
     return await addArticle(params)
   }
 
-  async delete(params = {}) {
+  async delete(params?: Record<string, any>) {
     return await deleteArticle(params)
   }
 
-  async getInfoById(params = {}) {
-    const data = await getArticleInfoById(params)
-    if (data.success) {
-      this.setDetail(data.data)
+  async getInfoById(params?: Record<string, any>) {
+    const { success, data } = await getArticleInfoById(params)
+    if (success) {
+      this.set('detail', data)
     }
-  }
-
-  setDetail(data) {
-    this.detail = data
   }
 }
 

@@ -1,29 +1,41 @@
 import { useEffect, useState } from 'react'
-import { Table, Button, Popconfirm, TableProps, Switch, Space } from 'antd'
+import { Table, Button, Popconfirm, TableProps, Switch, Space, message } from 'antd'
 import UserAddModal from './UserAddModal'
 import { inject, observer } from 'mobx-react'
 import { UserStore, RoleStore } from '@/store'
 
+interface IModalProps {
+  visible?: boolean
+  record?: Record<string, any>
+}
+
 const UserList = ({ userStore, roleStore }: { userStore?: UserStore; roleStore?: RoleStore }) => {
-  const [modalVisible, setModalVisible] = useState(false)
-  const [recordInfo, setRecordInfo] = useState({} as any)
-  const [reloadId, setReloadId] = useState(null)
-  const {
-    detail: { id: roleId },
-    result: roleList = [],
-  } = roleStore
+  const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
+  const { detail: { id: roleId } = {}, result: roleList = [] } = roleStore
 
   useEffect(() => {
+    onReload()
+  }, [roleId])
+
+  const onSetModalProps = (props: IModalProps = {}) => {
+    setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
+  }
+
+  const onReload = () => {
     roleId && userStore.get({ roleId })
-  }, [roleId, reloadId])
+  }
 
   const onAction = async (record: any = {}, type: 'add' | 'edit' | 'delete') => {
     if (type === 'add' || type === 'edit') {
-      setRecordInfo({ ...record })
-      setModalVisible(true)
+      onSetModalProps({ record, visible: true })
     } else if (type === 'delete') {
-      await userStore.delete({ id: record.id })
-      setReloadId(new Date())
+      const { success } = await userStore.delete({ id: record.id })
+      if (success) {
+        message.success('删除成功')
+        onReload()
+      } else {
+        message.success('删除失败')
+      }
     } else {
       console.log('do nothing')
     }
@@ -39,26 +51,22 @@ const UserList = ({ userStore, roleStore }: { userStore?: UserStore; roleStore?:
     {
       title: '角色',
       dataIndex: 'role_id',
-      render: value => {
-        return value
-          .split(',')
-          .map(v => {
-            const { name } = roleList.find(r => r.id === Number(v)) || {}
-            return name
-          })
-          .join(',')
+      render: (value: string) => {
+        //TODO 暂不支持多角色
+        const { name } = roleList.find(r => r.id === Number(value)) || {}
+        return name
       },
     },
     {
       title: '启用状态',
       dataIndex: 'enable',
-      render: value => <Switch checked={value === 1} size="small" />,
+      render: (value: number) => <Switch checked={value === 1} size="small" />,
     },
     {
       title: '操作',
       key: 'action',
       width: 200,
-      render: (value, record) => {
+      render: (_, record) => {
         return (
           <Space>
             <Button size="small" onClick={() => onAction(record, 'edit')}>
@@ -79,7 +87,7 @@ const UserList = ({ userStore, roleStore }: { userStore?: UserStore; roleStore?:
   const tableProps: TableProps<any> = {
     columns,
     dataSource: userList,
-    rowKey: ({ id }) => id,
+    rowKey: 'id',
     pagination: false,
     bordered: true,
     size: 'small',
@@ -95,15 +103,14 @@ const UserList = ({ userStore, roleStore }: { userStore?: UserStore; roleStore?:
         新增用户
       </Button>
       <Table {...tableProps} />
-      {modalVisible && (
+      {modalProps.visible && (
         <UserAddModal
           onSuccess={() => {
-            setModalVisible(false)
-            setReloadId(new Date())
+            onSetModalProps({ visible: false })
+            onReload()
           }}
-          roleList={roleList}
-          onCancel={() => setModalVisible(false)}
-          detail={recordInfo}
+          onCancel={() => onSetModalProps({ visible: false })}
+          detail={modalProps.record}
         />
       )}
     </>

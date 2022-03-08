@@ -1,24 +1,24 @@
 import { useEffect } from 'react'
 import { Form, Input, message, Modal, Radio, Select } from 'antd'
 import * as md5 from 'md5'
-import { UserStore } from '@/store'
+import { UserStore, RoleStore } from '@/store'
 import { inject, observer } from 'mobx-react'
 const { Option } = Select
 
 interface IProps {
   userStore?: UserStore
-  roleList?: any[]
+  roleStore?: RoleStore
   onSuccess: () => void
   onCancel: () => void
   detail: Record<string, any>
 }
 
-const AddFormModal = ({ userStore, roleList, onSuccess, onCancel, detail }: IProps) => {
+const AddFormModal = ({ userStore, roleStore, onSuccess, onCancel, detail }: IProps) => {
   const [form] = Form.useForm()
 
   useEffect(() => {
     if (!!detail.id) {
-      form.setFieldsValue({ ...detail, role_id: detail.role_id.split(',').map(r => Number(r)) })
+      form.setFieldsValue({ ...detail })
     }
   }, [])
 
@@ -26,7 +26,6 @@ const AddFormModal = ({ userStore, roleList, onSuccess, onCancel, detail }: IPro
     form.validateFields().then(async values => {
       const params = {
         ...values,
-        role_id: values.role_id.toString(),
       }
       let fn = userStore.add
       // 编辑
@@ -63,6 +62,7 @@ const AddFormModal = ({ userStore, roleList, onSuccess, onCancel, detail }: IPro
         form={form}
         initialValues={{
           enable: 1,
+          role_id: roleStore?.detail?.id,
         }}
       >
         <Form.Item label="用户名" name="name" rules={[{ required: true }]}>
@@ -76,8 +76,8 @@ const AddFormModal = ({ userStore, roleList, onSuccess, onCancel, detail }: IPro
         )}
 
         <Form.Item label="角色" name="role_id" rules={[{ required: true }]}>
-          <Select mode="multiple">
-            {roleList.map((r: any) => (
+          <Select>
+            {roleStore.result?.map((r: any) => (
               <Option key={r.id} value={r.id}>
                 {r.name}
               </Option>

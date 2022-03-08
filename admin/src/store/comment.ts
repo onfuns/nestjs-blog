@@ -9,22 +9,26 @@ export class CommentStore {
     makeAutoObservable(this)
   }
 
-  async get(params = {}) {
-    const data = await getCommentList(params)
-    if (data.success) {
-      this.result = data.data
+  set(key: string, value: any) {
+    this[key] = value
+  }
+
+  async get(params?: Record<string, any>) {
+    const { success, data } = await getCommentList(params)
+    if (success) {
+      this.set('result', data)
     }
   }
 
-  async update(params = {}) {
+  async update(params?: Record<string, any>) {
     return await updateComment(params)
   }
 
-  async add(params = {}) {
+  async add(params?: Record<string, any>) {
     return await addComment(params)
   }
 
-  async delete(params = {}) {
+  async delete(params?: Record<string, any>) {
     return await deleteComment(params)
   }
 }

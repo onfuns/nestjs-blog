@@ -13,27 +13,23 @@ export class RoleStore {
     this[key] = value
   }
 
-  async get(params = {}) {
+  async get(params?: Record<string, any>) {
     const { success, data } = await getRoleList(params)
     if (success) {
-      this.result = data
-      if (!this.detail.id && data.length) this.setCurrentDetail(data[0])
+      this.set('result', data)
+      if (!this.detail.id) this.set('detail', data?.[0] || {})
     }
   }
 
-  setCurrentDetail(record) {
-    this.set('detail', record)
-  }
-
-  async update(params = {}) {
+  async update(params?: Record<string, any>) {
     return await updateRole(params)
   }
 
-  async add(params = {}) {
+  async add(params?: Record<string, any>) {
     return await addRole(params)
   }
 
-  async delete(params = {}) {
+  async delete(params?: Record<string, any>) {
     return await deleteRole(params)
   }
 }

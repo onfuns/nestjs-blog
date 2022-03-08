@@ -22,15 +22,20 @@ const RoleList = ({ roleStore, userStore }: IProps) => {
   const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
 
   useEffect(() => {
-    roleStore.get()
+    onReload()
   }, [])
+
+  const onReload = async () => {
+    await roleStore.get()
+    onSelected(roleStore?.result?.[0])
+  }
 
   const onSetModalProps = (props: IModalProps = {}) => {
     setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
   }
 
-  const onChange = record => {
-    roleStore.setCurrentDetail(record)
+  const onSelected = record => {
+    roleStore.set('detail', record)
   }
 
   const onDelete = async id => {
@@ -40,15 +45,13 @@ const RoleList = ({ roleStore, userStore }: IProps) => {
     const { success } = await roleStore.delete({ id })
     if (success) {
       message.success('删除成功')
-      roleStore.get()
-      onChange(roleStore?.result?.[0])
+      onReload()
     } else {
       message.success('删除失败')
     }
   }
 
   const { result, detail } = roleStore
-
   return (
     <div className={styles.page}>
       <div className={styles.header}>
@@ -62,26 +65,28 @@ const RoleList = ({ roleStore, userStore }: IProps) => {
           <li
             key={item.id}
             className={classnames(styles.item, { [styles.active]: detail.id === item.id })}
-            onClick={() => onChange(item)}
+            onClick={() => onSelected(item)}
           >
             {item.name}
-            <Dropdown
-              trigger={['click']}
-              overlay={
-                <Menu>
-                  <Menu.Item>
-                    <a onClick={() => onSetModalProps({ record: item, type: 'edit' })}>编辑</a>
-                  </Menu.Item>
-                  <Menu.Item>
-                    <Popconfirm title="确定删除？" onConfirm={() => onDelete(item.id)}>
-                      <a>删除</a>
-                    </Popconfirm>
-                  </Menu.Item>
-                </Menu>
-              }
-            >
-              <DownOutlined style={{ color: '#ccc' }} />
-            </Dropdown>
+            {item.type === 0 && (
+              <Dropdown
+                trigger={['click']}
+                overlay={
+                  <Menu>
+                    <Menu.Item key="edit">
+                      <a onClick={() => onSetModalProps({ record: item, type: 'edit' })}>编辑</a>
+                    </Menu.Item>
+                    <Menu.Item key="add">
+                      <Popconfirm title="确定删除？" onConfirm={() => onDelete(item.id)}>
+                        <a>删除</a>
+                      </Popconfirm>
+                    </Menu.Item>
+                  </Menu>
+                }
+              >
+                <DownOutlined style={{ color: '#ccc' }} />
+              </Dropdown>
+            )}
           </li>
         ))}
       </ul>

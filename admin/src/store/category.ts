@@ -9,22 +9,26 @@ export class CategoryStore {
     makeAutoObservable(this)
   }
 
-  async get(params = {}) {
-    const data = await getCategoryList(params)
-    if (data.success) {
-      this.result = data.data
+  set(key: string, value: any) {
+    this[key] = value
+  }
+
+  async get(params?: Record<string, any>) {
+    const { success, data } = await getCategoryList(params)
+    if (success) {
+      this.set('result', data)
     }
   }
 
-  async update(params = {}) {
+  async update(params?: Record<string, any>) {
     return await updateCategory(params)
   }
 
-  async add(params = {}) {
+  async add(params?: Record<string, any>) {
     return await addCategory(params)
   }
 
-  async delete(params = {}) {
+  async delete(params?: Record<string, any>) {
     return await deleteCategory(params)
   }
 }
