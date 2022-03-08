@@ -12,19 +12,20 @@ export class UserController {
   async login(@Body() body) {
     const { name, password } = body
     const data = await this.service.login(name)
-    if (!data) {
-      return { success: false, msg: '用户名错误' }
-    }
-    if (data.password !== md5(password)) {
+    if (data?.password !== md5(password)) {
       return { success: false, msg: '密码错误' }
     } else {
-      const token = this.service.createToken({ secret: config.jwtToken, name })
+      const token = this.service.createToken({
+        secret: config.jwtToken,
+        id: data.id,
+        name: data.name,
+        role_id: data.role_id,
+      })
       return { userName: name, token }
     }
   }
 
   @Get('list')
-  @SetMetadata('roles', ['all'])
   async findAll(@Query('roleId') roleId) {
     return this.service.findAll({ roleId })
   }

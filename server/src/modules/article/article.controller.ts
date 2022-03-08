@@ -30,7 +30,6 @@ export class ArticleController {
   }
 
   @Get('client/list')
-  @SetMetadata('roles', ['all'])
   async getClientList(@Query() query) {
     const { list, count } = await this.service.findAll({ ...query, pass_flag: 1 })
     const data = await this.getRelationTags(list)

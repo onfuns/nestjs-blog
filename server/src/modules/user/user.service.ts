@@ -25,7 +25,7 @@ export class UserService {
     try {
       const decoded = jwt.verify(token, jwtToken)
       if (decoded && decoded.secret === jwtToken) {
-        return true
+        return decoded
       } else {
         return false
       }

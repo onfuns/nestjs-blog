@@ -49,4 +49,9 @@ export class AuthService {
       throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
+
+  async verify(body: string) {
+    const ids = body?.split(',')
+    return (await this.findAll()).filter(d => ids.includes(d.id.toString()))
+  }
 }

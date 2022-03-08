@@ -30,6 +30,7 @@ export class RoleService {
     try {
       const data = await this.repository.find({
         order: {
+          type: 'DESC',
           created_at: 'ASC',
         },
       })

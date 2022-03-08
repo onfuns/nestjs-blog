@@ -1,6 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 
 export interface IConfig {
-  db: TypeOrmModuleOptions
-  jwtToken: string
+  base?: string
+  db?: TypeOrmModuleOptions
+  jwtToken?: string
 }
