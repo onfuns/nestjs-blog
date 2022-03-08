@@ -42,11 +42,7 @@ const AddFormModal = ({ commentStore, onSuccess, onCancel, detail }: IProps) => 
         form={form}
         initialValues={{ reply: detail.reply || '' }}
       >
-        <Form.Item
-          label="回复内容"
-          name="reply"
-          rules={[{ required: false, message: '请输入回复内容' }]}
-        >
+        <Form.Item label="回复内容" name="reply">
           <Input.TextArea placeholder="请输入回复内容" />
         </Form.Item>
       </Form>

@@ -63,7 +63,7 @@ const AddFormModal = ({ authStore, onSuccess, onCancel, detail }: IProps) => {
         onValuesChange={(_, values) => setFormValues(values)}
         initialValues={{ type: '1' }}
       >
-        <Form.Item label="类型" name="type" rules={[{ required: true, message: '请选择类型' }]}>
+        <Form.Item label="类型" name="type" rules={[{ required: true }]}>
           <Radio.Group>
             <Radio value="1">模块</Radio>
             <Radio value="2">功能</Radio>
@@ -71,7 +71,7 @@ const AddFormModal = ({ authStore, onSuccess, onCancel, detail }: IProps) => {
         </Form.Item>
 
         {formVaules.type === '2' && (
-          <Form.Item label="模块" name="pid" rules={[{ required: true, message: '请选择模块' }]}>
+          <Form.Item label="模块" name="pid" rules={[{ required: true }]}>
             <Select placeholder="请选择模块">
               {optionsList.map(({ name, id }) => (
                 <Option key={id} value={id}>
@@ -82,11 +82,11 @@ const AddFormModal = ({ authStore, onSuccess, onCancel, detail }: IProps) => {
           </Form.Item>
         )}
 
-        <Form.Item label="名称" name="name" rules={[{ required: true, message: '请输入名称' }]}>
+        <Form.Item label="名称" name="name" rules={[{ required: true }]}>
           <Input placeholder="请输入名称" />
         </Form.Item>
 
-        <Form.Item label="路径" name="code" rules={[{ required: true, message: '请输入路径' }]}>
+        <Form.Item label="路径" name="code" rules={[{ required: true }]}>
           <Input placeholder="请输入路径" />
         </Form.Item>
       </Form>

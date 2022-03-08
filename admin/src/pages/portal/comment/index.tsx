@@ -4,7 +4,7 @@ import ListTable from '@/components/ListTable'
 import Search from '@/components/Search'
 import { inject, observer } from 'mobx-react'
 import { CommentStore } from '@/store'
-import { Button, Popconfirm, Tooltip, Switch, message } from 'antd'
+import { Button, Popconfirm, Tooltip, Switch, message, Space } from 'antd'
 import dayjs from 'dayjs'
 
 const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
@@ -103,13 +103,8 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
       key: 'action',
       render: (value, record) => {
         return (
-          <>
-            <Button
-              size="small"
-              type="ghost"
-              onClick={() => onAction(record, 'reply')}
-              style={{ marginRight: 10 }}
-            >
+          <Space>
+            <Button size="small" onClick={() => onAction(record, 'reply')}>
               回复
             </Button>
             <Popconfirm title="确定删除？" onConfirm={() => onAction(record, 'delete')}>
@@ -117,7 +112,7 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
                 删除
               </Button>
             </Popconfirm>
-          </>
+          </Space>
         )
       },
     },

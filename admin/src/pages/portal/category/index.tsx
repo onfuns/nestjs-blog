@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react'
 import AddModal from '@/components/Portal/Category/Add'
 import { CategoryStore } from '@/store'
 import ListTable from '@/components/ListTable'
-import { Button, Popconfirm, message, Switch } from 'antd'
+import { Button, Popconfirm, message, Switch, Space } from 'antd'
 interface IProps {
   categoryStore: CategoryStore
 }
@@ -81,18 +81,18 @@ const CategoryPage = ({ categoryStore }: IProps) => {
       width: 200,
       render: (value, record) => {
         return (
-          <div>
+          <Space>
             <Button size="small" onClick={() => onAction(record, 'edit')}>
               编辑
             </Button>
             {record.pid === 0 && record?.children?.length ? null : (
               <Popconfirm title="确定删除？" onConfirm={() => onAction(record, 'delete')}>
-                <Button size="small" danger style={{ marginLeft: 10 }}>
+                <Button size="small" danger>
                   删除
                 </Button>
               </Popconfirm>
             )}
-          </div>
+          </Space>
         )
       },
     },
@@ -101,8 +101,8 @@ const CategoryPage = ({ categoryStore }: IProps) => {
   const { result } = categoryStore
 
   return (
-    <div>
-      <Button type="primary" size="small" onClick={() => onAction({}, 'add')}>
+    <>
+      <Button type="primary" onClick={() => onAction({}, 'add')}>
         新增
       </Button>
       <ListTable
@@ -120,7 +120,7 @@ const CategoryPage = ({ categoryStore }: IProps) => {
           detail={recordInfo}
         />
       ) : null}
-    </div>
+    </>
   )
 }
 

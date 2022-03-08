@@ -61,24 +61,19 @@ const AddFormModal = ({ categoryStore, onSuccess, onCancel, detail }: IProps) =>
           status: 1,
         }}
       >
-        <Form.Item label="所属分类" name="pid" rules={[{ required: true, message: '请输入名称' }]}>
+        <Form.Item label="所属分类" name="pid" rules={[{ required: true }]}>
           <CategoryCascader disabled={!!detail.id} />
         </Form.Item>
 
-        <Form.Item label="名称" name="name" rules={[{ required: true, message: '请输入名称' }]}>
+        <Form.Item label="名称" name="name" rules={[{ required: true }]}>
           <Input placeholder="请输入名称" />
         </Form.Item>
 
-        <Form.Item label="路由" name="ename" rules={[{ required: true, message: '请输入路由' }]}>
+        <Form.Item label="路由" name="ename" rules={[{ required: true }]}>
           <Input placeholder="请输入路由，如 /front " />
         </Form.Item>
 
-        <Form.Item
-          label="类别"
-          name="type"
-          shouldUpdate
-          rules={[{ required: true, message: '请选择类别' }]}
-        >
+        <Form.Item label="类别" name="type" shouldUpdate rules={[{ required: true }]}>
           <Radio.Group>
             <Radio value={1}>文章列表</Radio>
             {/* <Radio value={2}>单页</Radio> */}
@@ -87,25 +82,16 @@ const AddFormModal = ({ categoryStore, onSuccess, onCancel, detail }: IProps) =>
         </Form.Item>
 
         {formVaules.type === 3 && (
-          <Form.Item
-            shouldUpdate
-            label="外链地址"
-            name="url"
-            rules={[{ required: true, message: '请输入外链地址' }]}
-          >
+          <Form.Item shouldUpdate label="外链地址" name="url" rules={[{ required: true }]}>
             <Input placeholder="请输入外链地址" />
           </Form.Item>
         )}
 
-        <Form.Item label="图标" name="icon" rules={[{ required: false, message: '请输入图标' }]}>
+        <Form.Item label="图标" name="icon">
           <Input placeholder="iconfont 或 url" />
         </Form.Item>
 
-        <Form.Item
-          label="图标颜色"
-          name="icon_color"
-          rules={[{ required: false, message: '请输入图标颜色' }]}
-        >
+        <Form.Item label="图标颜色" name="icon_color">
           <Input placeholder="只对iconfont 有效" />
         </Form.Item>
 

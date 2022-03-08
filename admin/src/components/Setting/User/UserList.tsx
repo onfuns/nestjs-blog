@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Table, Button, Popconfirm, TableProps, Switch } from 'antd'
+import { Table, Button, Popconfirm, TableProps, Switch, Space } from 'antd'
 import UserAddModal from './UserAddModal'
 import { inject, observer } from 'mobx-react'
 import { UserStore, RoleStore } from '@/store'
@@ -60,18 +60,18 @@ const UserList = ({ userStore, roleStore }: { userStore?: UserStore; roleStore?:
       width: 200,
       render: (value, record) => {
         return (
-          <div>
+          <Space>
             <Button size="small" onClick={() => onAction(record, 'edit')}>
               编辑
             </Button>
             {record.pid === 0 && record?.children?.length ? null : (
               <Popconfirm title="确定删除？" onConfirm={() => onAction(record, 'delete')}>
-                <Button size="small" danger style={{ marginLeft: 10 }}>
+                <Button size="small" danger>
                   删除
                 </Button>
               </Popconfirm>
             )}
-          </div>
+          </Space>
         )
       },
     },
@@ -86,10 +86,9 @@ const UserList = ({ userStore, roleStore }: { userStore?: UserStore; roleStore?:
   }
 
   return (
-    <div>
+    <>
       <Button
         type="primary"
-        size="small"
         style={{ marginBottom: 10, float: 'right' }}
         onClick={() => onAction(undefined, 'add')}
       >
@@ -107,7 +106,7 @@ const UserList = ({ userStore, roleStore }: { userStore?: UserStore; roleStore?:
           detail={recordInfo}
         />
       )}
-    </div>
+    </>
   )
 }
 

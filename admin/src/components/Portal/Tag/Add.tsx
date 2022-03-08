@@ -49,11 +49,11 @@ const AddFormModal = ({ tagStore, onSuccess, onCancel, detail }: IProps) => {
       destroyOnClose
     >
       <Form labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} form={form}>
-        <Form.Item label="名称" name="name" rules={[{ required: true, message: '请输入名称' }]}>
+        <Form.Item label="名称" name="name" rules={[{ required: true }]}>
           <Input placeholder="请输入名称" />
         </Form.Item>
 
-        <Form.Item label="描述" name="description" rules={[{ message: '请输入描述' }]}>
+        <Form.Item label="描述" name="description">
           <Input.TextArea />
         </Form.Item>
       </Form>

@@ -5,8 +5,7 @@ import { ArticleStore } from '@/store'
 import dayjs from 'dayjs'
 import { useHistory } from 'umi'
 import Search from '@/components/Search'
-import { Button, Popconfirm, Switch, message } from 'antd'
-import { Link } from 'umi'
+import { Button, Popconfirm, Switch, message, Space } from 'antd'
 import styles from './index.less'
 interface IProps {
   articleStore: ArticleStore
@@ -100,17 +99,17 @@ const Article = ({ articleStore }: IProps) => {
       width: 200,
       render: (value, { id }) => {
         return (
-          <div>
-            <Link to={{ pathname: '/portal/article/add', search: `?id=${id}` }}>
-              <Button size="small">编辑</Button>
-            </Link>
+          <Space>
+            <Button size="small" onClick={() => history.push(`/portal/article/add?id=${id}`)}>
+              编辑
+            </Button>
 
             <Popconfirm title="确定删除？" onConfirm={() => onAction({ id }, 'delete')}>
-              <Button size="small" danger style={{ marginLeft: 10 }}>
+              <Button size="small" danger>
                 删除
               </Button>
             </Popconfirm>
-          </div>
+          </Space>
         )
       },
     },
@@ -152,11 +151,7 @@ const Article = ({ articleStore }: IProps) => {
         ]}
       />
       <div className={styles.btnGroup}>
-        <Button
-          type="primary"
-          size="small"
-          onClick={() => history.push({ pathname: '/portal/article/add' })}
-        >
+        <Button type="primary" onClick={() => history.push({ pathname: '/portal/article/add' })}>
           新增
         </Button>
       </div>

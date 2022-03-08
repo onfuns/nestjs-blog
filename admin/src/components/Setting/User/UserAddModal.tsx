@@ -65,21 +65,17 @@ const AddFormModal = ({ userStore, roleList, onSuccess, onCancel, detail }: IPro
           enable: 1,
         }}
       >
-        <Form.Item label="用户名" name="name" rules={[{ required: true, message: '请输入用户名' }]}>
+        <Form.Item label="用户名" name="name" rules={[{ required: true }]}>
           <Input placeholder="请输入用户名" />
         </Form.Item>
 
         {isEdit ? null : (
-          <Form.Item
-            label="密码"
-            name="password"
-            rules={[{ required: true, message: '请输入密码' }]}
-          >
+          <Form.Item label="密码" name="password" rules={[{ required: true }]}>
             <Input.Password placeholder="请输入密码" />
           </Form.Item>
         )}
 
-        <Form.Item label="角色" name="role_id" rules={[{ required: true, message: '请选择角色' }]}>
+        <Form.Item label="角色" name="role_id" rules={[{ required: true }]}>
           <Select mode="multiple">
             {roleList.map((r: any) => (
               <Option key={r.id} value={r.id}>
@@ -88,7 +84,7 @@ const AddFormModal = ({ userStore, roleList, onSuccess, onCancel, detail }: IPro
             ))}
           </Select>
         </Form.Item>
-        <Form.Item label="状态" name="enable" rules={[{ required: true, message: '请选择状态' }]}>
+        <Form.Item label="状态" name="enable" rules={[{ required: true }]}>
           <Radio.Group>
             <Radio value={1}>启用</Radio>
             <Radio value={0}>禁用</Radio>

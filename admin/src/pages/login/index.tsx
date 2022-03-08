@@ -40,11 +40,12 @@ const LoginPage = ({ userStore }: IPros) => {
   return (
     <div className={styles.loginPage}>
       <h1 className={styles.title}>Nest-Blog</h1>
-      <Form className={styles.form} labelCol={{ span: 0 }} wrapperCol={{ span: 24 }} form={form}>
-        <Form.Item label="用户名" name="name" rules={[{ required: true }]}>
+      <Form className={styles.form} form={form}>
+        <Form.Item name="name" rules={[{ required: true }]}>
           <Input size="large" prefix={<UserOutlined />} placeholder="用户名" />
         </Form.Item>
-        <Form.Item label="密码" name="password" rules={[{ required: true }]}>
+
+        <Form.Item name="password" rules={[{ required: true }]}>
           <Input
             size="large"
             prefix={<LockOutlined />}
@@ -53,6 +54,7 @@ const LoginPage = ({ userStore }: IPros) => {
             onPressEnter={onSubmit}
           />
         </Form.Item>
+
         <Form.Item>
           <Button
             type="primary"

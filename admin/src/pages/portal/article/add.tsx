@@ -90,21 +90,13 @@ const ArticleAddPage = ({ articleStore, tagStore }: IProps) => {
           publish_time: dayjs(),
         }}
       >
-        <Form.Item label="标题" name="title" rules={[{ required: true, message: '请输入标题' }]}>
+        <Form.Item label="标题" name="title" rules={[{ required: true }]}>
           <Input placeholder="请输入标题" />
         </Form.Item>
-        <Form.Item
-          label="描述"
-          name="description"
-          rules={[{ required: false, message: '请输入描述' }]}
-        >
+        <Form.Item label="描述" name="description">
           <Input.TextArea placeholder="请输入描述" showCount maxLength={200} />
         </Form.Item>
-        <Form.Item
-          label="分类"
-          name="category_id"
-          rules={[{ required: true, message: '请选择分类' }]}
-        >
+        <Form.Item label="分类" name="category_id" rules={[{ required: true }]}>
           <CategoryCascader root={false} />
         </Form.Item>
 
@@ -132,14 +124,10 @@ const ArticleAddPage = ({ articleStore, tagStore }: IProps) => {
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item
-          label="发布时间"
-          name="publish_time"
-          rules={[{ required: true, message: '请选择发布时间' }]}
-        >
+        <Form.Item label="发布时间" name="publish_time" rules={[{ required: true }]}>
           <DatePicker showTime allowClear={false} format={formatDate} style={{ width: '100%' }} />
         </Form.Item>
-        <Form.Item label="作者" name="author" rules={[{ required: false, message: '请输入作者' }]}>
+        <Form.Item label="作者" name="author">
           <Input placeholder="请输入作者" />
         </Form.Item>
 

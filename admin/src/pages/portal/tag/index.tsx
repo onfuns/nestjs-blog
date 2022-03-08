@@ -3,7 +3,7 @@ import AddModal from '@/components/Portal/Tag/Add'
 import { TagStore } from '@/store'
 import ListTable from '@/components/ListTable'
 import { inject, observer } from 'mobx-react'
-import { Button, Popconfirm, message } from 'antd'
+import { Button, Popconfirm, message, Space } from 'antd'
 interface IProps {
   tagStore: TagStore
 }
@@ -55,16 +55,16 @@ const TagPage = ({ tagStore }: IProps) => {
       width: 200,
       render: (value, record) => {
         return (
-          <div>
+          <Space>
             <Button size="small" onClick={() => onAction(record, 'edit')}>
               编辑
             </Button>
             <Popconfirm title="确定删除？" onConfirm={() => onAction(record, 'delete')}>
-              <Button size="small" danger style={{ marginLeft: 10 }}>
+              <Button size="small" danger>
                 删除
               </Button>
             </Popconfirm>
-          </div>
+          </Space>
         )
       },
     },
@@ -73,8 +73,8 @@ const TagPage = ({ tagStore }: IProps) => {
   const { result } = tagStore
 
   return (
-    <div>
-      <Button type="primary" size="small" onClick={() => setModalVisible(true)}>
+    <>
+      <Button type="primary" onClick={() => setModalVisible(true)}>
         新增
       </Button>
 
@@ -93,7 +93,7 @@ const TagPage = ({ tagStore }: IProps) => {
           detail={recordInfo}
         />
       ) : null}
-    </div>
+    </>
   )
 }
 

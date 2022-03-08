@@ -6,6 +6,7 @@ import { adminRoutes } from '@/routes'
 import { inject, observer } from 'mobx-react'
 import { HeaderStore } from '@/store'
 import { HomeOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons'
+import classnames from 'classnames'
 
 const SubMenu = Menu.SubMenu
 const MenuComp = ({ headerStore }: { headerStore?: HeaderStore }) => {
@@ -15,9 +16,6 @@ const MenuComp = ({ headerStore }: { headerStore?: HeaderStore }) => {
     .split('/')
     .map(url => `/${url}`)
   const [openKeys, setOpenKeys] = useState([pathArr?.[0]])
-  //TODO临时写法只支持3级菜单
-  const len = pathArr.length
-  const selectedKeys = pathArr.slice(0, len > 2 ? len - 1 : len).join('')
 
   const onOpenChange = openKeys => {
     setOpenKeys([...openKeys])
@@ -51,16 +49,22 @@ const MenuComp = ({ headerStore }: { headerStore?: HeaderStore }) => {
     })
   }
 
+  const { menuCollapsed } = headerStore
+
   return (
-    <div className={headerStore.menuCollapsed ? styles.collapsedMenu : styles.menu}>
+    <div
+      className={classnames(styles.menu, {
+        [styles.collapsedMenu]: menuCollapsed,
+      })}
+    >
       <div className={styles.logoText}>Nest-Blog</div>
       <Menu
         style={{ flex: 1 }}
         mode="inline"
         theme="light"
-        inlineCollapsed={headerStore.menuCollapsed}
+        inlineCollapsed={menuCollapsed}
         openKeys={openKeys}
-        selectedKeys={[selectedKeys]}
+        selectedKeys={[pathname]}
         onOpenChange={onOpenChange}
       >
         {renderMenu(adminRoutes)}

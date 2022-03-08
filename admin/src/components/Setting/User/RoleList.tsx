@@ -33,7 +33,7 @@ const RoleList = ({ roleStore }: IProps) => {
     <div className={styles.page}>
       <div className={styles.header}>
         <h1>角色管理</h1>
-        <Button type="primary" size="small" onClick={() => onShow('add')}>
+        <Button type="primary" onClick={() => onShow('add')}>
           创建角色
         </Button>
         {modalProps.visible && (
