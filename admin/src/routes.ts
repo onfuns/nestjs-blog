@@ -63,16 +63,15 @@ const getRoutes = (data, flatRoutes = []) => {
 
 export const routes = [
   {
+    path: '/login',
+    component: '@/pages/login',
+  },
+  {
     component: '@/components/Layout/Container',
     routes: [
       {
         path: '/',
         redirect: '/portal/article/list',
-      },
-      {
-        path: '/login',
-        component: '@/pages/login',
-        layout: false,
       },
       ...getRoutes(adminRoutes),
       {

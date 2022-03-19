@@ -1,14 +1,14 @@
 import axios from 'axios'
 import config from '@/config'
 import { unset } from 'lodash'
-import Cache from '@/utils/cache'
-import { LOCAL_USER_TOKEN_KEY } from '@/constants'
+import { getLocalUser } from '@/actions/user'
 import { message } from 'antd'
 
 const request = options => {
   const { base } = config
+  const { token } = getLocalUser()
   axios.defaults.baseURL = base
-  axios.defaults.headers.common['x-auth-id-token'] = Cache.get(LOCAL_USER_TOKEN_KEY)
+  axios.defaults.headers.common['x-auth-id-token'] = token
   const { url, method = 'GET', params } = options
   if (method === 'GET') {
     options.params = params

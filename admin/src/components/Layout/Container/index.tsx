@@ -6,14 +6,16 @@ import zhCN from 'antd/lib/locale/zh_CN'
 import store from '@/store'
 import styles from './style.less'
 import 'reset-css/reset.css'
+import TagPanel from '@/components/Layout/TagPanel'
 
 const Container = props => {
   return (
     <div className={styles.main}>
-      <Menu />
+      <Header {...props} />
       <div className={styles.mainContent}>
-        <Header {...props} />
+        <Menu />
         <div className={styles.contentBody}>
+          <TagPanel {...props} />
           <div className={styles.content}>{props.children}</div>
         </div>
       </div>

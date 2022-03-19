@@ -1,4 +1,6 @@
 import request from '@/utils/request'
+import Cache from '@/utils/cache'
+import { LOCAL_USER_KEY } from '@/constants'
 
 export const getUserList = async (params = {}) => {
   return request({
@@ -38,4 +40,16 @@ export const loginUser = async (params = {}) => {
     method: 'POST',
     params,
   })
+}
+
+export const saveLocalUser = data => {
+  Cache.set(LOCAL_USER_KEY, data)
+}
+
+export const getLocalUser = (): any => {
+  return Cache.get(LOCAL_USER_KEY) || {}
+}
+
+export const logoutUser = () => {
+  Cache.remove(LOCAL_USER_KEY)
 }

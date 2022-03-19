@@ -8,22 +8,49 @@
   right: 0px;
   top: 0px;
   bottom: 0px;
+  background: linear-gradient(to left bottom, #6c0584 0%, #44106d 100%);
   background-size: cover;
 
-  .title {
-    font-size: 26px !important;
-  }
-
-  .form {
-    width: 300px;
-    margin-top: 20px;
-    :global {
-      input {
-        padding-left: 5px;
+  .content {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    width: 1080px;
+    height: 600px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    .carousel {
+      display: flex;
+      align-items: center;
+      width: 500px;
+      height: 100%;
+      background: #fafbfc;
+      & > div {
+        width: 100%;
       }
     }
-  }
-  .button {
-    width: 100%;
+    .form {
+      width: 350px;
+      margin: 0 0 0 100px;
+      .title {
+        font-size: 30px;
+        margin-bottom: 40px;
+      }
+      .button {
+        width: 100%;
+        border-radius: 6px;
+        height: 50px;
+      }
+      :global {
+        .ant-input-affix-wrapper {
+          border-radius: 6px;
+        }
+        input {
+          padding-left: 5px;
+          height: 35px;
+        }
+      }
+    }
   }
 }

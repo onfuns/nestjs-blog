@@ -5,7 +5,13 @@ import styles from './style.less'
 import { adminRoutes } from '@/routes'
 import { inject, observer } from 'mobx-react'
 import { HeaderStore } from '@/store'
-import { HomeOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons'
+import {
+  HomeOutlined,
+  AppstoreOutlined,
+  SettingOutlined,
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+} from '@ant-design/icons'
 import classnames from 'classnames'
 
 const SubMenu = Menu.SubMenu
@@ -57,18 +63,24 @@ const MenuComp = ({ headerStore }: { headerStore?: HeaderStore }) => {
         [styles.collapsedMenu]: menuCollapsed,
       })}
     >
-      <div className={styles.logoText}>Nest-Blog</div>
-      <Menu
-        style={{ flex: 1 }}
-        mode="inline"
-        theme="light"
-        inlineCollapsed={menuCollapsed}
-        openKeys={openKeys}
-        selectedKeys={[pathname]}
-        onOpenChange={onOpenChange}
-      >
-        {renderMenu(adminRoutes)}
-      </Menu>
+      <div className={styles.menuTree}>
+        <Menu
+          mode="inline"
+          theme="light"
+          inlineCollapsed={menuCollapsed}
+          openKeys={openKeys}
+          selectedKeys={[pathname]}
+          onOpenChange={onOpenChange}
+        >
+          {renderMenu(adminRoutes)}
+        </Menu>
+      </div>
+
+      <div className={styles.footer}>
+        <a onClick={() => headerStore.setMenuCollaps()}>
+          {headerStore.menuCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+        </a>
+      </div>
     </div>
   )
 }
