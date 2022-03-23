@@ -1,31 +1,36 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { inject, observer } from 'mobx-react'
 import AddModal from '@/components/Portal/Category/Add'
 import { CategoryStore } from '@/store'
-import ListTable from '@/components/ListTable'
 import { Button, Popconfirm, message, Switch, Space } from 'antd'
+import { CATEGORT_TYPE } from '@/constants'
+import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
+
 interface IProps {
   categoryStore: CategoryStore
 }
 
+interface IModalProps {
+  visible?: boolean
+  type?: 'add' | 'edit' | undefined
+  record?: Record<string, any>
+}
+
 const CategoryPage = ({ categoryStore }: IProps) => {
-  const [modalVisible, setModalVisible] = useState(false)
-  const [recordInfo, setRecordInfo] = useState({})
-  const [reloadKey, setReloadKey] = useState(Date.now())
+  const actionRef = useRef<ActionType>()
+  const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
+
+  const onSetModalProps = (props: IModalProps = {}) => {
+    setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
+  }
 
   const onReload = () => {
-    setReloadKey(Date.now())
+    actionRef?.current.reload()
   }
 
-  const onSuccess = () => {
-    setModalVisible(false)
-    onReload()
-  }
-
-  const onAction = async (record, type: 'add' | 'edit' | 'delete' | 'status') => {
+  const onAction = async (record: any = {}, type: 'add' | 'edit' | 'delete' | 'status') => {
     if (type === 'add' || type === 'edit') {
-      setRecordInfo({ ...record })
-      setModalVisible(true)
+      onSetModalProps({ record, visible: true })
     } else if (type === 'delete') {
       const { success, msg = '删除失败' } = await categoryStore.delete({ id: record.id })
       if (success) {
@@ -45,12 +50,10 @@ const CategoryPage = ({ categoryStore }: IProps) => {
       } else {
         message.error(msg)
       }
-    } else {
-      console.log('do nothing')
     }
   }
 
-  const columns = [
+  const columns: ProColumns<any>[] = [
     {
       title: '名称',
       dataIndex: 'name',
@@ -63,23 +66,24 @@ const CategoryPage = ({ categoryStore }: IProps) => {
     {
       title: '类别',
       dataIndex: 'type',
-      render: (value, { url }) => {
-        const types = { 1: '文章列表', 2: '单页', 3: `外链（${url}）` }
-        return types[value]
-      },
+      render: (_, { type, url }) => CATEGORT_TYPE[type] + (type === 3 ? `（${url}）` : ''),
     },
     {
       title: '显示',
       dataIndex: 'status',
-      render: (value, record) => (
-        <Switch checked={value === 1} onChange={() => onAction(record, 'status')} />
+      render: (_, record) => (
+        <Switch
+          checked={record.status === 1}
+          onChange={() => onAction(record, 'status')}
+          size="small"
+        />
       ),
     },
     {
       title: '操作',
-      key: 'action',
+      dataIndex: 'option',
       width: 200,
-      render: (value, record) => {
+      render: (_, record) => {
         return (
           <Space>
             <Button size="small" onClick={() => onAction(record, 'edit')}>
@@ -98,28 +102,39 @@ const CategoryPage = ({ categoryStore }: IProps) => {
     },
   ]
 
-  const { result } = categoryStore
-
   return (
     <>
-      <Button type="primary" onClick={() => onAction({}, 'add')}>
-        新增
-      </Button>
-      <ListTable
-        data={{ list: result }}
-        page={false}
+      <ProTable<any>
+        actionRef={actionRef}
+        bordered={true}
         columns={columns}
-        reloadKey={reloadKey}
-        onLoad={params => categoryStore.get(params)}
+        form={{ autoFocusFirstInput: false }}
+        search={false}
+        rowKey="id"
+        request={async (params = {}) => {
+          const { current = 1, pageSize = 20 } = params
+          await categoryStore.get({ ...params, page: current, pageSize })
+
+          return { success: true, data: categoryStore.result }
+        }}
+        toolBarRender={() => [
+          <Button key="add" type="primary" onClick={() => onAction({}, 'add')}>
+            新增
+          </Button>,
+        ]}
+        size="small"
       />
 
-      {modalVisible ? (
+      {modalProps.visible && (
         <AddModal
-          onSuccess={onSuccess}
-          onCancel={() => setModalVisible(false)}
-          detail={recordInfo}
+          onSuccess={() => {
+            onSetModalProps({ visible: false })
+            onReload()
+          }}
+          onCancel={() => onSetModalProps({ visible: false })}
+          detail={modalProps.record || {}}
         />
-      ) : null}
+      )}
     </>
   )
 }

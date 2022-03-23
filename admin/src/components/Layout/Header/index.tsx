@@ -1,5 +1,5 @@
 import { Menu, Dropdown } from 'antd'
-import { getLocalUser, logoutUser } from '@/actions/user'
+import { getLocalUser, removeLocalUser } from '@/actions/user'
 import styles from './style.less'
 import { LogoutOutlined } from '@ant-design/icons'
 import { useHistory } from 'umi'
@@ -8,7 +8,7 @@ export default () => {
   const history = useHistory()
 
   const onLogout = () => {
-    logoutUser()
+    removeLocalUser()
     history.push('/login')
   }
 

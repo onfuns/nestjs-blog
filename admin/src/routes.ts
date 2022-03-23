@@ -1,18 +1,23 @@
 export const adminRoutes = [
   {
-    name: '首页',
+    name: '工作台',
     path: '/dashboard',
     icon: 'home',
     component: '@/pages/dashboard',
   },
   {
-    name: '文档管理',
+    name: '门户管理',
     path: '/portal',
     icon: 'post',
     children: [
       {
+        name: '栏目管理',
+        path: '/portal/category',
+        component: '@/pages/portal/category',
+      },
+      {
         name: '文章管理',
-        path: '/portal/article/list',
+        path: '/portal/article',
         component: '@/pages/portal/article',
         children: [
           {
@@ -23,30 +28,35 @@ export const adminRoutes = [
         ],
       },
       {
-        name: '分类管理',
-        path: '/portal/category/list',
-        component: '@/pages/portal/category',
-      },
-      {
         name: '标签管理',
-        path: '/portal/tag/list',
+        path: '/portal/tag',
         component: '@/pages/portal/tag',
       },
       {
         name: '评论管理',
-        path: '/portal/comment/list',
+        path: '/portal/comment',
         component: '@/pages/portal/comment',
       },
     ],
   },
   {
-    name: '系统管理',
+    name: '系统设置',
     path: '/setting',
     icon: 'setting',
     children: [
       {
-        name: '用户管理',
-        path: '/setting/user/list',
+        name: '网站设置',
+        path: '/setting/user/list1',
+        component: '@/pages/setting/user',
+      },
+      {
+        name: '管理员设置',
+        path: '/setting/user',
+        component: '@/pages/setting/user',
+      },
+      {
+        name: '日志管理',
+        path: '/setting/user/list2',
         component: '@/pages/setting/user',
       },
     ],

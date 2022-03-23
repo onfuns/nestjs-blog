@@ -8,7 +8,7 @@ export default () => (
     subTitle="页面不见啦，请返回主页~"
     extra={
       <Link to="/">
-        <Button type="primary">回到首页</Button>
+        <Button type="primary">回到工作台</Button>
       </Link>
     }
   />

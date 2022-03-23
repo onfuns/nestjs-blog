@@ -1,31 +1,34 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import AddModal from '@/components/Portal/Tag/Add'
 import { TagStore } from '@/store'
-import ListTable from '@/components/ListTable'
 import { inject, observer } from 'mobx-react'
 import { Button, Popconfirm, message, Space } from 'antd'
+import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
 interface IProps {
   tagStore: TagStore
 }
 
-const TagPage = ({ tagStore }: IProps) => {
-  const [modalVisible, setModalVisible] = useState(false)
-  const [reloadKey, setReloadKey] = useState(Date.now())
-  const [recordInfo, setRecordInfo] = useState({})
+interface IModalProps {
+  visible?: boolean
+  type?: 'add' | 'edit' | undefined
+  record?: Record<string, any>
+}
 
-  const onSuccess = () => {
-    setModalVisible(false)
-    onReload()
+const TagPage = ({ tagStore }: IProps) => {
+  const actionRef = useRef<ActionType>()
+  const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
+
+  const onSetModalProps = (props: IModalProps = {}) => {
+    setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
   }
 
   const onReload = () => {
-    setReloadKey(Date.now())
+    actionRef?.current.reload()
   }
 
-  const onAction = async (record, type) => {
-    if (type === 'edit') {
-      setRecordInfo({ ...record })
-      setModalVisible(true)
+  const onAction = async (record: any = {}, type) => {
+    if (type === 'add' || type === 'edit') {
+      onSetModalProps({ record, visible: true })
     } else if (type === 'delete') {
       const { success, msg = '删除失败' } = await tagStore.delete({ id: record.id })
       if (success) {
@@ -39,7 +42,7 @@ const TagPage = ({ tagStore }: IProps) => {
     }
   }
 
-  const columns = [
+  const columns: ProColumns<any>[] = [
     {
       title: '名称',
       dataIndex: 'name',
@@ -51,9 +54,9 @@ const TagPage = ({ tagStore }: IProps) => {
     },
     {
       title: '操作',
-      key: 'action',
+      dataIndex: 'option',
       width: 200,
-      render: (value, record) => {
+      render: (_, record) => {
         return (
           <Space>
             <Button size="small" onClick={() => onAction(record, 'edit')}>
@@ -70,29 +73,38 @@ const TagPage = ({ tagStore }: IProps) => {
     },
   ]
 
-  const { result } = tagStore
-
   return (
     <>
-      <Button type="primary" onClick={() => setModalVisible(true)}>
-        新增
-      </Button>
-
-      <ListTable
-        data={{ list: result }}
-        page={false}
+      <ProTable<any>
+        actionRef={actionRef}
+        bordered={true}
         columns={columns}
-        reloadKey={reloadKey}
-        onLoad={params => tagStore.get(params)}
+        form={{ autoFocusFirstInput: false }}
+        search={false}
+        rowKey="id"
+        request={async (params = {}) => {
+          const { current = 1, pageSize = 20 } = params
+          await tagStore.get({ ...params, page: current, pageSize })
+          return { success: true, data: tagStore.result }
+        }}
+        toolBarRender={() => [
+          <Button key="add" type="primary" onClick={() => onAction({}, 'add')}>
+            新增
+          </Button>,
+        ]}
+        size="small"
       />
 
-      {modalVisible ? (
+      {modalProps.visible && (
         <AddModal
-          onSuccess={onSuccess}
-          onCancel={() => setModalVisible(false)}
-          detail={recordInfo}
+          onSuccess={() => {
+            onSetModalProps({ visible: false })
+            onReload()
+          }}
+          onCancel={() => onSetModalProps({ visible: false })}
+          detail={modalProps.record || {}}
         />
-      ) : null}
+      )}
     </>
   )
 }

@@ -1,24 +1,18 @@
-import { useState } from 'react'
+import { useRef } from 'react'
 import { inject, observer } from 'mobx-react'
-import ListTable from '@/components/ListTable'
 import { ArticleStore } from '@/store'
 import dayjs from 'dayjs'
 import { useHistory } from 'umi'
-import Search from '@/components/Search'
 import { Button, Popconfirm, Switch, message, Space } from 'antd'
-import styles from './index.less'
+import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
+
 interface IProps {
   articleStore: ArticleStore
 }
 
 const Article = ({ articleStore }: IProps) => {
   const history = useHistory()
-  const [reloadKey, setReloadKey] = useState(null)
-  const [filter, setFilter] = useState({})
-
-  const onReload = () => {
-    setReloadKey(Date.now())
-  }
+  const actionRef = useRef<ActionType>()
 
   const onAction = async ({ id = '', sort = 0, pass_flag = 0 } = {}, type) => {
     let params: any = { id }
@@ -43,21 +37,21 @@ const Article = ({ articleStore }: IProps) => {
     const { success, msg = '操作失败' } = await fn(params)
     if (success) {
       message.success('操作成功')
-      onReload()
+      actionRef?.current.reload()
     } else {
       message.error(msg)
     }
   }
 
-  const columns = [
+  const columns: ProColumns<any>[] = [
     {
       title: '标题',
       dataIndex: 'title',
       width: 250,
-      render: (value, { id }) => {
+      render: (_, { id, title }) => {
         return (
           <a target="__blank" href={`/article/${id}`}>
-            {value}
+            {title}
           </a>
         )
       },
@@ -65,39 +59,55 @@ const Article = ({ articleStore }: IProps) => {
     {
       title: '类别',
       dataIndex: 'category',
-      render: value => value?.name,
+      hideInSearch: true,
+      render: (_, { category }) => category?.name,
     },
     {
       title: '标签',
       dataIndex: 'tags',
-      render: value => value?.map(({ name }) => name).join(','),
+      hideInSearch: true,
+      render: (_, { tags }) => tags?.map(({ name }) => name).join(','),
     },
     {
       title: '发布时间',
+      hideInSearch: true,
       dataIndex: 'publish_time',
-      render: value => dayjs(value).format('YYYY-MM-DD HH:mm:ss'),
+      render: (_, { publish_time }) =>
+        publish_time && dayjs(publish_time).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
-      title: '置顶',
+      title: '置顶状态',
       dataIndex: 'sort',
+      valueEnum: {
+        1: '已通过',
+        2: '未审核',
+      },
       width: 100,
-      render: (value, { id, sort }) => (
-        <Switch checked={sort > 0} onChange={() => onAction({ id, sort }, 'sort')} />
+      render: (_, { id, sort }) => (
+        <Switch checked={sort > 0} onChange={() => onAction({ id, sort }, 'sort')} size="small" />
       ),
     },
     {
-      title: '审核',
+      title: '审核状态',
       dataIndex: 'review',
+      valueEnum: {
+        1: '已置顶',
+        2: '未置顶',
+      },
       width: 100,
-      render: (value, { id, pass_flag }) => (
-        <Switch checked={pass_flag === 1} onChange={() => onAction({ id, pass_flag }, 'pass')} />
+      render: (_, { id, pass_flag }) => (
+        <Switch
+          checked={pass_flag === 1}
+          onChange={() => onAction({ id, pass_flag }, 'pass')}
+          size="small"
+        />
       ),
     },
     {
       title: '操作',
-      key: 'action',
+      dataIndex: 'option',
       width: 200,
-      render: (value, { id }) => {
+      render: (_, { id }) => {
         return (
           <Space>
             <Button size="small" onClick={() => history.push(`/portal/article/add?id=${id}`)}>
@@ -115,55 +125,34 @@ const Article = ({ articleStore }: IProps) => {
     },
   ]
 
-  const { result } = articleStore
+  const xWidth = columns.reduce((total, current: any) => total + current?.width || 0, 0)
 
   return (
-    <div>
-      <Search
-        onChange={values => setFilter(values)}
-        data={[
-          {
-            type: 'search',
-            key: 'title',
-            placeholder: '请输入标题',
-            enterButton: true,
-          },
-          {
-            type: 'select',
-            key: 'pass_flag',
-            placeholder: '审核状态',
-            options: [
-              { label: '已通过', value: 1 },
-              { label: '未审核', value: 0 },
-            ],
-            allowClear: true,
-          },
-          {
-            type: 'select',
-            key: 'sort',
-            placeholder: '置顶状态',
-            options: [
-              { label: '已置顶', value: 1 },
-              { label: '未置顶', value: 0 },
-            ],
-            allowClear: true,
-          },
-        ]}
-      />
-      <div className={styles.btnGroup}>
-        <Button type="primary" onClick={() => history.push({ pathname: '/portal/article/add' })}>
-          新增
-        </Button>
-      </div>
+    <ProTable<any>
+      actionRef={actionRef}
+      bordered={true}
+      columns={columns}
+      form={{ autoFocusFirstInput: false }}
+      search={{ defaultCollapsed: false }}
+      rowKey="id"
+      request={async (params = {}) => {
+        const { current = 1, pageSize = 20 } = params
+        await articleStore.get({ ...params, page: current, pageSize })
 
-      <ListTable
-        data={result}
-        searchFilter={filter}
-        columns={columns}
-        reloadKey={reloadKey}
-        onLoad={params => articleStore.get(params)}
-      />
-    </div>
+        return { success: true, data: articleStore.result.list }
+      }}
+      toolBarRender={() => [
+        <Button
+          key="add"
+          type="primary"
+          onClick={() => history.push({ pathname: '/portal/article/add' })}
+        >
+          新增
+        </Button>,
+      ]}
+      scroll={{ x: xWidth }}
+      size="small"
+    />
   )
 }
 

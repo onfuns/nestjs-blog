@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'umi'
 import { Breadcrumb } from 'antd'
 import styles from './style.less'
-import { treeFindParent } from '@/utils/util'
+import { treeFindParent } from '@/utils'
 import { adminRoutes } from '@/routes'
 interface IData {
   path?: string

@@ -1,31 +1,32 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import AddModal from '@/components/Portal/Comment/Add'
-import ListTable from '@/components/ListTable'
-import Search from '@/components/Search'
 import { inject, observer } from 'mobx-react'
 import { CommentStore } from '@/store'
-import { Button, Popconfirm, Tooltip, Switch, message, Space } from 'antd'
+import { Button, Popconfirm, Switch, message, Space } from 'antd'
 import dayjs from 'dayjs'
+import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
+
+interface IModalProps {
+  visible?: boolean
+  type?: 'add' | 'edit' | undefined
+  record?: Record<string, any>
+}
 
 const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
-  const [modalVisible, setModalVisible] = useState(false)
-  const [reloadKey, setReloadKey] = useState(null)
-  const [recordInfo, setRecordInfo] = useState({})
-  const [filter, setFilter] = useState({})
+  const actionRef = useRef<ActionType>()
+  const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
 
-  const onSuccess = () => {
-    setModalVisible(false)
-    onReload()
+  const onSetModalProps = (props: IModalProps = {}) => {
+    setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
   }
 
   const onReload = () => {
-    setReloadKey(Date.now())
+    actionRef?.current.reload()
   }
 
   const onAction = async (record: any = {}, type) => {
     if (type === 'reply') {
-      setRecordInfo({ ...record })
-      setModalVisible(true)
+      onSetModalProps({ record, visible: true })
     } else if (type === 'delete') {
       const { success, msg = '删除失败' } = await commentStore.delete({ id: record?.id })
       if (success) {
@@ -50,11 +51,12 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
     }
   }
 
-  const columns = [
+  const columns: ProColumns<any>[] = [
     {
       title: '文章标题',
       dataIndex: 'name',
-      render: (value, { article }) => (
+      width: 250,
+      render: (_, { article }) => (
         <a href={`/article/${article?.id}`} target="__blank">
           {article?.title}
         </a>
@@ -63,16 +65,8 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
     {
       title: '评论内容',
       dataIndex: 'content',
-      render: value => {
-        if (value.length > 20) {
-          return (
-            <Tooltip title={value}>
-              <span>{value.substring(0, 20) + '...'}</span>
-            </Tooltip>
-          )
-        }
-        return value
-      },
+      ellipsis: true,
+      width: 120,
     },
     {
       title: '评论人',
@@ -89,19 +83,19 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
     {
       title: '评论时间',
       dataIndex: 'created_at',
-      render: value => dayjs(value).format('YYYY-MM-DD HH:mm:ss'),
+      render: (_, { created_at }) => created_at && dayjs(created_at).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: '审核状态',
       dataIndex: 'status',
-      render: (value, record) => (
-        <Switch checked={value === 1} onChange={() => onAction(record, 'pass')} />
+      render: (_, record) => (
+        <Switch checked={record.status === 1} onChange={() => onAction(record, 'pass')} />
       ),
     },
     {
       title: '操作',
       key: 'action',
-      render: (value, record) => {
+      render: (_, record) => {
         return (
           <Space>
             <Button size="small" onClick={() => onAction(record, 'reply')}>
@@ -118,36 +112,39 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
     },
   ]
 
-  const { result } = commentStore
-
   return (
-    <div>
-      <Search
-        onChange={values => setFilter(values)}
-        data={[
-          {
-            type: 'search',
-            key: 'title',
-            placeholder: '请输入文章标题',
-            enterButton: true,
-          },
-        ]}
-      />
-      <ListTable
-        data={result}
+    <>
+      <ProTable<any>
+        actionRef={actionRef}
+        bordered={true}
         columns={columns}
-        reloadKey={reloadKey}
-        onLoad={params => commentStore.get(params)}
-        searchFilter={filter}
+        form={{ autoFocusFirstInput: false }}
+        search={false}
+        rowKey="id"
+        request={async (params = {}) => {
+          const { current = 1, pageSize = 20 } = params
+          await commentStore.get({ ...params, page: current, pageSize })
+          return { success: true, data: commentStore.result.list }
+        }}
+        toolBarRender={() => [
+          <Button key="add" type="primary" onClick={() => onAction({}, 'add')}>
+            新增
+          </Button>,
+        ]}
+        size="small"
       />
-      {modalVisible ? (
+
+      {modalProps.visible && (
         <AddModal
-          onSuccess={onSuccess}
-          onCancel={() => setModalVisible(false)}
-          detail={recordInfo}
+          onSuccess={() => {
+            onSetModalProps({ visible: false })
+            onReload()
+          }}
+          onCancel={() => onSetModalProps({ visible: false })}
+          detail={modalProps.record || {}}
         />
-      ) : null}
-    </div>
+      )}
+    </>
   )
 }
 

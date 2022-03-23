@@ -6,34 +6,30 @@ export default defineConfig({
   nodeModulesTransform: {
     type: 'none',
   },
-  routes: routes,
+  routes,
+  theme,
   fastRefresh: {},
   // mfsu: {},
   base: '/admin-website',
-  publicPath: '/admin-static/',
-  theme: theme,
+  publicPath: '/',
   dynamicImport: {},
   proxy: {
     '/api': {
       target: 'http://localhost:4000',
-      changeOrigin: true,
-      pathRewrite: {},
     },
   },
   chainWebpack(config) {
-    //prettier-ignore
-    config
-      .output
-        .set('chunkFilename','js/[id].[contenthash:8].chunk.js')
-        .end()
+    config.output
+      .set('chunkFilename', 'static/[id].[contenthash:8].chunk.js')
+      .end()
       .plugin('antd-dayjs-webpack-plugin')
-        .use('antd-dayjs-webpack-plugin')
-        .end()
-    .plugin('extract-css')
+      .use('antd-dayjs-webpack-plugin')
+      .end()
+      .plugin('extract-css')
       .tap(args => [
         {
           ...args[0],
-          chunkFilename: `css/[id].[contenthash:8].chunk.css`,
+          chunkFilename: `static/[id].[contenthash:8].chunk.css`,
         },
       ])
       .end()
