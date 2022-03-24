@@ -30,7 +30,7 @@ const MenuComp = ({ headerStore }: { headerStore?: HeaderStore }) => {
   const renderIcon = (icon: string) => {
     const icons = {
       home: HomeOutlined,
-      post: AppstoreOutlined,
+      portal: AppstoreOutlined,
       setting: SettingOutlined,
     }
     return icon ? React.createElement(icons[icon]) : null

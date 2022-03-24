@@ -8,7 +8,7 @@ export const adminRoutes = [
   {
     name: '门户管理',
     path: '/portal',
-    icon: 'post',
+    icon: 'portal',
     children: [
       {
         name: '栏目管理',
@@ -38,11 +38,6 @@ export const adminRoutes = [
     icon: 'setting',
     children: [
       {
-        name: '网站设置',
-        path: '/setting/user/list1',
-        component: '@/pages/setting/user',
-      },
-      {
         name: '用户管理',
         path: '/setting/user',
         component: '@/pages/setting/user',
@@ -53,9 +48,9 @@ export const adminRoutes = [
         component: '@/pages/setting/role',
       },
       {
-        name: '日志管理',
-        path: '/setting/user/list2',
-        component: '@/pages/setting/user',
+        name: '网站设置',
+        path: '/setting/website',
+        component: '@/pages/setting/website',
       },
     ],
   },
