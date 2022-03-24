@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { inject, observer } from 'mobx-react'
 import AddModal from '@/components/Portal/Category/Add'
 import { CategoryStore } from '@/store'
@@ -19,36 +19,37 @@ interface IModalProps {
 const CategoryPage = ({ categoryStore }: IProps) => {
   const actionRef = useRef<ActionType>()
   const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
+  const [expandKeys, setExpandKeys] = useState([])
 
   const onSetModalProps = (props: IModalProps = {}) => {
     setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
   }
 
-  const onReload = () => {
-    actionRef?.current.reload()
+  useEffect(() => {
+    onLoadData()
+  }, [])
+
+  const onLoadData = async () => {
+    await categoryStore.get()
   }
 
   const onAction = async (record: any = {}, type: 'add' | 'edit' | 'delete' | 'status') => {
     if (type === 'add' || type === 'edit') {
       onSetModalProps({ record, visible: true })
     } else if (type === 'delete') {
-      const { success, msg = '删除失败' } = await categoryStore.delete({ id: record.id })
+      const { success } = await categoryStore.delete({ id: record.id })
       if (success) {
         message.success('删除成功')
-        onReload()
-      } else {
-        message.error(msg)
+        onLoadData()
       }
     } else if (type === 'status') {
-      const { success, msg = '操作失败' } = await categoryStore.update({
+      const { success } = await categoryStore.update({
         id: record.id,
         status: Number(!record.status),
       })
       if (success) {
         message.success('操作成功')
-        onReload()
-      } else {
-        message.error(msg)
+        onLoadData()
       }
     }
   }
@@ -60,7 +61,7 @@ const CategoryPage = ({ categoryStore }: IProps) => {
       width: 300,
     },
     {
-      title: '路由',
+      title: '链接',
       dataIndex: 'ename',
     },
     {
@@ -108,9 +109,23 @@ const CategoryPage = ({ categoryStore }: IProps) => {
         actionRef={actionRef}
         bordered={true}
         columns={columns}
+        headerTitle="栏目列表"
         form={{ autoFocusFirstInput: false }}
         search={false}
+        expandable={{
+          expandedRowKeys: expandKeys,
+          onExpand: (expand, record) => {
+            let newKeys = [...expandKeys]
+            if (expand) {
+              newKeys.push(record.id)
+            } else {
+              newKeys = newKeys.filter(key => key !== record.id)
+            }
+            setExpandKeys([...newKeys])
+          },
+        }}
         rowKey="id"
+        onDataSourceChange={data => setExpandKeys(data.map(({ id }) => id))}
         request={async (params = {}) => {
           const { current = 1, pageSize = 20 } = params
           await categoryStore.get({ ...params, page: current, pageSize })
@@ -129,7 +144,7 @@ const CategoryPage = ({ categoryStore }: IProps) => {
         <AddModal
           onSuccess={() => {
             onSetModalProps({ visible: false })
-            onReload()
+            onLoadData()
           }}
           onCancel={() => onSetModalProps({ visible: false })}
           detail={modalProps.record || {}}

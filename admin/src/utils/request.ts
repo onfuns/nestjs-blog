@@ -4,7 +4,7 @@ import { unset } from 'lodash'
 import { getLocalUser } from '@/actions/user'
 import { message } from 'antd'
 
-const request = options => {
+const request = (options, showMsg = true) => {
   const { base } = config
   const { token } = getLocalUser()
   axios.defaults.baseURL = base
@@ -38,7 +38,9 @@ const request = options => {
           return message.error('抱歉，无权限操作')
         }
       }
-      return { msg: data?.msg || '请求出错，请重试', success: false }
+      const errmsg = data?.msg || '请求出错，请重试'
+      if (showMsg) message.error(errmsg)
+      return { msg: errmsg, success: false }
     })
 }
 

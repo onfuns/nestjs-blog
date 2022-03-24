@@ -34,12 +34,10 @@ const AddFormModal = ({ authStore, onSuccess, onCancel, detail }: IProps) => {
         fn = authStore.update
         params.id = detail.id
       }
-      const { success, msg = '操作失败' } = await fn(params)
+      const { success } = await fn(params)
       if (success) {
         message.success('操作成功')
         onSuccess()
-      } else {
-        message.error(msg)
       }
     })
   }
@@ -51,7 +49,7 @@ const AddFormModal = ({ authStore, onSuccess, onCancel, detail }: IProps) => {
     <Modal
       title="权限信息"
       visible={true}
-      width={500}
+      width={600}
       onOk={onFinish}
       onCancel={onCancel}
       destroyOnClose

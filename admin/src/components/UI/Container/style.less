@@ -1,8 +1,8 @@
-.main {
+.container {
   height: 100vh;
   overflow: hidden;
 
-  .mainContent {
+  .pageContent {
     display: flex;
   }
 
@@ -16,6 +16,13 @@
       background: #fff;
       height: calc(~'100vh - 115px');
       overflow: auto;
+    }
+  }
+
+  :global {
+    .ant-pro-table-search {
+      margin-bottom: 0;
+      padding: 10px 24px 0;
     }
   }
 }

@@ -15,13 +15,11 @@ export default () => {
     form.validateFields().then(async values => {
       setLoading(true)
       const { name, password } = values
-      const { success, data, msg = '登录失败' } = await loginUser({ name, password })
+      const { success, data } = await loginUser({ name, password })
       setLoading(false)
       if (success) {
         saveLocalUser(data)
         history.push('/dashboard')
-      } else {
-        message.error(msg)
       }
     })
   }

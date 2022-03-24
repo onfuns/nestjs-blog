@@ -14,14 +14,14 @@ const UserList = ({ userStore, roleStore }: { userStore?: UserStore; roleStore?:
   const { detail: { id: roleId } = {}, result: roleList = [] } = roleStore
 
   useEffect(() => {
-    onReload()
+    onLoadData()
   }, [roleId])
 
   const onSetModalProps = (props: IModalProps = {}) => {
     setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
   }
 
-  const onReload = () => {
+  const onLoadData = () => {
     roleId && userStore.get({ roleId })
   }
 
@@ -32,12 +32,8 @@ const UserList = ({ userStore, roleStore }: { userStore?: UserStore; roleStore?:
       const { success } = await userStore.delete({ id: record.id })
       if (success) {
         message.success('删除成功')
-        onReload()
-      } else {
-        message.success('删除失败')
+        onLoadData()
       }
-    } else {
-      console.log('do nothing')
     }
   }
 
@@ -107,7 +103,7 @@ const UserList = ({ userStore, roleStore }: { userStore?: UserStore; roleStore?:
         <UserAddModal
           onSuccess={() => {
             onSetModalProps({ visible: false })
-            onReload()
+            onLoadData()
           }}
           onCancel={() => onSetModalProps({ visible: false })}
           detail={modalProps.record}

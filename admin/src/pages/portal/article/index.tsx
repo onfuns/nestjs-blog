@@ -1,18 +1,29 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { inject, observer } from 'mobx-react'
 import { ArticleStore } from '@/store'
 import dayjs from 'dayjs'
 import { useHistory } from 'umi'
 import { Button, Popconfirm, Switch, message, Space } from 'antd'
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
+import ArticleAdd from '@/components/Portal/Article/Add'
 
 interface IProps {
   articleStore: ArticleStore
+}
+interface IModalProps {
+  visible?: boolean
+  type?: 'add' | 'edit' | undefined
+  record?: Record<string, any>
 }
 
 const Article = ({ articleStore }: IProps) => {
   const history = useHistory()
   const actionRef = useRef<ActionType>()
+  const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
+
+  const onSetModalProps = (props: IModalProps = {}) => {
+    setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
+  }
 
   const onAction = async ({ id = '', sort = 0, pass_flag = 0 } = {}, type) => {
     let params: any = { id }
@@ -34,12 +45,10 @@ const Article = ({ articleStore }: IProps) => {
       fn = articleStore.delete
     }
 
-    const { success, msg = '操作失败' } = await fn(params)
+    const { success } = await fn(params)
     if (success) {
       message.success('操作成功')
       actionRef?.current.reload()
-    } else {
-      message.error(msg)
     }
   }
 
@@ -107,14 +116,13 @@ const Article = ({ articleStore }: IProps) => {
       title: '操作',
       dataIndex: 'option',
       width: 200,
-      render: (_, { id }) => {
+      render: (_, record) => {
         return (
           <Space>
-            <Button size="small" onClick={() => history.push(`/portal/article/add?id=${id}`)}>
+            <Button size="small" onClick={() => onSetModalProps({ record, visible: true })}>
               编辑
             </Button>
-
-            <Popconfirm title="确定删除？" onConfirm={() => onAction({ id }, 'delete')}>
+            <Popconfirm title="确定删除？" onConfirm={() => onAction(record, 'delete')}>
               <Button size="small" danger>
                 删除
               </Button>
@@ -128,31 +136,40 @@ const Article = ({ articleStore }: IProps) => {
   const xWidth = columns.reduce((total, current: any) => total + current?.width || 0, 0)
 
   return (
-    <ProTable<any>
-      actionRef={actionRef}
-      bordered={true}
-      columns={columns}
-      form={{ autoFocusFirstInput: false }}
-      search={{ defaultCollapsed: false }}
-      rowKey="id"
-      request={async (params = {}) => {
-        const { current = 1, pageSize = 20 } = params
-        await articleStore.get({ ...params, page: current, pageSize })
+    <>
+      <ProTable<any>
+        actionRef={actionRef}
+        bordered={true}
+        columns={columns}
+        headerTitle="文章列表"
+        form={{ autoFocusFirstInput: false }}
+        search={{ defaultCollapsed: false }}
+        rowKey="id"
+        request={async (params = {}) => {
+          const { current = 1, pageSize = 20 } = params
+          await articleStore.get({ ...params, page: current, pageSize })
 
-        return { success: true, data: articleStore.result.list }
-      }}
-      toolBarRender={() => [
-        <Button
-          key="add"
-          type="primary"
-          onClick={() => history.push({ pathname: '/portal/article/add' })}
-        >
-          新增
-        </Button>,
-      ]}
-      scroll={{ x: xWidth }}
-      size="small"
-    />
+          return { success: true, data: articleStore.result.list }
+        }}
+        toolBarRender={() => [
+          <Button key="add" type="primary" onClick={() => onSetModalProps({ visible: true })}>
+            新增
+          </Button>,
+        ]}
+        scroll={{ x: xWidth }}
+        size="small"
+      />
+      {modalProps.visible && (
+        <ArticleAdd
+          onSuccess={() => {
+            onSetModalProps({ visible: false })
+            actionRef?.current.reload()
+          }}
+          onCancel={() => onSetModalProps({ visible: false })}
+          detail={modalProps.record || {}}
+        />
+      )}
+    </>
   )
 }
 

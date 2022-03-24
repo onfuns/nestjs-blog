@@ -8,12 +8,7 @@ import styles from './style.less'
 export default ({ value, onChange }) => {
   const modifyViewContent = () => {
     return {
-      viewerEffect({ markdownBody }) {
-        const heads = markdownBody.querySelectorAll('h1,h2,h3,h4,h5,h6')
-        Array.from(heads).forEach((dom: HTMLElement) => {
-          dom.innerHTML = `<span>${dom.innerText}</span>`
-        })
-      },
+      viewerEffect({ markdownBody }) {},
     }
   }
   return (

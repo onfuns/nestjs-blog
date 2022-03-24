@@ -20,7 +20,7 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
     setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
   }
 
-  const onReload = () => {
+  const onLoadData = () => {
     actionRef?.current.reload()
   }
 
@@ -28,26 +28,20 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
     if (type === 'reply') {
       onSetModalProps({ record, visible: true })
     } else if (type === 'delete') {
-      const { success, msg = '删除失败' } = await commentStore.delete({ id: record?.id })
+      const { success } = await commentStore.delete({ id: record?.id })
       if (success) {
         message.success('删除成功')
-        onReload()
-      } else {
-        message.error(msg)
+        onLoadData()
       }
     } else if (type === 'pass') {
-      const { success, msg = '操作失败' } = await commentStore.update({
+      const { success } = await commentStore.update({
         id: record?.id,
         status: Number(!record.status),
       })
       if (success) {
         message.success('操作成功')
-        onReload()
-      } else {
-        message.error(msg)
+        onLoadData()
       }
-    } else {
-      console.log('do nothing')
     }
   }
 
@@ -56,6 +50,7 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
       title: '文章标题',
       dataIndex: 'name',
       width: 250,
+      ellipsis: true,
       render: (_, { article }) => (
         <a href={`/article/${article?.id}`} target="__blank">
           {article?.title}
@@ -83,13 +78,18 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
     {
       title: '评论时间',
       dataIndex: 'created_at',
-      render: (_, { created_at }) => created_at && dayjs(created_at).format('YYYY-MM-DD HH:mm:ss'),
+      render: (_, { created_at }) => created_at && dayjs(created_at).format('YYYY-MM-DD HH:mm'),
     },
     {
       title: '审核状态',
       dataIndex: 'status',
+      width: 100,
       render: (_, record) => (
-        <Switch checked={record.status === 1} onChange={() => onAction(record, 'pass')} />
+        <Switch
+          checked={record.status === 1}
+          onChange={() => onAction(record, 'pass')}
+          size="small"
+        />
       ),
     },
     {
@@ -118,6 +118,7 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
         actionRef={actionRef}
         bordered={true}
         columns={columns}
+        headerTitle="评论列表"
         form={{ autoFocusFirstInput: false }}
         search={false}
         rowKey="id"
@@ -138,7 +139,7 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
         <AddModal
           onSuccess={() => {
             onSetModalProps({ visible: false })
-            onReload()
+            onLoadData()
           }}
           onCancel={() => onSetModalProps({ visible: false })}
           detail={modalProps.record || {}}

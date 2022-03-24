@@ -17,12 +17,10 @@ const AddFormModal = ({ commentStore, onSuccess, onCancel, detail }: IProps) => 
         ...values,
         id: detail.id,
       }
-      const { success, message: msg = '操作失败，请重试' } = await commentStore.update(params)
+      const { success } = await commentStore.update(params)
       if (success) {
         message.success('操作成功')
         onSuccess()
-      } else {
-        message.error(msg)
       }
     })
   }

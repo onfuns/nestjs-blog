@@ -22,10 +22,10 @@ const RoleList = ({ roleStore, userStore }: IProps) => {
   const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
 
   useEffect(() => {
-    onReload()
+    onLoadData()
   }, [])
 
-  const onReload = async () => {
+  const onLoadData = async () => {
     await roleStore.get()
     onSelected(roleStore?.result?.[0])
   }
@@ -45,9 +45,7 @@ const RoleList = ({ roleStore, userStore }: IProps) => {
     const { success } = await roleStore.delete({ id })
     if (success) {
       message.success('删除成功')
-      onReload()
-    } else {
-      message.success('删除失败')
+      onLoadData()
     }
   }
 

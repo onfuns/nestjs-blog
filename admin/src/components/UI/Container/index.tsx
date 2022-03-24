@@ -10,9 +10,9 @@ import Menu from '@/components/UI/Menu'
 
 const Container = props => {
   return (
-    <div className={styles.main}>
+    <div className={styles.container}>
       <Header {...props} />
-      <div className={styles.mainContent}>
+      <div className={styles.pageContent}>
         <Menu />
         <div className={styles.contentBody}>
           <TagPanel {...props} />

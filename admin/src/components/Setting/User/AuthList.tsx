@@ -44,14 +44,12 @@ const AuthList = ({ authStore, roleStore }: IProps) => {
 
   const onSave = async () => {
     let authIds = []
-    const { success, msg = '保存失败' } = await roleStore.update({
+    const { success } = await roleStore.update({
       id: roleId,
       auth_id: authIds.toString(),
     })
     if (success) {
       message.success('保存成功')
-    } else {
-      message.error(msg)
     }
   }
 

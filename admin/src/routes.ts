@@ -19,13 +19,6 @@ export const adminRoutes = [
         name: '文章管理',
         path: '/portal/article',
         component: '@/pages/portal/article',
-        children: [
-          {
-            name: '文章信息',
-            path: '/portal/article/add',
-            component: '@/pages/portal/article/add',
-          },
-        ],
       },
       {
         name: '标签管理',
@@ -77,16 +70,16 @@ export const routes = [
     component: '@/pages/login',
   },
   {
-    component: '@/components/Layout/Container',
+    component: '@/components/UI/Container',
     routes: [
       {
         path: '/',
-        redirect: '/portal/article/list',
+        redirect: '/portal/article',
       },
       ...getRoutes(adminRoutes),
       {
         path: '*',
-        component: '@/pages/error/404',
+        component: '@/pages/404',
       },
     ],
   },

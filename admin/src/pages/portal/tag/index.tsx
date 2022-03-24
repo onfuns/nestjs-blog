@@ -22,7 +22,7 @@ const TagPage = ({ tagStore }: IProps) => {
     setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
   }
 
-  const onReload = () => {
+  const onLoadData = () => {
     actionRef?.current.reload()
   }
 
@@ -30,15 +30,11 @@ const TagPage = ({ tagStore }: IProps) => {
     if (type === 'add' || type === 'edit') {
       onSetModalProps({ record, visible: true })
     } else if (type === 'delete') {
-      const { success, msg = '删除失败' } = await tagStore.delete({ id: record.id })
+      const { success } = await tagStore.delete({ id: record.id })
       if (success) {
         message.success('删除成功')
-        onReload()
-      } else {
-        message.error(msg)
+        onLoadData()
       }
-    } else {
-      console.log('do nothing')
     }
   }
 
@@ -79,6 +75,7 @@ const TagPage = ({ tagStore }: IProps) => {
         actionRef={actionRef}
         bordered={true}
         columns={columns}
+        headerTitle="标签列表"
         form={{ autoFocusFirstInput: false }}
         search={false}
         rowKey="id"
@@ -99,7 +96,7 @@ const TagPage = ({ tagStore }: IProps) => {
         <AddModal
           onSuccess={() => {
             onSetModalProps({ visible: false })
-            onReload()
+            onLoadData()
           }}
           onCancel={() => onSetModalProps({ visible: false })}
           detail={modalProps.record || {}}

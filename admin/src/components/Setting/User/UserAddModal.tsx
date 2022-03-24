@@ -35,12 +35,10 @@ const AddFormModal = ({ userStore, roleStore, onSuccess, onCancel, detail }: IPr
       } else {
         params.password = md5(values.password)
       }
-      const { success, msg = '操作失败' } = await fn(params)
+      const { success } = await fn(params)
       if (success) {
         message.success('操作成功')
         onSuccess()
-      } else {
-        message.error(msg)
       }
     })
   }
@@ -51,7 +49,7 @@ const AddFormModal = ({ userStore, roleStore, onSuccess, onCancel, detail }: IPr
     <Modal
       title="用户信息"
       visible={true}
-      width={500}
+      width={600}
       onOk={onFinish}
       onCancel={onCancel}
       destroyOnClose
