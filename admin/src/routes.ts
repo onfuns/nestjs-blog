@@ -43,9 +43,14 @@ export const adminRoutes = [
         component: '@/pages/setting/user',
       },
       {
-        name: '管理员设置',
+        name: '用户管理',
         path: '/setting/user',
         component: '@/pages/setting/user',
+      },
+      {
+        name: '角色管理',
+        path: '/setting/role',
+        component: '@/pages/setting/role',
       },
       {
         name: '日志管理',

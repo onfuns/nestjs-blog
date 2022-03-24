@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Form, Input, message, Modal, Radio, Select } from 'antd'
+import { Form, Input, message, Modal, Radio, Select, Checkbox } from 'antd'
 import { AuthStore } from '@/store'
 import { inject, observer } from 'mobx-react'
 const { Option } = Select
@@ -12,19 +12,18 @@ interface IProps {
 }
 
 const AddFormModal = ({ authStore, onSuccess, onCancel, detail }: IProps) => {
-  const [formVaules, setFormValues] = useState({} as any)
+  const [formVaules, setFormValues] = useState<any>({ type: 1 })
   const [form] = Form.useForm()
-  const { setFieldsValue, validateFields } = form
 
   useEffect(() => {
     if (!!detail.id) {
-      setFieldsValue({ ...detail })
+      form.setFieldsValue({ ...detail })
       setFormValues({ ...detail })
     }
   }, [])
 
   const onFinish = () => {
-    validateFields().then(async values => {
+    form.validateFields().then(async values => {
       const params = {
         ...values,
       }
@@ -59,34 +58,58 @@ const AddFormModal = ({ authStore, onSuccess, onCancel, detail }: IProps) => {
         wrapperCol={{ span: 20 }}
         form={form}
         onValuesChange={(_, values) => setFormValues(values)}
-        initialValues={{ type: '1' }}
+        initialValues={{ type: 1 }}
       >
         <Form.Item label="类型" name="type" rules={[{ required: true }]}>
           <Radio.Group>
-            <Radio value="1">模块</Radio>
-            <Radio value="2">功能</Radio>
+            <Radio value={1}>菜单</Radio>
+            <Radio value={2}>功能</Radio>
           </Radio.Group>
         </Form.Item>
 
-        {formVaules.type === '2' && (
-          <Form.Item label="模块" name="pid" rules={[{ required: true }]}>
-            <Select placeholder="请选择模块">
-              {optionsList.map(({ name, id }) => (
-                <Option key={id} value={id}>
-                  {name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+        {formVaules.type === 1 && (
+          <>
+            <Form.Item label="所属菜单" name="pid" rules={[{ required: true }]}>
+              <Select placeholder="请选择">
+                <Option value={0}>一级菜单</Option>
+                {optionsList.map(({ name, id }) => (
+                  <Option key={id} value={id}>
+                    {name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item label="名称" name="name" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+
+            <Form.Item label="编码" name="code" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+          </>
         )}
 
-        <Form.Item label="名称" name="name" rules={[{ required: true }]}>
-          <Input placeholder="请输入名称" />
-        </Form.Item>
+        {formVaules.type === 2 && (
+          <>
+            <Form.Item label="所属菜单" name="pid" rules={[{ required: true }]}>
+              <Select placeholder="请选择">
+                {optionsList.map(({ name, id }) => (
+                  <Option key={id} value={id}>
+                    {name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
 
-        <Form.Item label="路径" name="code" rules={[{ required: true }]}>
-          <Input placeholder="请输入路径" />
-        </Form.Item>
+            <Form.Item label="功能项" name="name" rules={[{ required: true }]}>
+              <Checkbox.Group>
+                <Checkbox value="1">仅查看</Checkbox>
+                <Checkbox value="2">可编辑</Checkbox>
+              </Checkbox.Group>
+            </Form.Item>
+          </>
+        )}
       </Form>
     </Modal>
   )

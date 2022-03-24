@@ -13,7 +13,7 @@ interface IProps {
   detail: Record<string, any>
 }
 
-const AddFormModal = ({ userStore, roleStore, onSuccess, onCancel, detail }: IProps) => {
+const Add = ({ userStore, roleStore, onSuccess, onCancel, detail }: IProps) => {
   const [form] = Form.useForm()
 
   useEffect(() => {
@@ -93,4 +93,4 @@ const AddFormModal = ({ userStore, roleStore, onSuccess, onCancel, detail }: IPr
   )
 }
 
-export default inject('userStore', 'roleStore')(observer(AddFormModal))
+export default inject('userStore', 'roleStore')(observer(Add))
