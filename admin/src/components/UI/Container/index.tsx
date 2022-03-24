@@ -1,12 +1,12 @@
-import Header from '@/components/Layout/Header'
-import Menu from '@/components/Layout/Menu'
 import { Provider } from 'mobx-react'
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN'
 import * as store from '@/store'
 import styles from './style.less'
 import 'reset-css/reset.css'
-import TagPanel from '@/components/Layout/TagPanel'
+import TagPanel from '@/components/UI/TagPanel'
+import Header from '@/components/UI/Header'
+import Menu from '@/components/UI/Menu'
 
 const Container = props => {
   return (

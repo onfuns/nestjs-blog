@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Form, Input, Button, message, Radio, DatePicker, Select } from 'antd'
-import Breadcrumb from '@/components/Breadcrumb'
 import { inject, observer } from 'mobx-react'
 import { ArticleStore, TagStore } from '@/store'
 import Editor from '@/components/Editor'
@@ -9,7 +8,6 @@ import dayjs from 'dayjs'
 const formatDate = 'YYYY-MM-DD HH:mm:ss'
 import CategoryCascader from '@/components/Portal/Category/Cascader'
 import { useHistory } from 'umi'
-import styles from './add.less'
 
 interface IProps {
   articleStore: ArticleStore
@@ -78,69 +76,66 @@ const ArticleAddPage = ({ articleStore, tagStore }: IProps) => {
   const { result: tagList } = tagStore
 
   return (
-    <div className={styles.addPage}>
-      <Breadcrumb />
-      <Form
-        labelCol={{ span: 2 }}
-        wrapperCol={{ span: 20 }}
-        form={form}
-        initialValues={{
-          pass_flag: 1,
-          comment_flag: 1,
-          publish_time: dayjs(),
-        }}
-      >
-        <Form.Item label="标题" name="title" rules={[{ required: true }]}>
-          <Input placeholder="请输入标题" />
-        </Form.Item>
-        <Form.Item label="描述" name="description">
-          <Input.TextArea placeholder="请输入描述" showCount maxLength={200} />
-        </Form.Item>
-        <Form.Item label="分类" name="category_id" rules={[{ required: true }]}>
-          <CategoryCascader root={false} />
-        </Form.Item>
+    <Form
+      labelCol={{ span: 2 }}
+      wrapperCol={{ span: 20 }}
+      form={form}
+      initialValues={{
+        pass_flag: 1,
+        comment_flag: 1,
+        publish_time: dayjs(),
+      }}
+    >
+      <Form.Item label="标题" name="title" rules={[{ required: true }]}>
+        <Input placeholder="请输入标题" />
+      </Form.Item>
+      <Form.Item label="描述" name="description">
+        <Input.TextArea placeholder="请输入描述" showCount maxLength={200} />
+      </Form.Item>
+      <Form.Item label="分类" name="category_id" rules={[{ required: true }]}>
+        <CategoryCascader root={false} />
+      </Form.Item>
 
-        <Form.Item label="标签" name="tag_id">
-          <Select mode="multiple" style={{ width: '100%' }} placeholder="请选择标签">
-            {tagList.map((item, index) => (
-              <Select.Option key={index} value={item.id}>
-                {item.name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+      <Form.Item label="标签" name="tag_id">
+        <Select mode="multiple" style={{ width: '100%' }} placeholder="请选择标签">
+          {tagList.map((item, index) => (
+            <Select.Option key={index} value={item.id}>
+              {item.name}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
 
-        <Form.Item label="审核状态" name="pass_flag">
-          <Radio.Group>
-            <Radio value={1}>通过</Radio>
-            <Radio value={0}>待审核</Radio>
-          </Radio.Group>
-        </Form.Item>
+      <Form.Item label="审核状态" name="pass_flag">
+        <Radio.Group>
+          <Radio value={1}>通过</Radio>
+          <Radio value={0}>待审核</Radio>
+        </Radio.Group>
+      </Form.Item>
 
-        <Form.Item label="评论状态" name="comment_flag">
-          <Radio.Group>
-            <Radio value={1}>开放</Radio>
-            <Radio value={0}>关闭</Radio>
-          </Radio.Group>
-        </Form.Item>
+      <Form.Item label="评论状态" name="comment_flag">
+        <Radio.Group>
+          <Radio value={1}>开放</Radio>
+          <Radio value={0}>关闭</Radio>
+        </Radio.Group>
+      </Form.Item>
 
-        <Form.Item label="发布时间" name="publish_time" rules={[{ required: true }]}>
-          <DatePicker showTime allowClear={false} format={formatDate} style={{ width: '100%' }} />
-        </Form.Item>
-        <Form.Item label="作者" name="author">
-          <Input placeholder="请输入作者" />
-        </Form.Item>
+      <Form.Item label="发布时间" name="publish_time" rules={[{ required: true }]}>
+        <DatePicker showTime allowClear={false} format={formatDate} style={{ width: '100%' }} />
+      </Form.Item>
+      <Form.Item label="作者" name="author">
+        <Input placeholder="请输入作者" />
+      </Form.Item>
 
-        <Form.Item label="内容" required>
-          <Editor value={content} onChange={value => setContent(value)} />
-        </Form.Item>
-        <div style={{ textAlign: 'center' }}>
-          <Button type="primary" onClick={onSubmit} style={{ width: 200 }}>
-            保存
-          </Button>
-        </div>
-      </Form>
-    </div>
+      <Form.Item label="内容" required>
+        <Editor value={content} onChange={value => setContent(value)} />
+      </Form.Item>
+      <div style={{ textAlign: 'center' }}>
+        <Button type="primary" onClick={onSubmit} style={{ width: 200 }}>
+          保存
+        </Button>
+      </div>
+    </Form>
   )
 }
 
