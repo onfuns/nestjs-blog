@@ -49,13 +49,12 @@ export class UserService {
     }
   }
 
-  async findAll(query: { roleId: string }): Promise<User[]> {
-    const { roleId } = query
+  async findAll(query = {}): Promise<User[]> {
     try {
-      const data = await await getRepository(User)
+      const data = await getRepository(User)
         .createQueryBuilder('user')
-        .where('find_in_set(:roleId,user.role_id)', { roleId }) //TODO 这里简化，用关联表合理
-        .addOrderBy('created_at', 'ASC')
+        .select(['user', 'role.id', 'role.name'])
+        .leftJoin('user.roles', 'role')
         .getMany()
       return data
     } catch (err) {

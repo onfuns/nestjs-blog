@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 import { Category } from '@/modules/category/category.entity'
-@Entity({ engine: 'InnoDB' })
+@Entity()
 export class Article {
   @PrimaryGeneratedColumn('uuid')
   id: string

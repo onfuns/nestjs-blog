@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm'
-@Entity({ engine: 'InnoDB' })
+@Entity()
 export class Auth {
   @PrimaryGeneratedColumn()
   id: number

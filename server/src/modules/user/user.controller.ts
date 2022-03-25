@@ -19,15 +19,14 @@ export class UserController {
         secret: config.jwtToken,
         id: data.id,
         name: data.name,
-        role_id: data.role_id,
       })
       return { userName: name, token }
     }
   }
 
   @Get('list')
-  async findAll(@Query('roleId') roleId) {
-    return this.service.findAll({ roleId })
+  async findAll(@Query() query) {
+    return this.service.findAll(query)
   }
 
   @Post('add')

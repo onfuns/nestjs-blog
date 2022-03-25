@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 import { Article } from '../article/article.entity'
-@Entity({ engine: 'InnoDB' })
+@Entity()
 export class Comment {
   @PrimaryGeneratedColumn()
   id: number
