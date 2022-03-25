@@ -11,9 +11,9 @@ export class UserService {
   @InjectRepository(User) private readonly repository: Repository<User>
   constructor() {}
 
-  async login(name) {
+  async login(body: { name: string; password: string }) {
     try {
-      const data = await this.repository.findOne({ name })
+      const data = await this.repository.findOne(body)
       return data
     } catch (err) {
       throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
@@ -49,7 +49,7 @@ export class UserService {
     }
   }
 
-  async findAll(query = {}): Promise<User[]> {
+  async findAll(query: Partial<User>): Promise<User[]> {
     try {
       const data = await getRepository(User)
         .createQueryBuilder('user')
@@ -62,7 +62,7 @@ export class UserService {
     }
   }
 
-  async update(body): Promise<any> {
+  async update(body: Partial<User>): Promise<any> {
     const { id } = body
     unset(body, 'id')
     try {
@@ -72,7 +72,7 @@ export class UserService {
     }
   }
 
-  async delete(body): Promise<any> {
+  async delete(body: Partial<User>): Promise<any> {
     const { id } = body
     try {
       return await this.repository.delete(id)

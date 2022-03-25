@@ -14,7 +14,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Column({ unique: true })
   name: string
 
   @Column({ select: false })
@@ -30,6 +30,12 @@ export class User {
 
   @Column({ default: 1 })
   enable: number
+
+  @Column()
+  last_login_ip: string
+
+  @CreateDateColumn()
+  last_login_at: string
 
   @CreateDateColumn()
   created_at: string

@@ -1,26 +1,43 @@
-import { Inject, Controller, Post, Get, Body, SetMetadata, Query } from '@nestjs/common'
+import {
+  Inject,
+  Controller,
+  Post,
+  Get,
+  Body,
+  SetMetadata,
+  Query,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common'
 import { UserService } from './user.service'
 import * as md5 from 'md5'
 import { User } from './user.entity'
 import config from '@/config'
+import { IpAddress } from '@/decorator/IpAddress'
 @Controller('/user')
 export class UserController {
   constructor(@Inject(UserService) private readonly service: UserService) {}
 
   @Post('login')
   @SetMetadata('roles', ['all'])
-  async login(@Body() body) {
-    const { name, password } = body
-    const data = await this.service.login(name)
-    if (data?.password !== md5(password)) {
-      return { success: false, msg: '密码错误' }
-    } else {
+  async login(@Body() body: User, @IpAddress() cleintIp: string) {
+    try {
+      const { name, password } = body
+      const data: User = await this.service.login({ name, password: md5(password) })
+      if (!data) return { success: false, msg: '用户名或密码错误' }
       const token = this.service.createToken({
         secret: config.jwtToken,
         id: data.id,
         name: data.name,
       })
+      await this.service.update({
+        id: data.id,
+        last_login_at: new Date().toString(),
+        last_login_ip: cleintIp,
+      })
       return { userName: name, token }
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 
