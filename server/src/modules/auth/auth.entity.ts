@@ -10,8 +10,8 @@ export class Auth {
   @Column({ unique: true })
   code: string
 
-  @Column()
-  type: string
+  @Column({ comment: '1--菜单,2--功能' })
+  type: number
 
   @Column({ default: 0 })
   pid: number

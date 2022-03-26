@@ -1,8 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { getRepository, Repository } from 'typeorm'
 import { Role } from './role.entity'
-import { unset } from 'lodash'
 @Injectable()
 export class RoleService {
   constructor(
@@ -10,9 +9,12 @@ export class RoleService {
     private readonly repository: Repository<Role>,
   ) {}
 
-  async create(data: Role): Promise<Role> {
+  async create(body: Role): Promise<Role> {
     try {
-      return await this.repository.save(data)
+      const { auths, ...others } = body
+      const record = this.repository.create(others)
+      record.auths = auths
+      return await this.repository.save(record)
     } catch (err) {
       throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }
@@ -28,23 +30,22 @@ export class RoleService {
 
   async findAll(): Promise<Role[]> {
     try {
-      const data = await this.repository.find({
-        order: {
-          type: 'DESC',
-          created_at: 'ASC',
-        },
-      })
-      return data
+      return getRepository(Role)
+        .createQueryBuilder('role')
+        .leftJoinAndSelect('role.auths', 'auth')
+        .getMany()
     } catch (err) {
       throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 
-  async update(body): Promise<any> {
-    const { id } = body
-    unset(body, 'id')
+  async update(body: Role): Promise<any> {
     try {
-      return await this.repository.update(id, body)
+      const { id, auths, ...others } = body
+      const record = this.repository.create(others)
+      record.auths = auths
+      record.id = id
+      return await this.repository.save(record)
     } catch (err) {
       throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }

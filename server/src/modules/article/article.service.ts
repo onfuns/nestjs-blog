@@ -1,8 +1,7 @@
 import { Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository, Not, Like, MoreThan } from 'typeorm'
+import { Repository, Like, MoreThan } from 'typeorm'
 import { Article } from './article.entity'
-import { unset } from 'lodash'
 @Injectable()
 export class ArticleService {
   private logger = new Logger(ArticleService.name)
@@ -64,10 +63,9 @@ export class ArticleService {
   }
 
   async update(body: Article): Promise<any> {
-    const { id } = body
-    unset(body, 'id')
+    const { id, ...others } = body
     try {
-      return await this.repository.update(id, body)
+      return await this.repository.update(id, others)
     } catch (err) {
       this.logger.error('update body:', body as any)
       throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)

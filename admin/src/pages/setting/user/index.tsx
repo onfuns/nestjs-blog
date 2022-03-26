@@ -1,9 +1,10 @@
 import { useState, useRef } from 'react'
-import { Button, Popconfirm, Switch, Space, message } from 'antd'
+import { Button, Popconfirm, Space, message, Tag } from 'antd'
 import AddModal from '@/components/Setting/User/Add'
 import { inject, observer } from 'mobx-react'
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
-import { UserStore, RoleStore } from '@/store'
+import { UserStore } from '@/store'
+import dayjs from 'dayjs'
 
 interface IModalProps {
   visible?: boolean
@@ -11,9 +12,9 @@ interface IModalProps {
   record?: Record<string, any>
 }
 
-const UserList = ({ userStore, roleStore }: { userStore?: UserStore; roleStore?: RoleStore }) => {
-  const { result: roleList = [] } = roleStore
+const fromatDate = date => date && dayjs(date).format('YYYY-MM-DD HH:mm')
 
+const UserList = ({ userStore }: { userStore?: UserStore }) => {
   const actionRef = useRef<ActionType>()
   const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
 
@@ -41,25 +42,47 @@ const UserList = ({ userStore, roleStore }: { userStore?: UserStore; roleStore?:
     {
       title: '用户名',
       dataIndex: 'name',
+      ellipsis: true,
+      width: 150,
     },
     {
-      title: '角色',
-      dataIndex: 'role_id',
-      render: (value: string) => {
-        //TODO 暂不支持多角色
-        const { name } = roleList.find(r => r.id === Number(value)) || {}
-        return name
+      title: '所属角色',
+      dataIndex: 'roles',
+      render: (_, record) => {
+        return record?.roles?.map(r => (
+          <Tag key={r.id} color="blue">
+            {r.name}
+          </Tag>
+        ))
       },
     },
     {
-      title: '启用状态',
+      title: '最后登录IP',
+      dataIndex: 'last_login_ip',
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'created_at',
+      render: (_, { created_at }) => fromatDate(created_at),
+    },
+    {
+      title: '最后登录时间',
+      dataIndex: 'last_login_at',
+      render: (_, { last_login_at }) => fromatDate(last_login_at),
+    },
+    {
+      title: '状态',
       dataIndex: 'enable',
-      render: (value: number) => <Switch checked={value === 1} size="small" />,
+      hideInSearch: true,
+      render: value => (
+        <Tag color={value === 1 ? 'success' : 'error'}>{value === 1 ? '正常' : '停用'}</Tag>
+      ),
+      width: 80,
     },
     {
       title: '操作',
       key: 'action',
-      width: 200,
+      width: 130,
       render: (_, record) => {
         return (
           <Space>

@@ -3,7 +3,7 @@ import AddRoleModal from '@/components/Setting/Role/Add'
 import AuthTreeModal from '@/components/Setting/Role/AuthTree'
 import { RoleStore } from '@/store'
 import { inject, observer } from 'mobx-react'
-import { Button, Popconfirm, message, Space } from 'antd'
+import { Button, Popconfirm, message, Space, Tag } from 'antd'
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
 interface IProps {
   roleStore: RoleStore
@@ -51,6 +51,15 @@ const RolePage = ({ roleStore }: IProps) => {
       dataIndex: 'description',
     },
     {
+      title: '状态',
+      dataIndex: 'enable',
+      hideInSearch: true,
+      render: value => (
+        <Tag color={value === 1 ? 'success' : 'error'}>{value === 1 ? '正常' : '停用'}</Tag>
+      ),
+      width: 80,
+    },
+    {
       title: '操作',
       dataIndex: 'option',
       width: 200,
@@ -62,7 +71,7 @@ const RolePage = ({ roleStore }: IProps) => {
             </Button>
             <Button
               size="small"
-              onClick={() => onSetModalProps({ visible: true, modalType: 'authTree' })}
+              onClick={() => onSetModalProps({ visible: true, modalType: 'authTree', record })}
             >
               权限设置
             </Button>

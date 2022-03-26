@@ -4,7 +4,6 @@ import { Repository, getRepository } from 'typeorm'
 import { User } from './user.entity'
 import * as jwt from 'jsonwebtoken'
 import config from '@/config'
-import { unset } from 'lodash'
 
 @Injectable()
 export class UserService {
@@ -41,9 +40,12 @@ export class UserService {
     return token
   }
 
-  async create(data: User): Promise<User> {
+  async create(body: User): Promise<any> {
+    const { roles, ...others } = body
     try {
-      return await this.repository.save(data)
+      const record = this.repository.create(others)
+      record.roles = roles
+      await this.repository.save(record)
     } catch (err) {
       throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }
@@ -63,10 +65,12 @@ export class UserService {
   }
 
   async update(body: Partial<User>): Promise<any> {
-    const { id } = body
-    unset(body, 'id')
+    const { id, roles, ...others } = body
     try {
-      return await this.repository.update(id, body)
+      const record = this.repository.create(others)
+      record.roles = roles
+      record.id = id
+      await this.repository.save(record)
     } catch (err) {
       throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }

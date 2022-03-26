@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Form, Input, message, Modal } from 'antd'
+import { Form, Input, message, Modal, Radio } from 'antd'
 import { RoleStore } from '@/store'
 import { inject, observer } from 'mobx-react'
 
@@ -47,13 +47,25 @@ const AddFormModal = ({ roleStore, onSuccess, onCancel, detail }: IProps) => {
       onCancel={onCancel}
       destroyOnClose
     >
-      <Form labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} form={form}>
+      <Form
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 20 }}
+        form={form}
+        initialValues={{ enable: 1 }}
+      >
         <Form.Item label="名称" name="name" rules={[{ required: true }]}>
           <Input placeholder="请输入名称" />
         </Form.Item>
 
         <Form.Item label="描述" name="description" rules={[{ required: true }]}>
-          <Input placeholder="请输入名称" />
+          <Input.TextArea placeholder="请输入描述" />
+        </Form.Item>
+
+        <Form.Item label="状态" name="enable" rules={[{ required: true }]}>
+          <Radio.Group>
+            <Radio value={1}>启用</Radio>
+            <Radio value={0}>停用</Radio>
+          </Radio.Group>
         </Form.Item>
       </Form>
     </Modal>

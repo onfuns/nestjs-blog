@@ -20,9 +20,9 @@ export class User {
   @Column({ select: false })
   password: string
 
-  @ManyToMany(type => Role)
+  @ManyToMany(type => Role, { cascade: true })
   @JoinTable({
-    name: 'user_role', // 中间表名
+    name: 'user_role_relation',
     joinColumns: [{ name: 'user_id' }],
     inverseJoinColumns: [{ name: 'role_id' }],
   })
@@ -31,7 +31,7 @@ export class User {
   @Column({ default: 1 })
   enable: number
 
-  @Column()
+  @Column({ nullable: true })
   last_login_ip: string
 
   @CreateDateColumn()

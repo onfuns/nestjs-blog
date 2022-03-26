@@ -15,21 +15,25 @@ interface IProps {
 
 const Add = ({ userStore, roleStore, onSuccess, onCancel, detail }: IProps) => {
   const [form] = Form.useForm()
+  const isEdit = !!detail.id
 
   useEffect(() => {
-    if (!!detail.id) {
-      form.setFieldsValue({ ...detail })
-    }
+    ;(async () => {
+      await roleStore.get()
+      if (isEdit) {
+        form.setFieldsValue({ ...detail, roles: detail.roles?.map(r => r.id) })
+      }
+    })()
   }, [])
 
   const onFinish = () => {
     form.validateFields().then(async values => {
       const params = {
         ...values,
+        roles: values.roles.map(id => ({ id })),
       }
       let fn = userStore.add
-      // 编辑
-      if (!!detail.id) {
+      if (isEdit) {
         fn = userStore.update
         params.id = detail.id
       } else {
@@ -42,8 +46,6 @@ const Add = ({ userStore, roleStore, onSuccess, onCancel, detail }: IProps) => {
       }
     })
   }
-
-  const isEdit = !!detail.id
 
   return (
     <Modal
@@ -60,21 +62,20 @@ const Add = ({ userStore, roleStore, onSuccess, onCancel, detail }: IProps) => {
         form={form}
         initialValues={{
           enable: 1,
-          role_id: roleStore?.detail?.id,
         }}
       >
         <Form.Item label="用户名" name="name" rules={[{ required: true }]}>
           <Input placeholder="请输入用户名" />
         </Form.Item>
 
-        {isEdit ? null : (
+        {!isEdit && (
           <Form.Item label="密码" name="password" rules={[{ required: true }]}>
             <Input.Password placeholder="请输入密码" />
           </Form.Item>
         )}
 
-        <Form.Item label="角色" name="role_id" rules={[{ required: true }]}>
-          <Select>
+        <Form.Item label="所属角色" name="roles" rules={[{ required: true }]}>
+          <Select mode="multiple">
             {roleStore.result?.map((r: any) => (
               <Option key={r.id} value={r.id}>
                 {r.name}
@@ -82,10 +83,11 @@ const Add = ({ userStore, roleStore, onSuccess, onCancel, detail }: IProps) => {
             ))}
           </Select>
         </Form.Item>
+
         <Form.Item label="状态" name="enable" rules={[{ required: true }]}>
           <Radio.Group>
             <Radio value={1}>启用</Radio>
-            <Radio value={0}>禁用</Radio>
+            <Radio value={0}>停用</Radio>
           </Radio.Group>
         </Form.Item>
       </Form>

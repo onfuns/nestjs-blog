@@ -2,7 +2,6 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Tag } from './tag.entity'
-import { unset } from 'lodash'
 @Injectable()
 export class TagService {
   constructor(
@@ -32,10 +31,9 @@ export class TagService {
   }
 
   async update(body): Promise<any> {
-    const { id } = body
-    unset(body, 'id')
+    const { id, ...others } = body
     try {
-      return await this.repository.update(id, body)
+      return await this.repository.update(id, others)
     } catch (err) {
       throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }
