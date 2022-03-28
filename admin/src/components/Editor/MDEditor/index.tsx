@@ -1,4 +1,4 @@
-import { Editor } from '@bytemd/react'
+import { Editor as BytemdEditor } from '@bytemd/react'
 import 'bytemd/dist/index.min.css'
 import zh_Hans from 'bytemd/lib/locales/zh_Hans.json'
 import gfm from '@bytemd/plugin-gfm'
@@ -13,7 +13,7 @@ export default ({ value, onChange }) => {
   }
   return (
     <div className={styles.editor}>
-      <Editor
+      <BytemdEditor
         mode="split"
         locale={zh_Hans}
         value={value}

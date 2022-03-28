@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 import { Form, Input, message, Radio, DatePicker, Select } from 'antd'
 import { inject, observer } from 'mobx-react'
 import { ArticleStore, TagStore } from '@/store'
-import Editor from '@/components/Editor'
+import MDEditor from '@/components/Editor/MDEditor'
+import HTMLEditor from '@/components/Editor/HTMLEditor'
+import JSONEditor from '@/components/Editor/JSONEditor'
 import dayjs from 'dayjs'
 import CategoryCascader from '@/components/Portal/Category/Cascader'
 import Drawer from '@/components/UI/Drawer'
@@ -121,7 +123,9 @@ const ArticleAdd = ({ articleStore, tagStore, onCancel, onSuccess, detail = {} }
         </Form.Item>
 
         <Form.Item label="内容" required>
-          <Editor value={content} onChange={value => setContent(value)} />
+          <MDEditor value={content} onChange={value => setContent(value)} />
+          {/* <HTMLEditor id="article_add_dom" onChange={value => setContent(value)}/> */}
+          {/* <JSONEditor onChange={value => setContent(value)} /> */}
         </Form.Item>
       </Form>
     </Drawer>

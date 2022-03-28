@@ -84,6 +84,7 @@ const TagPage = ({ tagStore }: IProps) => {
           await tagStore.get({ ...params, page: current, pageSize })
           return { success: true, data: tagStore.result }
         }}
+        pagination={false}
         toolBarRender={() => [
           <Button key="add" type="primary" onClick={() => onAction({}, 'add')}>
             新增

@@ -25,12 +25,8 @@ const CategoryPage = ({ categoryStore }: IProps) => {
     setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
   }
 
-  useEffect(() => {
-    onLoadData()
-  }, [])
-
-  const onLoadData = async () => {
-    await categoryStore.get()
+  const onLoadData = () => {
+    actionRef?.current.reload()
   }
 
   const onAction = async (record: any = {}, type: 'add' | 'edit' | 'delete' | 'status') => {
@@ -132,6 +128,7 @@ const CategoryPage = ({ categoryStore }: IProps) => {
 
           return { success: true, data: categoryStore.result }
         }}
+        pagination={false}
         toolBarRender={() => [
           <Button key="add" type="primary" onClick={() => onAction({}, 'add')}>
             新增
