@@ -3,24 +3,26 @@
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
-  padding: 10px;
+  padding: 5px 10px;
   background: #fff;
-  border: 1px solid #e6e6e6;
-  border-left: none;
-  border-right: none;
-  :global {
-    .ant-tag {
-      padding: 3px 10px;
+  overflow-x: auto;
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 12px;
+    font-size: 13px;
+    margin-right: 5px;
+    border-radius: 2px;
+    border: 1px solid #e6e6e6;
+    .icon {
+      margin-left: 5px;
     }
   }
   .active {
-    background: #4bc2c5 !important;
-
-    a,
-    svg {
-      color: #fff !important;
-      text-decoration: none;
-    }
+    background: #4bc2c5;
+    border-color: #4bc2c5;
+    color: #fff;
 
     &:before {
       content: '';
@@ -30,7 +32,8 @@
       height: 8px;
       border-radius: 50%;
       position: relative;
-      margin-right: 2px;
+      margin-right: 5px;
+      opacity: 1;
     }
   }
 }

@@ -115,6 +115,7 @@ const Article = ({ articleStore }: IProps) => {
     {
       title: '操作',
       dataIndex: 'option',
+      valueType: 'option',
       width: 200,
       render: (_, record) => {
         return (
@@ -139,11 +140,9 @@ const Article = ({ articleStore }: IProps) => {
     <>
       <ProTable<any>
         actionRef={actionRef}
-        bordered={true}
         columns={columns}
         headerTitle="文章列表"
         form={{ autoFocusFirstInput: false }}
-        search={{ defaultCollapsed: false }}
         rowKey="id"
         request={async (params = {}) => {
           const { current = 1, pageSize = 20 } = params

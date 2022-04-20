@@ -103,7 +103,6 @@ const CategoryPage = ({ categoryStore }: IProps) => {
     <>
       <ProTable<any>
         actionRef={actionRef}
-        bordered={true}
         columns={columns}
         headerTitle="栏目列表"
         form={{ autoFocusFirstInput: false }}

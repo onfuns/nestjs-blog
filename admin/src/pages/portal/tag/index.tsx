@@ -73,7 +73,6 @@ const TagPage = ({ tagStore }: IProps) => {
     <>
       <ProTable<any>
         actionRef={actionRef}
-        bordered={true}
         columns={columns}
         headerTitle="标签列表"
         form={{ autoFocusFirstInput: false }}

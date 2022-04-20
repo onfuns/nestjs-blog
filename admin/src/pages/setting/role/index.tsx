@@ -92,7 +92,6 @@ const RolePage = ({ roleStore }: IProps) => {
     <>
       <ProTable<any>
         actionRef={actionRef}
-        bordered={true}
         columns={columns}
         headerTitle="角色列表"
         form={{ autoFocusFirstInput: false }}

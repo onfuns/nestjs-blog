@@ -26,7 +26,6 @@ export class UserGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<any> {
-    return true
     const request = context.switchToHttp().getRequest<Request>()
     const roles = this.reflector.get<string[]>('roles', context.getHandler())
     /** token 鉴权 begin */

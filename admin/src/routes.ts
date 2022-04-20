@@ -47,11 +47,11 @@ export const adminRoutes = [
         path: '/setting/role',
         component: '@/pages/setting/role',
       },
-      {
-        name: '网站设置',
-        path: '/setting/website',
-        component: '@/pages/setting/website',
-      },
+      // {
+      //   name: '网站设置',
+      //   path: '/setting/website',
+      //   component: '@/pages/setting/website',
+      // },
     ],
   },
 ]

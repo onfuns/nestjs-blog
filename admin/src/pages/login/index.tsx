@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Form, Input, Button, message, Carousel } from 'antd'
+import { Form, Input, Button, Carousel } from 'antd'
 import styles from './style.less'
 import { useHistory } from 'umi'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'

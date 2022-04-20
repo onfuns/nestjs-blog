@@ -116,7 +116,6 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
     <>
       <ProTable<any>
         actionRef={actionRef}
-        bordered={true}
         columns={columns}
         headerTitle="评论列表"
         form={{ autoFocusFirstInput: false }}

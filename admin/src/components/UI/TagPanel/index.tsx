@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
-import { Tag } from 'antd'
 import { inject, observer } from 'mobx-react'
 import { HeaderStore } from '@/store'
-import { useLocation, useHistory, Link } from 'umi'
+import { useLocation, useHistory } from 'umi'
 import styles from './style.less'
+import classnames from 'classnames'
+import { CloseOutlined } from '@ant-design/icons'
 interface IProps {
   headerStore?: HeaderStore
   route: { routes: any[] }
@@ -41,14 +42,17 @@ const TagPanel = (props: IProps) => {
   return tagsPanel.length ? (
     <div className={styles.tagsPanel}>
       {tagsPanel.map(({ path, name }) => (
-        <Tag
-          className={path === pathname ? styles.active : ''}
+        <a
+          className={classnames(styles.btn, {
+            [styles.active]: path === pathname,
+          })}
           key={name}
-          closable={tagsPanel.length !== 1}
-          onClose={() => onClose(path)}
         >
-          <Link to={path}>{name}</Link>
-        </Tag>
+          {name}
+          {tagsPanel.length !== 1 && (
+            <CloseOutlined className={styles.icon} onClick={() => onClose(path)} />
+          )}
+        </a>
       ))}
     </div>
   ) : null

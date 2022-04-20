@@ -23,10 +23,10 @@ import { CommentModule } from '@/modules/comment/comment.module'
   ],
   controllers: [],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: UserGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: UserGuard,
+    // },
   ],
 })
 export class AppModule {}

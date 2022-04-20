@@ -9,8 +9,7 @@ export default defineConfig({
   routes,
   theme,
   fastRefresh: {},
-  // mfsu: {},
-  base: '/admin-website',
+  base: '/admin',
   publicPath: '/',
   dynamicImport: {},
   proxy: {

@@ -106,7 +106,6 @@ const UserList = ({ userStore }: { userStore?: UserStore }) => {
     <>
       <ProTable<any>
         actionRef={actionRef}
-        bordered={true}
         columns={columns}
         headerTitle="用户列表"
         form={{ autoFocusFirstInput: false }}

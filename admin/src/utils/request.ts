@@ -29,7 +29,7 @@ const request = (options, showMsg = true) => {
       if (status === 403) {
         if (data?.msg === 'TOKEN_INVALID') {
           message.error('登录过期，请重新登录', 2).then(() => {
-            window.location.href = '/admin-website/login'
+            window.location.href = '/admin/login'
           })
           return false
         }
