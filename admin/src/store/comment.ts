@@ -3,13 +3,12 @@ import { getCommentList, addComment, updateComment, deleteComment } from '@/acti
 
 export class CommentStore {
   result: { list: any[]; count: number } | null = {} as any
-  detail: any = {}
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  set(key: string, value: any) {
+  set(key: 'result', value: any) {
     this[key] = value
   }
 

@@ -9,7 +9,7 @@ export class RoleStore {
     makeAutoObservable(this)
   }
 
-  set(key: string, value: any) {
+  set(key: 'result' | 'detail', value: any) {
     this[key] = value
   }
 

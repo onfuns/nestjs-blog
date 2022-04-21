@@ -3,13 +3,12 @@ import { getTagList, updateTag, addTag, deleteTag } from '@/actions/tag'
 
 export class TagStore {
   result: any[] = []
-  detail: any = {}
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  set(key: string, value: any) {
+  set(key: 'result', value: any) {
     this[key] = value
   }
 

@@ -8,15 +8,13 @@ export class CategoryStore {
     makeAutoObservable(this)
   }
 
-  set(key, value) {
+  set(key: 'list', value) {
     this[key] = value
   }
 
   async get() {
     const { data } = await getCategoryList()
-    if (data?.length) {
-      this.set('list', data)
-    }
+    this.set('list', data || [])
   }
 }
 

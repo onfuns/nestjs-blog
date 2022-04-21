@@ -4,7 +4,7 @@ import styles from './style.less'
 import { useHistory } from 'umi'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { saveLocalUser, loginUser } from '@/actions/user'
-import LoginImage from '@/assets/images/login-1.png'
+import LoginImage from '@/assets/images/login-bg.png'
 
 export default () => {
   const [loading, setLoading] = useState(false)

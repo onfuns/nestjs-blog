@@ -3,13 +3,12 @@ import { getCategoryList, updateCategory, addCategory, deleteCategory } from '@/
 
 export class CategoryStore {
   result: any[] = []
-  detail: any = {}
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  set(key: string, value: any) {
+  set(key: 'result', value: any) {
     this[key] = value
   }
 

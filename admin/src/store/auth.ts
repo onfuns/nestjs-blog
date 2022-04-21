@@ -3,13 +3,12 @@ import { getAuthList, addAuth, updateAuth, deleteAuth } from '@/actions/auth'
 
 export class AuthStore {
   result: any[] = []
-  detail: any = {}
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  set(key: string, value: any) {
+  set(key: 'result', value: any) {
     this[key] = value
   }
 

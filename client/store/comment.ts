@@ -8,15 +8,13 @@ export class CommentStore {
     makeAutoObservable(this)
   }
 
-  set(key, value) {
+  set(key: 'result', value) {
     this[key] = value
   }
 
   async get(params = {}) {
     const { data } = await getCommentList(params)
-    if (data) {
-      this.set('result', data)
-    }
+    this.set('result', data || [])
   }
 
   async add(params = {}) {

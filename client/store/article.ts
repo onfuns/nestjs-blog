@@ -9,19 +9,19 @@ export class ArticleStore {
     makeAutoObservable(this)
   }
 
-  set(key, value) {
+  set(key: 'result' | 'detail', value) {
     this[key] = value
   }
 
   async get(params = {}) {
     const { data } = await getArticleList(params)
-    this.set('result', data)
+    this.set('result', data || [])
     return this.result
   }
 
   async getInfoById(params) {
     const { data } = await getArticleDetailById(params)
-    this.set('detail', data)
+    this.set('detail', data || {})
   }
 }
 

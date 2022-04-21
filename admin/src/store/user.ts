@@ -3,13 +3,12 @@ import { getUserList, deleteUser, updateUser, addUser, loginUser } from '@/actio
 
 export class UserStore {
   result: any[] = []
-  detail: any = {}
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  set(key: string, value: any) {
+  set(key: 'result', value: any) {
     this[key] = value
   }
 
