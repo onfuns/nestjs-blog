@@ -29,7 +29,3 @@ $ npm run test:e2e
 # 覆盖率
 $ npm run test:cov
 ```
-
-## Filter、Interceptor 等区别
-
-![](./static/life-cycle.jpg)

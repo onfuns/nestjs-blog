@@ -2,29 +2,32 @@ import { makeAutoObservable } from 'mobx'
 import { getCommentList, addComment, updateComment, deleteComment } from '@/actions/comment'
 
 export class CommentStore {
-  result: { list: any[]; count: number } | null = {} as any
-  detail: any = {}
+  result: { data: any[]; count: number } | null = {} as any
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  async get(params = {}) {
-    const data = await getCommentList(params)
-    if (data.success) {
-      this.result = data.data
+  set(key: 'result', value: any) {
+    this[key] = value
+  }
+
+  async get(params?: Record<string, any>) {
+    const { success, data } = await getCommentList(params)
+    if (success) {
+      this.set('result', data)
     }
   }
 
-  async update(params = {}) {
+  async update(params?: Record<string, any>) {
     return await updateComment(params)
   }
 
-  async add(params = {}) {
+  async add(params?: Record<string, any>) {
     return await addComment(params)
   }
 
-  async delete(params = {}) {
+  async delete(params?: Record<string, any>) {
     return await deleteComment(params)
   }
 }

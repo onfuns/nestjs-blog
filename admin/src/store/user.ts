@@ -3,32 +3,35 @@ import { getUserList, deleteUser, updateUser, addUser, loginUser } from '@/actio
 
 export class UserStore {
   result: any[] = []
-  detail: any = {}
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  async get(params = {}) {
-    const data = await getUserList(params)
-    if (data.success) {
-      this.result = data.data
+  set(key: 'result', value: any) {
+    this[key] = value
+  }
+
+  async get(params?: Record<string, any>) {
+    const { success, data } = await getUserList(params)
+    if (success) {
+      this.set('result', data)
     }
   }
 
-  async update(params = {}) {
+  async update(params?: Record<string, any>) {
     return await updateUser(params)
   }
 
-  async add(params = {}) {
+  async add(params?: Record<string, any>) {
     return await addUser(params)
   }
 
-  async delete(params = {}) {
+  async delete(params?: Record<string, any>) {
     return await deleteUser(params)
   }
 
-  async login(params = {}) {
+  async login(params?: Record<string, any>) {
     return await loginUser(params)
   }
 }

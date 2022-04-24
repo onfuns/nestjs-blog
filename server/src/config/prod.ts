@@ -1,6 +1,6 @@
 import { IConfig } from './type'
 
-const config: IConfig = {
+export default {
   db: {
     type: 'mysql',
     host: process.env.DB_HOST,
@@ -10,8 +10,7 @@ const config: IConfig = {
     database: process.env.DB_DATABASE,
     entities: ['dist/**/*.entity.js'],
     entityPrefix: 'rs_',
+    synchronize: true,
   },
   jwtToken: process.env.JWT_TOKEN,
-}
-
-export default config
+} as IConfig

@@ -1,48 +1,61 @@
-import { useEffect } from 'react'
-import { Tag } from 'antd'
+import React, { useEffect } from 'react'
 import { inject, observer } from 'mobx-react'
-import styles from './style.module.less'
 import { HeaderStore } from '@/store'
-import { Link, useLocation } from 'umi'
-
+import { useLocation, useHistory } from 'umi'
+import styles from './style.less'
+import classnames from 'classnames'
+import { CloseOutlined } from '@ant-design/icons'
 interface IProps {
   headerStore?: HeaderStore
-  [key: string]: any
+  route: { routes: any[] }
+  children?: React.ReactChildren
 }
 
 const TagPanel = (props: IProps) => {
-  const { headerStore, history, route } = props
-  const { pathname } = useLocation()
+  //!!! 注意，这里必须用 umi 提供的location，不要用window.localtion，因为basename会读取
+  const location = useLocation()
+  const history = useHistory()
+  const { pathname } = location
+  const { headerStore, route } = props
 
   useEffect(() => {
-    const pathInfo = route?.routes?.find((item: any) => item.path === pathname) || {}
-    headerStore.updateTagsPanel({ ...pathInfo })
+    const router = route?.routes?.find((item: any) => item.path === pathname) || {}
+    if (!router.name || !router.path) return
+    headerStore.updateTagsPanel({ ...router })
   }, [pathname])
 
-  const onClose = (item: any) => {
-    headerStore.updateTagsPanel(item, 'remove')
+  const onChange = (path: string) => {
+    history.push(path)
+  }
+
+  const onClose = path => {
+    headerStore.updateTagsPanel({ path }, 'remove')
     const { tagsPanel = [] } = headerStore
     //关闭当前标签，回退上一个
-    if (item.path === pathname) {
-      const { path = '/dashboard' } = tagsPanel[tagsPanel.length - 1] || {}
-      history.push(path)
+    if (path === pathname) {
+      const { path } = tagsPanel[tagsPanel.length - 1] || {}
+      onChange(path)
     }
   }
+
   const { tagsPanel = [] } = headerStore
-  return (
+  return tagsPanel.length ? (
     <div className={styles.tagsPanel}>
-      {tagsPanel.slice().map((item, index) => (
-        <Tag
-          className={item.path === pathname ? styles.active : ''}
-          key={index}
-          closable
-          onClose={() => onClose(item)}
+      {tagsPanel.map(({ path, name }) => (
+        <a
+          className={classnames(styles.btn, {
+            [styles.active]: path === pathname,
+          })}
+          key={name}
         >
-          <Link to={`${item.path}`}>{item.name}</Link>
-        </Tag>
+          {name}
+          {tagsPanel.length !== 1 && (
+            <CloseOutlined className={styles.icon} onClick={() => onClose(path)} />
+          )}
+        </a>
       ))}
     </div>
-  )
+  ) : null
 }
 
 export default inject('headerStore')(observer(TagPanel))

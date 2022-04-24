@@ -33,18 +33,13 @@ const Comment = ({ articeId, commentStore }: IProps) => {
     loadData()
   }, [])
 
-  const {
-    result: { list },
-  } = commentStore
+  const { result: { data = [] } = {} } = commentStore
 
   return (
     <div className={styles.comment}>
       <div className={styles.header}>评论</div>
       <div className={styles.content}>
-        <img
-          className={styles.avatar}
-          src="https://p6-passport.byteacctimg.com/img/user-avatar/e6a5e6bfe9096262331dfc9a885b1c57~300x300.image"
-        />
+        <img className={styles.avatar} src="/image/avatar.png" />
         <Form className={styles.form} form={form}>
           <Row gutter={16}>
             <Col span={12}>
@@ -77,16 +72,13 @@ const Comment = ({ articeId, commentStore }: IProps) => {
         </Form>
       </div>
 
-      {list.length ? (
+      {data.length ? (
         <div className={styles.listContent}>
           <div className={styles.header}>全部评论</div>
           <div className={styles.list}>
-            {list?.map((item, index) => (
+            {data?.map((item, index) => (
               <div className={styles.listItem} key={index}>
-                <img
-                  className={styles.avatar}
-                  src="https://tva1.sinaimg.cn/large/008i3skNly1gxsggowfh1j30h00h03z7.jpg"
-                />
+                <img className={styles.avatar} src="/image/avatar.png" />
                 <div className={styles.listRow}>
                   <div className={styles.listMeta}>
                     <a href={item.url} target="_blank" className={styles.name}>

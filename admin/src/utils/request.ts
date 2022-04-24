@@ -1,15 +1,18 @@
 import axios from 'axios'
 import config from '@/config'
 import { unset } from 'lodash'
-import Cache from '@/utils/cache'
-import { LOCAL_USER_TOKEN_KEY } from '@/constants'
+import { getLocalUser } from '@/actions/user'
+import { message } from 'antd'
 
-export const request = (options, host = 'api') => {
-  axios.defaults.headers.common['x-auth-id-token'] = Cache.get(LOCAL_USER_TOKEN_KEY)
-  const defalutOptions = {
-    withCredentials: false,
-    timeout: 1000 * 10,
-  }
+const onMessage = (msg = '请求出错，请重试') => {
+  message.error(msg)
+}
+
+const request = (options, showMsg = true) => {
+  const { base } = config
+  const { token = '' } = getLocalUser()
+  axios.defaults.baseURL = base
+  axios.defaults.headers.common['x-auth-id-token'] = token
   const { url, method = 'GET', params } = options
   if (method === 'GET') {
     options.params = params
@@ -18,17 +21,34 @@ export const request = (options, host = 'api') => {
     unset(options, 'params')
   }
 
-  return axios((config[host] || '') + url, {
-    ...defalutOptions,
+  return axios({
+    url,
+    withCredentials: false,
+    timeout: 1000 * 10,
     ...options,
   })
-    .then(response => response.data)
-    .catch(err => {
-      const { status, data } = err.response
-      if (status === 403 && data?.msg === 'TOKEN_INVALID') {
-        window.location.href = '/admin-website/login'
-        return false
+    .then(({ data }) => {
+      if (showMsg && data.success === false) onMessage(data?.message)
+      return data
+    })
+    .catch(({ response }) => {
+      const { status, data } = response
+      const msg = data?.message
+      if (status === 403) {
+        if (msg === 'TOKEN_INVALID') {
+          message.error('登录过期，请重新登录', 2).then(() => {
+            window.location.href = '/admin/login'
+          })
+          return false
+        }
+
+        if (msg === 'AUTH_INVALID') {
+          return message.error('抱歉，无权限操作')
+        }
       }
-      return { msg: data?.msg || '请求异常，请重试', success: false }
+      if (showMsg && data.success === false) onMessage(msg)
+      return { message: msg, success: false }
     })
 }
+
+export default request

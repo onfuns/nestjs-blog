@@ -9,20 +9,25 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
+    "@ant-design/pro-table": "^2.68.3",
     "@bytemd/plugin-gfm": "^1.10.13",
     "@bytemd/plugin-highlight": "^1.10.13",
     "@bytemd/react": "^1.10.13",
+    "@monaco-editor/react": "^4.3.1",
     "axios": "^0.21.1",
     "dayjs": "^1.10.6",
     "list-to-tree": "^2.2.4",
     "md5": "^2.3.0",
     "mobx": "^6.3.2",
     "mobx-react": "^7.2.0",
+    "monaco-themes": "^0.4.0",
     "path-to-regexp": "^6.2.0",
+    "prettier": "^2.6.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "reset-css": "^5.0.1",
-    "umi": "^3.5.15"
+    "umi": "^3.5.21",
+    "wangeditor": "^4.7.12"
   },
   "devDependencies": {
     "@umijs/preset-react": "^1.8.22",

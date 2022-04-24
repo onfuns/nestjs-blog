@@ -2,21 +2,19 @@ import { makeAutoObservable } from 'mobx'
 import { getCommentList, addComment } from '@/actions/comment'
 
 export class CommentStore {
-  result: { list: any[]; count?: number } | null = { list: [] }
+  result: { data: any[]; count?: number } | null = { data: [] }
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  set(key, value) {
+  set(key: 'result', value) {
     this[key] = value
   }
 
   async get(params = {}) {
     const { data } = await getCommentList(params)
-    if (data) {
-      this.set('result', data)
-    }
+    this.set('result', data || [])
   }
 
   async add(params = {}) {

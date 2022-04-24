@@ -1,5 +1,5 @@
 import { IConfig } from './type'
-const config: IConfig = {
+export default {
   db: {
     type: 'mysql',
     host: 'localhost',
@@ -9,10 +9,8 @@ const config: IConfig = {
     database: 'nest_blog',
     entities: ['dist/**/*.entity.js'],
     entityPrefix: 'rs_',
-    synchronize: true, //自动创建数据库结构，生产环境禁用
+    synchronize: true, //自动创建数据库结构，生产环境谨慎使用！
     logging: ['query', 'error'],
   },
-  jwtToken: 'CODERFUNS.COM BY ONFUNS',
-}
-
-export default config
+  jwtToken: 'ONFUNS',
+} as IConfig

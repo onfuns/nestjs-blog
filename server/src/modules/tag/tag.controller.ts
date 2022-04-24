@@ -1,12 +1,12 @@
-import { Inject, Controller, Post, Get, Body, SetMetadata } from '@nestjs/common'
+import { Inject, Controller, Post, Get, Body } from '@nestjs/common'
 import { TagService } from './tag.service'
 import { Tag } from './tag.entity'
+
 @Controller('/Tag')
 export class TagController {
   constructor(@Inject(TagService) private readonly service: TagService) {}
 
   @Get('list')
-  @SetMetadata('roles', ['all'])
   async findAll() {
     return this.service.findAll()
   }

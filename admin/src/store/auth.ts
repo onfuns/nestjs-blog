@@ -3,32 +3,31 @@ import { getAuthList, addAuth, updateAuth, deleteAuth } from '@/actions/auth'
 
 export class AuthStore {
   result: any[] = []
-  detail: any = {}
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  set(key: string, value: any) {
+  set(key: 'result', value: any) {
     this[key] = value
   }
 
-  async get(params = {}) {
-    const data = await getAuthList(params)
-    if (data.success) {
-      this.set('result', data.data)
+  async get(params?: Record<string, any>) {
+    const { success, data } = await getAuthList(params)
+    if (success) {
+      this.set('result', data)
     }
   }
 
-  async update(params = {}) {
+  async update(params?: Record<string, any>) {
     return await updateAuth(params)
   }
 
-  async add(params = {}) {
+  async add(params?: Record<string, any>) {
     return await addAuth(params)
   }
 
-  async delete(params = {}) {
+  async delete(params?: Record<string, any>) {
     return await deleteAuth(params)
   }
 }

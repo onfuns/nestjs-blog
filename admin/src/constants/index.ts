@@ -1,2 +1,8 @@
-export const LOCAL_USER_NAME_KEY = 'nest-blog-user'
-export const LOCAL_USER_TOKEN_KEY = 'nest-blog-token'
+export const LOCAL_USER_KEY = 'nest-blog-user'
+
+//栏目类别
+export const CATEGORT_TYPE = {
+  1: '文章列表',
+  2: '单页',
+  3: '外链',
+}

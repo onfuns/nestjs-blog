@@ -1,12 +1,13 @@
 import axios from 'axios'
 import config from '@/config'
 import { unset } from 'lodash'
+import { isServer } from './util'
 
-export const request = (options, host = 'api') => {
-  const defalutOptions = {
-    withCredentials: false,
-    timeout: 1000 * 10,
-  }
+const request = options => {
+  if (isServer) axios.defaults.baseURL = config['base']
+  const { server_api, base } = config
+  axios.defaults.baseURL = isServer ? server_api + base : base
+
   const { url, method = 'GET', params = {} } = options
   if (method === 'GET') {
     options.params = params
@@ -14,15 +15,18 @@ export const request = (options, host = 'api') => {
     options.data = params
     unset(options, 'params')
   }
-
-  console.log('fetch:', config[host] + url, options.params || options.data)
-  return axios(host && config[host] ? config[host] + url : url, {
-    ...defalutOptions,
+  return axios({
+    url,
+    withCredentials: false,
+    timeout: 1000 * 10,
     ...options,
   })
     .then(response => response.data)
     .catch(err => {
-      console.log(`request failed:`, err.message)
+      console.log(`请求失败:`, err)
+      console.log(`入参:`, options)
       return { message: '请求异常，请重试', success: false }
     })
 }
+
+export default request

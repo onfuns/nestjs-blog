@@ -4,6 +4,7 @@ import { Article } from './article.entity'
 import { TagService } from '../tag/tag.service'
 import { Tag } from '../tag/tag.entity'
 import { CreateDto, UpdateDto } from './article.dto'
+
 @Controller('/article')
 export class ArticleController {
   constructor(
@@ -24,17 +25,15 @@ export class ArticleController {
 
   @Get('list')
   async findAll(@Query() query) {
-    const { list, count } = await this.service.findAll(query)
-    const data = await this.getRelationTags(list)
-    return { list: data, count }
+    const article = await this.service.findAll(query)
+    const data = await this.getRelationTags(article.data)
+    return { data, count: article.count }
   }
 
   @Get('client/list')
   @SetMetadata('roles', ['all'])
   async getClientList(@Query() query) {
-    const { list, count } = await this.service.findAll({ ...query, pass_flag: 1 })
-    const data = await this.getRelationTags(list)
-    return { list: data, count }
+    return this.findAll({ ...query, pass_flag: 1 })
   }
 
   @Post('create')
@@ -55,7 +54,7 @@ export class ArticleController {
   @Get('info')
   @SetMetadata('roles', ['all'])
   async detail(@Query('id') id: string) {
-    const data = await this.service.findOne(id)
+    const data = await this.service.findById(id)
     const list = await this.getRelationTags([data])
     return list?.[0]
   }

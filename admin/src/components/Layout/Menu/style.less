@@ -1,0 +1,29 @@
+.menu {
+  position: relative;
+  width: 200px;
+
+  .menuTree {
+    overflow-y: auto;
+    height: calc(100vh - 95px);
+  }
+  .footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    a {
+      font-size: 18px;
+    }
+  }
+}
+.collapsedMenu {
+  width: auto;
+  .footer {
+    justify-content: center;
+  }
+}

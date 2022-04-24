@@ -7,7 +7,6 @@
   height: 40px;
   background: #fff;
   width: 100%;
-  box-shadow: 0 1px 5px rgb(0 0 0 / 10%);
   animation-duration: 0.5s;
   animation-fill-mode: both;
   &.up {
@@ -15,6 +14,7 @@
   }
   &.down {
     animation-name: slideDown;
+    box-shadow: 0 1px 5px rgb(0 0 0 / 10%);
   }
   @keyframes slideUp {
     0% {
@@ -39,6 +39,9 @@
     a {
       font-family: 'Comic Sans MS', cursive, LiSu, sans-serif;
       color: #333;
+    }
+    .logo {
+      font-size: 18px;
     }
     .headerLink {
       a {

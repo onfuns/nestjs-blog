@@ -3,27 +3,31 @@ import { getTagList, updateTag, addTag, deleteTag } from '@/actions/tag'
 
 export class TagStore {
   result: any[] = []
-  detail: any = {}
 
   constructor() {
     makeAutoObservable(this)
   }
-  async get(params = {}) {
-    const data = await getTagList(params)
-    if (data.success) {
-      this.result = data.data
+
+  set(key: 'result', value: any) {
+    this[key] = value
+  }
+
+  async get(params?: Record<string, any>) {
+    const { success, data } = await getTagList(params)
+    if (success) {
+      this.set('result', data)
     }
   }
 
-  async update(params = {}) {
+  async update(params?: Record<string, any>) {
     return await updateTag(params)
   }
 
-  async add(params = {}) {
+  async add(params?: Record<string, any>) {
     return await addTag(params)
   }
 
-  async delete(params = {}) {
+  async delete(params?: Record<string, any>) {
     return await deleteTag(params)
   }
 }

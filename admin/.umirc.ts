@@ -6,29 +6,51 @@ export default defineConfig({
   nodeModulesTransform: {
     type: 'none',
   },
-  routes: routes,
+  routes,
+  theme,
   fastRefresh: {},
-  // mfsu: {},
-  base: '/admin-website',
-  publicPath: '/admin-static/',
-  theme: theme,
-  //dynamicImport: {},
+  base: '/admin',
+  publicPath: '/admin/',
+  dynamicImport: {},
+  hash: true,
+  proxy: {
+    '/api': {
+      target: 'http://localhost:4000',
+    },
+  },
+  chunks: ['antd', 'vendors', 'umi'],
   chainWebpack(config) {
-    //prettier-ignore
-    config
-      //.output
-        // .set('chunkFilename','js/[id].[contenthash:8].chunk.js')
-        // .end()
+    config.output
+      .set('chunkFilename', 'static/[id].[contenthash:8].chunk.js')
+      .end()
       .plugin('antd-dayjs-webpack-plugin')
-        .use('antd-dayjs-webpack-plugin')
-        .end()
-    // .plugin('extract-css')
-    //   .tap(args => [
-    //     {
-    //       ...args[0],
-    //       chunkFilename: `css/[id].[contenthash:8].chunk.css`,
-    //     },
-    //   ])
-    //   .end()
+      .use('antd-dayjs-webpack-plugin')
+      .end()
+      .plugin('extract-css')
+      .tap(args => [
+        {
+          ...args[0],
+          chunkFilename: `static/[id].[contenthash:8].chunk.css`,
+        },
+      ])
+      .end()
+      .optimization.splitChunks({
+        ...config.optimization.get('splitChunks'),
+        cacheGroups: {
+          default: false,
+          antd: {
+            test: /[\\/]node_modules[\\/](antd|@ant-design|rc-[\w]+)[\\/]/,
+            name: 'antd',
+            chunks: 'all',
+            priority: 20,
+          },
+          vendors: {
+            chunks: 'all',
+            name: 'vendors',
+            test: /[\\/]node_modules[\\/]/,
+            priority: 10,
+          },
+        },
+      })
   },
 })

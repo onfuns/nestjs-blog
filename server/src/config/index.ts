@@ -1,4 +1,9 @@
-import ConfigDev from './dev'
-import ConfigProd from './prod'
+import BaseConfig from './base'
+import DevConfig from './dev'
+import ProdConfig from './prod'
+const _DEV_ = process.env.NODE_ENV !== 'production'
 
-export default process.env.NODE_ENV === 'production' ? ConfigProd : ConfigDev
+export default {
+  ...BaseConfig,
+  ...(_DEV_ ? DevConfig : ProdConfig),
+}

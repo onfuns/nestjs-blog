@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm'
-@Entity({ engine: 'InnoDB' })
+
+@Entity()
 export class Auth {
   @PrimaryGeneratedColumn()
   id: number
@@ -10,8 +11,8 @@ export class Auth {
   @Column({ unique: true })
   code: string
 
-  @Column()
-  type: string
+  @Column({ comment: '1:菜单 2:功能' })
+  type: number
 
   @Column({ default: 0 })
   pid: number

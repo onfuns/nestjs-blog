@@ -1,14 +1,35 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm'
-@Entity({ engine: 'InnoDB' })
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm'
+import { Auth } from '../auth/auth.entity'
+
+@Entity()
 export class Role {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Column({ unique: true })
   name: string
 
-  @Column({ nullable: true })
-  auth_id: string
+  @Column()
+  description: string
+
+  @ManyToMany(() => Auth, { cascade: true })
+  @JoinTable({
+    name: 'role_auth_relation',
+    joinColumns: [{ name: 'role_id' }],
+    inverseJoinColumns: [{ name: 'auth_id' }],
+  })
+  auths: Auth[]
+
+  @Column({ default: 1, comment: '0--停用,1--启用' })
+  enable: number
 
   @CreateDateColumn()
   created_at: string

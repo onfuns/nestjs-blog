@@ -2,8 +2,8 @@
 
 ## 预览
 
-- 用户前台：[https://blog.coderfuns.com](https://blog.coderfuns.com)
-- 管理后台：[https://blog.coderfuns.com/admin-website/login](https://blog.coderfuns.com/admin-website/login)
+- 用户前台：[https://demo.onfuns.com](https://demo.onfuns.com)
+- 管理后台：[https://demo.onfuns.com/admin/login](https://onfuns.onfuns.com/admin/login)
 
 ## 启动
 

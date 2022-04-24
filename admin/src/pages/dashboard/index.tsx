@@ -1,72 +1,82 @@
-import { Row, Col, Card, List } from 'antd'
-import styles from './style.module.less'
+import { useEffect } from 'react'
+import { Row, Col, Card, List, Space } from 'antd'
+import styles from './style.less'
+import { inject, observer } from 'mobx-react'
+import { CommonStore } from '@/store'
+import dayjs from 'dayjs'
+const formatDate = 'YYYY-MM-DD HH:mm'
 
-interface ICount {
-  title: string
-  icon?: string
-  total: number
-  color?: string
-}
+const Dashboard = ({ commonStore }: { commonStore: CommonStore }) => {
+  useEffect(() => {
+    commonStore.getDashboardInfo()
+  }, [])
 
-const CountPannel = ({ data = [] }: { data: ICount[] }) => {
-  return (
-    <Card>
-      <Row>
-        {data.map((d, index) => (
-          <Col key={index} span={6} offset={1} className={styles.pannelItem}>
-            <Col span={10} className={styles.pannelItemIcon} style={{ background: d.color }}></Col>
-            <Col span={14} className={styles.pannelItemText}>
-              <div style={{ color: d.color }}>{d.total}</div>
-              <div>{d.title}</div>
-            </Col>
-          </Col>
-        ))}
-      </Row>
-    </Card>
-  )
-}
-
-export default () => {
-  const dataSource: any = {}
-  const { article = 0, comments = {} } = dataSource
-  const { rows = [], count = 0 } = comments
+  const { article, comment, user } = commonStore.dashboardInfo
   const countData = [
-    { title: '评论总数', icon: '', total: count, color: '#30cbcb' },
-    { title: '文章总数', icon: '', total: article, color: '#fbd441' },
+    { title: '文章总数', value: article?.count || 0 },
+    { title: '评论总数', value: comment?.count || 0 },
   ]
   return (
-    <div className={styles.dashboardPage}>
-      <CountPannel data={countData} />
-      <div style={{ marginTop: 20 }}>
-        <Card title="最新评论">
-          <List
-            itemLayout="horizontal"
-            dataSource={rows}
-            renderItem={(item: any) => (
-              <List.Item>
-                <List.Item.Meta
-                  style={{ width: '100%' }}
-                  title={
-                    <div>
-                      <span style={{ marginRight: 5 }}>{item.nickname}</span>在
-                      <a
-                        target="_blank"
-                        href={`/article/${item.post.id}`}
-                        className={styles.postLink}
-                      >
-                        {item.post.title}
-                      </a>
-                      评论
-                      <span style={{ float: 'right' }}>2021-08-18 15:02:35</span>
-                    </div>
-                  }
-                  description={item.content}
-                />
-              </List.Item>
-            )}
-          />
-        </Card>
-      </div>
+    <div className={styles.page}>
+      <Row gutter={16}>
+        <Col span={16}>
+          <Card title="数据统计">
+            <Row gutter={16}>
+              {countData.map(({ title, value }) => (
+                <Col key={title} span={8}>
+                  <div className={styles.pannel}>
+                    <div className={styles.title}>{title}</div>
+                    <div className={styles.count}>{value}</div>
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card title="用户信息">
+            <p>
+              上次登录时间： {user?.last_login_at && dayjs(user?.last_login_at).format(formatDate)}
+            </p>
+            <p>上次登录IP： {user?.last_login_ip?.replace('::ffff:', '')}</p>
+          </Card>
+        </Col>
+      </Row>
+      <Row gutter={16} style={{ marginTop: 20 }}>
+        <Col span={16}>
+          <Card title="最新评论">
+            <List
+              itemLayout="horizontal"
+              dataSource={comment?.data || []}
+              renderItem={({ name, article, created_at, content }) => (
+                <List.Item>
+                  <List.Item.Meta
+                    style={{ width: '100%' }}
+                    title={
+                      <>
+                        <span style={{ marginRight: 5 }}>{name}</span>
+                        <Space>
+                          在
+                          <a target="_blank" href={`/article/${article?.id}`}>
+                            {article?.title}
+                          </a>
+                          评论
+                        </Space>
+                        <span style={{ float: 'right' }}>
+                          {created_at && dayjs(created_at).format(formatDate)}
+                        </span>
+                      </>
+                    }
+                    description={content}
+                  />
+                </List.Item>
+              )}
+            />
+          </Card>
+        </Col>
+      </Row>
     </div>
   )
 }
+
+export default inject('commonStore')(observer(Dashboard))

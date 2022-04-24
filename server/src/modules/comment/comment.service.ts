@@ -1,8 +1,8 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository, getRepository, Like } from 'typeorm'
+import { pickBy } from 'lodash'
+import { Like, Repository } from 'typeorm'
 import { Comment } from './comment.entity'
-import { unset } from 'lodash'
 
 @Injectable()
 export class CommentService {
@@ -12,73 +12,45 @@ export class CommentService {
   ) {}
 
   async create(data: Comment): Promise<Comment> {
-    try {
-      return await this.repository.save(data)
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+    return await this.repository.save(data)
   }
 
-  async findOne(query): Promise<Comment> {
-    try {
-      return await this.repository.findOne(query)
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+  async findById(id): Promise<Comment> {
+    return await this.repository.findOneBy(id)
   }
 
-  async findAll(query): Promise<{ list: Comment[]; count: number }> {
+  async findAll(query: any = {}): Promise<{ data: Comment[]; count: number }> {
     const { current = 1, pageSize = 20, aid, status, title = '' } = query
-    let where: any = {}
-    if (aid) {
-      where.aid = aid
-    }
-    if (status !== undefined) {
-      where.status = status
-    }
+    const where = pickBy({ aid, status })
+    const [data = [], count = 0] = await this.repository.findAndCount({
+      where: {
+        ...where,
+        article: {
+          title: Like(`%${title}%`),
+        },
+      },
+      join: {
+        alias: 'comment',
+        leftJoinAndSelect: {
+          article: 'comment.article',
+        },
+      },
+      skip: pageSize * (current - 1),
+      take: pageSize,
+      order: {
+        created_at: 'DESC',
+      },
+    })
 
-    try {
-      //https://github.com/typeorm/typeorm/issues/3890
-      // typeorm bug findAndCount不能使用这种关联形式 where = { article: { title:Like(`%${title}%`) } }
-      const [list = [], count = 0] = await this.repository.findAndCount({
-        where: qb => {
-          qb.where(where).andWhere('article.title like :title', { title: `%${title}%` })
-        },
-        join: {
-          alias: 'comment',
-          leftJoinAndSelect: {
-            article: 'comment.article',
-          },
-        },
-        skip: pageSize * (current - 1),
-        take: pageSize,
-        order: {
-          created_at: 'DESC',
-        },
-      })
-
-      return { list, count }
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+    return { data, count }
   }
 
   async update(body): Promise<any> {
-    const { id } = body
-    unset(body, 'id')
-    try {
-      return await this.repository.update(id, body)
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+    const { id, ...others } = body
+    return await this.repository.update(id, others)
   }
 
-  async delete(body): Promise<any> {
-    const { id } = body
-    try {
-      return await this.repository.delete(id)
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+  async delete(id): Promise<any> {
+    return await this.repository.delete(id)
   }
 }

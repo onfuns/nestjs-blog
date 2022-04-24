@@ -1,0 +1,18 @@
+.container {
+  height: 100vh;
+  overflow: hidden;
+
+  .pageContent {
+    display: flex;
+  }
+
+  .contentBody {
+    flex: 1;
+    .content {
+      padding: 10px;
+      height: calc(100vh - 80px);
+      overflow: auto;
+      background: #f0f2f5;
+    }
+  }
+}

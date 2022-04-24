@@ -1,52 +1,42 @@
 import { Menu, Dropdown } from 'antd'
-import { LOCAL_USER_TOKEN_KEY, LOCAL_USER_NAME_KEY } from '@/constants'
-import Cache from '@/utils/cache'
-import { inject, observer } from 'mobx-react'
-import styles from './style.module.less'
-import { HeaderStore } from '@/store'
-import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
-import TagPanel from '@/components/Layout/TagPanel'
+import { getLocalUser, removeLocalUser } from '@/actions/user'
+import styles from './style.less'
+import { LogoutOutlined } from '@ant-design/icons'
+import { useHistory } from 'umi'
+import AvatarImage from '@/assets/images/avatar.png'
 
-interface IProps {
-  headerStore?: HeaderStore
-  route?: any
-}
+export default () => {
+  const history = useHistory()
 
-const Header = (props: IProps) => {
-  const { headerStore, route } = props
-
-  const loginOutFn = () => {
-    Cache.remove(LOCAL_USER_TOKEN_KEY)
-    Cache.remove(LOCAL_USER_NAME_KEY)
-    window.location.href = '/login'
+  const onLogout = () => {
+    removeLocalUser()
+    history.push('/login')
   }
 
-  const username = Cache.get(LOCAL_USER_NAME_KEY)
-
+  const { userName = 'demo' } = getLocalUser()
   return (
     <div className={styles.header}>
-      <div className={styles.headerContent}>
-        <a onClick={() => headerStore.setMenuCollaps()}>
-          {headerStore.menuCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-        </a>
-        <div className={styles.title}>
-          <Dropdown
-            overlay={
-              <Menu>
-                <Menu.Item key={1} className={styles.menuItem}>
-                  <a onClick={loginOutFn}>退出</a>
-                </Menu.Item>
-              </Menu>
-            }
-            trigger={['click']}
-          >
-            <a className={styles.dropdownLink}>{username}</a>
-          </Dropdown>
-        </div>
+      <div className={styles.logoText}>管理后台</div>
+      <div className={styles.tools}>
+        <Dropdown
+          overlay={
+            <Menu>
+              <Menu.Item key={1} className={styles.menuItem}>
+                <a onClick={onLogout}>
+                  <LogoutOutlined style={{ marginRight: 5 }} />
+                  退出
+                </a>
+              </Menu.Item>
+            </Menu>
+          }
+          trigger={['click']}
+        >
+          <div className={styles.username}>
+            <img src={AvatarImage} className={styles.avatar} />
+            {userName}
+          </div>
+        </Dropdown>
       </div>
-      <TagPanel route={route} />
     </div>
   )
 }
-
-export default inject('headerStore')(observer(Header))

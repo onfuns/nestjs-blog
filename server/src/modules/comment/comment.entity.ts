@@ -8,7 +8,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 import { Article } from '../article/article.entity'
-@Entity({ engine: 'InnoDB' })
+
+@Entity()
 export class Comment {
   @PrimaryGeneratedColumn()
   id: number
@@ -35,7 +36,7 @@ export class Comment {
   @JoinColumn({ name: 'aid' })
   article: Article
 
-  @Column({ comment: '审核状态 0:未审核 1:通过', default: 0 })
+  @Column({ comment: '0:未审核 1:通过', default: 0 })
   status: number
 
   @CreateDateColumn()

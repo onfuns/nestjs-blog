@@ -1,8 +1,8 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { getRepository, Repository } from 'typeorm'
 import { Role } from './role.entity'
-import { unset } from 'lodash'
+
 @Injectable()
 export class RoleService {
   constructor(
@@ -10,50 +10,33 @@ export class RoleService {
     private readonly repository: Repository<Role>,
   ) {}
 
-  async create(data: Role): Promise<Role> {
-    try {
-      return await this.repository.save(data)
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+  async create(body: Role): Promise<Role> {
+    const { auths, ...others } = body
+    const record = this.repository.create(others)
+    record.auths = auths
+    return await this.repository.save(record)
   }
 
-  async findOne(query): Promise<Role> {
-    try {
-      return await this.repository.findOne(query)
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+  async findById(id): Promise<Role> {
+    return await this.repository.findOneBy({ id })
   }
 
   async findAll(): Promise<Role[]> {
-    try {
-      const data = await this.repository.find({
-        order: {
-          created_at: 'ASC',
-        },
-      })
-      return data
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+    return getRepository(Role)
+      .createQueryBuilder('role')
+      .leftJoinAndSelect('role.auths', 'auth')
+      .getMany()
   }
 
-  async update(body): Promise<any> {
-    const { id } = body
-    unset(body, 'id')
-    try {
-      return await this.repository.update(id, body)
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+  async update(body: Role): Promise<any> {
+    const { id, auths, ...others } = body
+    const record = this.repository.create(others)
+    record.auths = auths
+    record.id = id
+    return await this.repository.save(record)
   }
 
   async delete(id): Promise<any> {
-    try {
-      return await this.repository.delete(id)
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+    return await this.repository.delete(id)
   }
 }

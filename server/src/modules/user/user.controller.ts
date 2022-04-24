@@ -3,34 +3,38 @@ import { UserService } from './user.service'
 import * as md5 from 'md5'
 import { User } from './user.entity'
 import config from '@/config'
+import { IpAddress } from '@/decorator/IpAddress'
+
 @Controller('/user')
 export class UserController {
   constructor(@Inject(UserService) private readonly service: UserService) {}
 
   @Post('login')
   @SetMetadata('roles', ['all'])
-  async login(@Body() body) {
+  async login(@Body() body: User, @IpAddress() cleintIp: string) {
     const { name, password } = body
-    const data = await this.service.login(name)
-    if (!data) {
-      return { success: false, msg: '用户名错误' }
-    }
-    if (data.password !== md5(password)) {
-      return { success: false, msg: '密码错误' }
-    } else {
-      const token = this.service.createToken({ secret: config.jwtToken, name })
-      return { userName: name, token }
-    }
+    const data: User = await this.service.login({ name, password: md5(password) })
+    if (!data) return { success: false, message: '用户名或密码错误' }
+    const token = this.service.createToken({
+      secret: config.jwtToken,
+      id: data.id,
+      name: data.name,
+    })
+    await this.service.updateLoginInfo({
+      id: data.id,
+      last_login_at: new Date(),
+      last_login_ip: cleintIp,
+    })
+    return { userName: name, token }
   }
 
   @Get('list')
-  @SetMetadata('roles', ['all'])
-  async findAll(@Query('roleId') roleId) {
-    return this.service.findAll({ roleId })
+  async findAll(@Query() query) {
+    return this.service.findAll()
   }
 
   @Post('add')
-  async add(@Body() body: User) {
+  async add(@Body() body) {
     return this.service.create(body)
   }
 
@@ -40,7 +44,7 @@ export class UserController {
   }
 
   @Post('delete')
-  async delete(@Body() body) {
-    return this.service.delete(body)
+  async delete(@Body('id') id) {
+    return this.service.delete(id)
   }
 }
