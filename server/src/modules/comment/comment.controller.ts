@@ -1,7 +1,5 @@
 import { Inject, Controller, Post, Get, Body, SetMetadata, Query } from '@nestjs/common'
 import { CommentService } from './comment.service'
-import { Comment } from './comment.entity'
-
 @Controller('/comment')
 export class CommentController {
   constructor(@Inject(CommentService) private readonly service: CommentService) {}
@@ -19,7 +17,7 @@ export class CommentController {
 
   @Post('add')
   @SetMetadata('roles', ['all'])
-  async add(@Body() body: Comment) {
+  async add(@Body() body) {
     return this.service.create(body)
   }
 

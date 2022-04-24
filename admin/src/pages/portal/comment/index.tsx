@@ -48,7 +48,7 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
   const columns: ProColumns<any>[] = [
     {
       title: '文章标题',
-      dataIndex: 'name',
+      dataIndex: 'title',
       width: 250,
       ellipsis: true,
       render: (_, { article }) => (
@@ -60,29 +60,35 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
     {
       title: '评论内容',
       dataIndex: 'content',
+      hideInSearch: true,
       ellipsis: true,
       width: 120,
     },
     {
       title: '评论人',
       dataIndex: 'name',
+      hideInSearch: true,
     },
     {
       title: '站点',
       dataIndex: 'url',
+      hideInSearch: true,
     },
     {
       title: '回复内容',
       dataIndex: 'reply',
+      hideInSearch: true,
     },
     {
       title: '评论时间',
       dataIndex: 'created_at',
+      hideInSearch: true,
       render: (_, { created_at }) => created_at && dayjs(created_at).format('YYYY-MM-DD HH:mm'),
     },
     {
       title: '审核状态',
       dataIndex: 'status',
+      hideInSearch: true,
       width: 100,
       render: (_, record) => (
         <Switch
@@ -94,7 +100,8 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
     },
     {
       title: '操作',
-      key: 'action',
+      dataIndex: 'option',
+      valueType: 'option',
       render: (_, record) => {
         return (
           <Space>
@@ -119,7 +126,6 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
         columns={columns}
         headerTitle="评论列表"
         form={{ autoFocusFirstInput: false }}
-        search={false}
         rowKey="id"
         request={async (params = {}) => {
           await commentStore.get({ ...params })

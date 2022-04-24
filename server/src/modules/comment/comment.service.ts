@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { pickBy } from 'lodash'
-import { Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
 import { Comment } from './comment.entity'
 
 @Injectable()
@@ -22,11 +22,12 @@ export class CommentService {
   async findAll(query: any = {}): Promise<{ data: Comment[]; count: number }> {
     const { current = 1, pageSize = 20, aid, status, title = '' } = query
     const where = pickBy({ aid, status })
-    //https://github.com/typeorm/typeorm/issues/3890
-    // typeorm bug findAndCount不能使用这种关联形式 where = { article: { title:Like(`%${title}%`) } }
     const [data = [], count = 0] = await this.repository.findAndCount({
-      where: qb => {
-        qb.where(where).andWhere('article.title like :title', { title: `%${title}%` })
+      where: {
+        ...where,
+        article: {
+          title: Like(`%${title}%`),
+        },
       },
       join: {
         alias: 'comment',

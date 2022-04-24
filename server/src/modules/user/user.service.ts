@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository, getRepository } from 'typeorm'
+import { Repository, getRepository, DataSource } from 'typeorm'
 import { User } from './user.entity'
 import * as jwt from 'jsonwebtoken'
 import config from '@/config'
@@ -11,7 +11,9 @@ export class UserService {
   constructor() {}
 
   async login(body: { name: string; password: string }) {
-    return await this.repository.findOne(body)
+    return await this.repository.findOne({
+      where: body,
+    })
   }
 
   verifyToken(token) {

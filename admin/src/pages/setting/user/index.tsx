@@ -81,7 +81,8 @@ const UserList = ({ userStore }: { userStore?: UserStore }) => {
     },
     {
       title: '操作',
-      key: 'action',
+      dataIndex: 'option',
+      valueType: 'option',
       width: 130,
       render: (_, record) => {
         return (

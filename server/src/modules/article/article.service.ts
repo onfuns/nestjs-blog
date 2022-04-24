@@ -15,8 +15,11 @@ export class ArticleService {
   }
 
   async findOne(id): Promise<Article> {
-    return await this.repository.findOne(id, {
-      relations: ['category'],
+    return await this.repository.findOne({
+      where: { id },
+      relations: {
+        category: true,
+      },
     })
   }
 
