@@ -8,7 +8,7 @@ import {
 } from '@/actions/article'
 
 export class ArticleStore {
-  result: { list?: any[]; count?: number } | null = {}
+  result: { data?: any[]; count?: number } | null = {}
   detail: any = {}
 
   constructor() {

@@ -124,7 +124,7 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
         request={async (params = {}) => {
           const { current = 1, pageSize = 20 } = params
           await commentStore.get({ ...params, page: current, pageSize })
-          return { success: true, data: commentStore.result.list }
+          return { success: true, data: commentStore.result.data }
         }}
         toolBarRender={() => [
           <Button key="add" type="primary" onClick={() => onAction({}, 'add')}>

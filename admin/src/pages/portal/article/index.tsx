@@ -143,7 +143,7 @@ const Article = ({ articleStore }: IProps) => {
         request={async (params = {}) => {
           const { current = 1, pageSize = 20 } = params
           await articleStore.get({ ...params, page: current, pageSize })
-          return { success: true, data: articleStore.result.list }
+          return { success: true, data: articleStore.result.data }
         }}
         toolBarRender={() => [
           <Button key="add" type="primary" onClick={() => onSetModalProps({ visible: true })}>

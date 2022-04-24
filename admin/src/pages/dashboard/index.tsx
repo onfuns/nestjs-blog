@@ -42,7 +42,7 @@ const Dashboard = ({ commonStore }: { commonStore: CommonStore }) => {
       <Card title="最新评论" style={{ marginTop: 20 }}>
         <List
           itemLayout="horizontal"
-          dataSource={comment?.list || []}
+          dataSource={comment?.data || []}
           renderItem={({ nickname, post, created_at, content }) => (
             <List.Item>
               <List.Item.Meta

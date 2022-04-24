@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx'
 import { getCommentList, addComment, updateComment, deleteComment } from '@/actions/comment'
 
 export class CommentStore {
-  result: { list: any[]; count: number } | null = {} as any
+  result: { data: any[]; count: number } | null = {} as any
 
   constructor() {
     makeAutoObservable(this)

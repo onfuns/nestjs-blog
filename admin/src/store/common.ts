@@ -3,7 +3,7 @@ import { getDashboardInfo } from '@/actions/common'
 
 type IDashboardInfoProps = {
   article?: { count: number }
-  comment?: { count: number; list: any[] }
+  comment?: { count: number; data: any[] }
 }
 
 export class CommonStore {
