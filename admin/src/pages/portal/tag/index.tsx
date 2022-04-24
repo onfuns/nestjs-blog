@@ -79,8 +79,7 @@ const TagPage = ({ tagStore }: IProps) => {
         search={false}
         rowKey="id"
         request={async (params = {}) => {
-          const { current = 1, pageSize = 20 } = params
-          await tagStore.get({ ...params, page: current, pageSize })
+          await tagStore.get({ ...params })
           return { success: true, data: tagStore.result }
         }}
         pagination={false}

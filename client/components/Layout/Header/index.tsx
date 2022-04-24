@@ -32,10 +32,10 @@ export default function Header() {
         </a>
         <div className={styles.headerLink}>
           <a href="/">首页</a>
-          <a href="https://coderfuns.com" target="_blank">
+          <a href="https://hao.onfuns.com" target="_blank">
             前端导航
           </a>
-          <a href="https://book.coderfuns.com" target="_blank">
+          <a href="https://book.onfuns.com" target="_blank">
             前端小册
           </a>
         </div>

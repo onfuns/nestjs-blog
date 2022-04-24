@@ -12,5 +12,5 @@ export default {
     synchronize: true, //自动创建数据库结构，生产环境禁用
     logging: ['query', 'error'],
   },
-  jwtToken: 'CODERFUNS.COM BY ONFUNS',
+  jwtToken: 'ONFUNS',
 } as IConfig

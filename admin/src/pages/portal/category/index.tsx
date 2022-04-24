@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { inject, observer } from 'mobx-react'
 import AddModal from '@/components/Portal/Category/Add'
 import { CategoryStore } from '@/store'
@@ -122,9 +122,7 @@ const CategoryPage = ({ categoryStore }: IProps) => {
         rowKey="id"
         onDataSourceChange={data => setExpandKeys(data.map(({ id }) => id))}
         request={async (params = {}) => {
-          const { current = 1, pageSize = 20 } = params
-          await categoryStore.get({ ...params, page: current, pageSize })
-
+          await categoryStore.get({ ...params })
           return { success: true, data: categoryStore.result }
         }}
         pagination={false}

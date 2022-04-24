@@ -122,8 +122,7 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
         search={false}
         rowKey="id"
         request={async (params = {}) => {
-          const { current = 1, pageSize = 20 } = params
-          await commentStore.get({ ...params, page: current, pageSize })
+          await commentStore.get({ ...params })
           return { success: true, data: commentStore.result.data }
         }}
         toolBarRender={() => [

@@ -2,7 +2,7 @@ import styles from './style.module.less'
 import classnames from 'classnames'
 import { useRouter } from 'next/router'
 
-const MenuPanel = ({ list = [] }) => {
+const MenuPanel = ({ data = [] }) => {
   const router = useRouter()
   const url = router.asPath
   const isActive = item => url.replace('/category', '') === item.ename || url === item.url
@@ -47,16 +47,16 @@ const MenuPanel = ({ list = [] }) => {
 
   const otherMenu = [
     {
-      name: '网址导航',
+      name: '前端导航',
       type: 3,
-      url: 'https://coderfuns.com',
+      url: 'https://hao.onfuns.com',
       icon: 'icon-huaban',
       icon_color: '#12b7f5',
     },
     {
       name: '前端手册',
       type: 3,
-      url: 'https://book.coderfuns.com',
+      url: 'https://book.onfuns.com',
       icon: 'icon-gongzuoshouce',
       icon_color: '#FF7878',
     },
@@ -64,7 +64,7 @@ const MenuPanel = ({ list = [] }) => {
 
   return (
     <div className={styles.menu}>
-      <ul className={styles.menuList}>{renderMenu(defauluMenu.concat(list))}</ul>
+      <ul className={styles.menuList}>{renderMenu(defauluMenu.concat(data))}</ul>
       <ul className={styles.menuList}>{renderMenu(otherMenu)}</ul>
     </div>
   )

@@ -2,7 +2,7 @@ import classnames from 'classnames'
 import { useState, useEffect } from 'react'
 import styles from './style.module.less'
 
-export default function Anchor({ list = [] }) {
+export default function Anchor({ data = [] }) {
   const [currentHeadingIndex, setCurrentHeadingIndex] = useState(0)
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function Anchor({ list = [] }) {
   return (
     <div className={styles.anchor}>
       <ul className={classnames('anchor-list', styles.anchorList)}>
-        {list.map((item, index) => (
+        {data.map((item, index) => (
           <li
             key={index}
             anchor-index={item.index}

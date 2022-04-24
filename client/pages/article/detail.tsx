@@ -40,7 +40,7 @@ const ArticleDetail = ({ detail }) => {
             dangerouslySetInnerHTML={{ __html: content }}
           ></div>
         </div>
-        <Anchor list={anchor} />
+        <Anchor data={anchor} />
       </div>
       {comment_flag === 1 && <Comment articeId={id} />}
     </div>

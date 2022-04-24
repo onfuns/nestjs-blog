@@ -33,15 +33,13 @@ const Comment = ({ articeId, commentStore }: IProps) => {
     loadData()
   }, [])
 
-  const {
-    result: { list },
-  } = commentStore
+  const { result: { data = [] } = {} } = commentStore
 
   return (
     <div className={styles.comment}>
       <div className={styles.header}>评论</div>
       <div className={styles.content}>
-        <img className={styles.avatar} src="https://image.onfuns.com/blog/default-avatar.png" />
+        <img className={styles.avatar} src="/image/avatar.png" />
         <Form className={styles.form} form={form}>
           <Row gutter={16}>
             <Col span={12}>
@@ -74,16 +72,13 @@ const Comment = ({ articeId, commentStore }: IProps) => {
         </Form>
       </div>
 
-      {list.length ? (
+      {data.length ? (
         <div className={styles.listContent}>
           <div className={styles.header}>全部评论</div>
           <div className={styles.list}>
-            {list?.map((item, index) => (
+            {data?.map((item, index) => (
               <div className={styles.listItem} key={index}>
-                <img
-                  className={styles.avatar}
-                  src="https://image.onfuns.com/blog/default-avatar.png"
-                />
+                <img className={styles.avatar} src="/image/avatar.png" />
                 <div className={styles.listRow}>
                   <div className={styles.listMeta}>
                     <a href={item.url} target="_blank" className={styles.name}>

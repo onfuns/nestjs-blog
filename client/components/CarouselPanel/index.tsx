@@ -3,12 +3,8 @@ import styles from './style.module.less'
 const CarouselPanel = () => {
   const carouselList = [
     {
-      url: 'https://coderfuns.com/',
-      img: 'https://image.onfuns.com/blog/blog-slider-1.jpg',
-    },
-    {
-      url: 'https://coderfuns.com/',
-      img: 'https://image.onfuns.com/blog/blog-slider-2.jpg',
+      url: 'https://hao.onfuns.com/',
+      img: '/image/demo-1.png',
     },
   ]
   return (

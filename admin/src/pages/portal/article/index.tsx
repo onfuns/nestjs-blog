@@ -32,7 +32,7 @@ const Article = ({ articleStore }: IProps) => {
       params.sort = Number(sort) > 0 ? 0 : dayjs().unix()
     }
     //审核
-    else if (type === 'pass') {
+    else if (type === 'pass_flag') {
       params.pass_flag = Number(!Boolean(pass_flag))
     }
     //删除
@@ -83,11 +83,11 @@ const Article = ({ articleStore }: IProps) => {
         publish_time && dayjs(publish_time).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
-      title: '置顶状态',
+      title: '置顶',
       dataIndex: 'sort',
       valueEnum: {
-        1: '已通过',
-        2: '未审核',
+        1: '是',
+        '-1': '否',
       },
       width: 100,
       render: (_, { id, sort }) => (
@@ -95,17 +95,17 @@ const Article = ({ articleStore }: IProps) => {
       ),
     },
     {
-      title: '审核状态',
-      dataIndex: 'review',
+      title: '审核',
+      dataIndex: 'pass_flag',
       valueEnum: {
-        1: '已置顶',
-        2: '未置顶',
+        1: '已审核',
+        2: '未审核',
       },
       width: 100,
       render: (_, { id, pass_flag }) => (
         <Switch
           checked={pass_flag === 1}
-          onChange={() => onAction({ id, pass_flag }, 'pass')}
+          onChange={() => onAction({ id, pass_flag }, 'pass_flag')}
           size="small"
         />
       ),
@@ -141,8 +141,7 @@ const Article = ({ articleStore }: IProps) => {
         form={{ autoFocusFirstInput: false }}
         rowKey="id"
         request={async (params = {}) => {
-          const { current = 1, pageSize = 20 } = params
-          await articleStore.get({ ...params, page: current, pageSize })
+          await articleStore.get({ ...params })
           return { success: true, data: articleStore.result.data }
         }}
         toolBarRender={() => [

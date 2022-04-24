@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx'
 import { getArticleList, getArticleDetailById } from '@/actions/article'
 
 export class ArticleStore {
-  result = { list: [], count: 0 }
+  result = { data: [], count: 0 }
   detail = {}
 
   constructor() {

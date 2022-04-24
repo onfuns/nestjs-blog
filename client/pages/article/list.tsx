@@ -6,14 +6,14 @@ import ListItem from '@/components/Article/ListItem'
 import CarouselPanel from '@/components/CarouselPanel'
 
 const Article = ({ categoryList, articleData }) => {
-  const { list: acticleList, count: acticleTotal } = articleData || {}
+  const { data: acticleList, count: acticleTotal } = articleData || {}
 
   return (
     <div className={classnames('container', styles.page)}>
-      <Menu list={categoryList} />
+      <Menu data={categoryList} />
       <div className={styles.content}>
         <CarouselPanel />
-        <ListItem list={acticleList} count={acticleTotal} />
+        <ListItem data={acticleList} count={acticleTotal} />
       </div>
     </div>
   )
@@ -26,11 +26,11 @@ export const getServerSideProps = async ({ req }) => {
   const { page } = req.query
   let params: any = { current: page || 1, pageSize: 20 }
   if (ename) {
-    const { id } = categoryStore?.list?.find(c => c.ename.slice(1) === ename) || {}
+    const { id } = categoryStore?.data?.find(c => c.ename.slice(1) === ename) || {}
     if (id) params.cid = id
   }
   const articleData = (await articleStore.get(params)) || null
-  articleData?.list?.map(acticle => {
+  articleData?.data?.map(acticle => {
     if (!acticle.description) {
       const moreIndex = acticle.content.indexOf('<!--more-->')
       if (moreIndex > -1) {
@@ -42,7 +42,7 @@ export const getServerSideProps = async ({ req }) => {
 
   return {
     props: {
-      categoryList: categoryStore.list || [],
+      categoryList: categoryStore.data || [],
       articleData,
     },
   }
