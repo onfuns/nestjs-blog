@@ -10,13 +10,15 @@ export default defineConfig({
   theme,
   fastRefresh: {},
   base: '/admin',
-  publicPath: '/',
+  publicPath: '/admin/',
   dynamicImport: {},
+  hash: true,
   proxy: {
     '/api': {
       target: 'http://localhost:4000',
     },
   },
+  chunks: ['antd', 'vendors', 'umi'],
   chainWebpack(config) {
     config.output
       .set('chunkFilename', 'static/[id].[contenthash:8].chunk.js')
@@ -32,5 +34,23 @@ export default defineConfig({
         },
       ])
       .end()
+      .optimization.splitChunks({
+        ...config.optimization.get('splitChunks'),
+        cacheGroups: {
+          default: false,
+          antd: {
+            test: /[\\/]node_modules[\\/](antd|@ant-design|rc-[\w]+)[\\/]/,
+            name: 'antd',
+            chunks: 'all',
+            priority: 20,
+          },
+          vendors: {
+            chunks: 'all',
+            name: 'vendors',
+            test: /[\\/]node_modules[\\/]/,
+            priority: 10,
+          },
+        },
+      })
   },
 })

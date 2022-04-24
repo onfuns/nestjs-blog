@@ -18,7 +18,7 @@ const buildServer = () => {
     rimraf(join('./dist/server'), async () => {
       const list = ['dist', 'pm2-app.json', 'package.json', 'package-lock.json'];
       await copyFiles('server', list);
-      console.log(`buildServer success!`);
+      console.log(`server build success!`);
     });
   } catch (err) {
     console.log('build failed: \n' + err);
@@ -38,7 +38,7 @@ const buildClient = () => {
         'package-lock.json',
       ];
       await copyFiles('client', list);
-      console.log(`buildClient success!`);
+      console.log(`client build success!`);
     });
   } catch (err) {
     console.log('build failed: \n' + err);
@@ -50,7 +50,7 @@ const buildAdmin = () => {
     rimraf(join('./dist/admin'), async () => {
       const list = ['dist'];
       await copyFiles('admin', list);
-      console.log(`buildAdmin success!`);
+      console.log(`admin build success!`);
     });
   } catch (err) {
     console.log('build failed: \n' + err);

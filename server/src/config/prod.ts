@@ -10,6 +10,7 @@ export default {
     database: process.env.DB_DATABASE,
     entities: ['dist/**/*.entity.js'],
     entityPrefix: 'rs_',
+    synchronize: true,
   },
   jwtToken: process.env.JWT_TOKEN,
 } as IConfig

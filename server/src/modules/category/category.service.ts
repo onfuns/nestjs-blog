@@ -34,7 +34,7 @@ export class CategoryService {
       const message = err.message.includes('a foreign key constraint fails')
         ? '有文章引用分类，无法删除'
         : err.message
-      return { success: false, msg: message }
+      return { success: false, message }
     }
   }
 }

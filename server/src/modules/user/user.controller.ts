@@ -14,7 +14,7 @@ export class UserController {
   async login(@Body() body: User, @IpAddress() cleintIp: string) {
     const { name, password } = body
     const data: User = await this.service.login({ name, password: md5(password) })
-    if (!data) return { success: false, msg: '用户名或密码错误' }
+    if (!data) return { success: false, message: '用户名或密码错误' }
     const token = this.service.createToken({
       secret: config.jwtToken,
       id: data.id,

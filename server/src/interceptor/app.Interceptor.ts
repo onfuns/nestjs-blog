@@ -18,7 +18,7 @@ export class AppInterceptor implements NestInterceptor {
       res.status(HttpStatus.OK)
     }
     const resMapData = map((data: any) => {
-      let result = { success: true, msg: '请求成功', data: null }
+      let result = { success: true, message: '请求成功', data: null }
       if (data && typeof data === 'object' && 'success' in data) {
         result = { ...result, ...data }
       } else {

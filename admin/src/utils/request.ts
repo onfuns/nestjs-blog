@@ -4,6 +4,10 @@ import { unset } from 'lodash'
 import { getLocalUser } from '@/actions/user'
 import { message } from 'antd'
 
+const onMessage = (msg = '请求出错，请重试') => {
+  message.error(msg)
+}
+
 const request = (options, showMsg = true) => {
   const { base } = config
   const { token = '' } = getLocalUser()
@@ -23,24 +27,27 @@ const request = (options, showMsg = true) => {
     timeout: 1000 * 10,
     ...options,
   })
-    .then(response => response.data)
+    .then(({ data }) => {
+      if (showMsg && data.success === false) onMessage(data?.message)
+      return data
+    })
     .catch(({ response }) => {
       const { status, data } = response
+      const msg = data?.message
       if (status === 403) {
-        if (data?.msg === 'TOKEN_INVALID') {
+        if (msg === 'TOKEN_INVALID') {
           message.error('登录过期，请重新登录', 2).then(() => {
             window.location.href = '/admin/login'
           })
           return false
         }
 
-        if (data?.msg === 'AUTH_INVALID') {
+        if (msg === 'AUTH_INVALID') {
           return message.error('抱歉，无权限操作')
         }
       }
-      const errmsg = data?.msg || '请求出错，请重试'
-      if (showMsg) message.error(errmsg)
-      return { msg: errmsg, success: false }
+      if (showMsg && data.success === false) onMessage(msg)
+      return { message: msg, success: false }
     })
 }
 

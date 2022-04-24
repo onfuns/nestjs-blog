@@ -66,12 +66,12 @@ const getRoutes = (data, flatRoutes = []) => {
 
 export const routes = [
   {
-    path: '/login',
-    component: '@/pages/login',
-  },
-  {
     component: '@/components/Layout/Container',
     routes: [
+      {
+        path: '/login',
+        component: '@/pages/login',
+      },
       {
         path: '/',
         redirect: '/dashboard',
