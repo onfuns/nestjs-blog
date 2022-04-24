@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export const getDashboardInfo = (params = {}) => {
   return request({
-    url: '/dashboard/info',
+    url: '/common/dashboard',
     method: 'GET',
     params,
   })

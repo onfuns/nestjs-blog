@@ -1,22 +1,24 @@
-import { Row, Col, Card, List } from 'antd'
+import { useEffect } from 'react'
+import { Row, Col, Card, List, Space } from 'antd'
 import styles from './style.less'
+import { inject, observer } from 'mobx-react'
+import { CommonStore } from '@/store'
+import dayjs from 'dayjs'
 
-interface ICount {
-  title: string
-  value: number
-  color?: string
+interface ICountPanelProps {
+  data: { title: string; value: number }[]
 }
 
-const CountPannel = ({ data = [] }: { data: ICount[] }) => {
+const CountPanel = ({ data = [] }: ICountPanelProps) => {
   return (
     <Card title="数据统计">
-      <Row>
-        {data.map(({ title, value, color }) => (
-          <Col key={title} span={4} offset={1} className={styles.pannel}>
-            <div className={styles.count} style={{ color, borderTop: `1px solid ${color}` }}>
-              {value}
+      <Row gutter={16}>
+        {data.map(({ title, value }) => (
+          <Col key={title} span={4}>
+            <div className={styles.pannel}>
+              <div className={styles.title}>{title}</div>
+              <div className={styles.count}>{value}</div>
             </div>
-            <div className={styles.title}>{title}</div>
           </Col>
         ))}
       </Row>
@@ -24,40 +26,40 @@ const CountPannel = ({ data = [] }: { data: ICount[] }) => {
   )
 }
 
-export default () => {
-  const dataSource: any = {}
-  const { article = 0, comments = {} } = dataSource
-  const { rows = [], count = 0 } = comments
+const Dashboard = ({ commonStore }: { commonStore: CommonStore }) => {
+  useEffect(() => {
+    commonStore.getDashboardInfo()
+  }, [])
+
+  const { article, comment } = commonStore.dashboardInfo
   const countData = [
-    { title: '评论总数', value: count, color: '#30cbcb' },
-    { title: '文章总数', value: article, color: '#fbd441' },
+    { title: '文章总数', value: article?.count || 0 },
+    { title: '评论总数', value: comment?.count || 0 },
   ]
   return (
     <div className={styles.page}>
-      <CountPannel data={countData} />
+      <CountPanel data={countData} />
       <Card title="最新评论" style={{ marginTop: 20 }}>
         <List
           itemLayout="horizontal"
-          dataSource={rows}
-          renderItem={(item: any) => (
+          dataSource={comment?.list || []}
+          renderItem={({ nickname, post, created_at, content }) => (
             <List.Item>
               <List.Item.Meta
                 style={{ width: '100%' }}
                 title={
-                  <div>
-                    <span style={{ marginRight: 5 }}>{item.nickname}</span>在
-                    <a
-                      target="_blank"
-                      href={`/article/${item.post.id}`}
-                      className={styles.postLink}
-                    >
-                      {item.post.title}
+                  <Space>
+                    <span style={{ marginRight: 5 }}>{nickname}</span>在
+                    <a target="_blank" href={`/article/${post?.id}`}>
+                      {post?.title}
                     </a>
                     评论
-                    <span style={{ float: 'right' }}>2021-08-18 15:02:35</span>
-                  </div>
+                    <span style={{ float: 'right' }}>
+                      {created_at && dayjs(created_at).format('YYYY-MM-DD HH:mm')}
+                    </span>
+                  </Space>
                 }
-                description={item.content}
+                description={content}
               />
             </List.Item>
           )}
@@ -66,3 +68,5 @@ export default () => {
     </div>
   )
 }
+
+export default inject('commonStore')(observer(Dashboard))

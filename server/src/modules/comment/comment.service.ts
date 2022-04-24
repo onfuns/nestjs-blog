@@ -26,7 +26,7 @@ export class CommentService {
     }
   }
 
-  async findAll(query): Promise<{ list: Comment[]; count: number }> {
+  async findAll(query: any = {}): Promise<{ list: Comment[]; count: number }> {
     const { current = 1, pageSize = 20, aid, status, title = '' } = query
     let where: any = {}
     if (aid) {

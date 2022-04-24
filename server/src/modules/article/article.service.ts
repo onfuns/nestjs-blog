@@ -30,7 +30,7 @@ export class ArticleService {
     }
   }
 
-  async findAll(query): Promise<{ list: any; count: number }> {
+  async findAll(query: any = {}): Promise<{ list: any; count: number }> {
     const { current = 1, pageSize = 20, title = '', pass_flag, sort, cid: category_id = '' } = query
     let where: any = {}
     try {

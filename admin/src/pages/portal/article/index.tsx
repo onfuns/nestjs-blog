@@ -2,7 +2,6 @@ import { useRef, useState } from 'react'
 import { inject, observer } from 'mobx-react'
 import { ArticleStore } from '@/store'
 import dayjs from 'dayjs'
-import { useHistory } from 'umi'
 import { Button, Popconfirm, Switch, message, Space } from 'antd'
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
 import ArticleAdd from '@/components/Portal/Article/Add'
@@ -17,7 +16,6 @@ interface IModalProps {
 }
 
 const Article = ({ articleStore }: IProps) => {
-  const history = useHistory()
   const actionRef = useRef<ActionType>()
   const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
 
@@ -134,8 +132,6 @@ const Article = ({ articleStore }: IProps) => {
     },
   ]
 
-  const xWidth = columns.reduce((total, current: any) => total + current?.width || 0, 0)
-
   return (
     <>
       <ProTable<any>
@@ -147,7 +143,6 @@ const Article = ({ articleStore }: IProps) => {
         request={async (params = {}) => {
           const { current = 1, pageSize = 20 } = params
           await articleStore.get({ ...params, page: current, pageSize })
-
           return { success: true, data: articleStore.result.list }
         }}
         toolBarRender={() => [
@@ -155,7 +150,7 @@ const Article = ({ articleStore }: IProps) => {
             新增
           </Button>,
         ]}
-        scroll={{ x: xWidth }}
+        scroll={{ x: '100%' }}
         size="small"
       />
       {modalProps.visible && (
