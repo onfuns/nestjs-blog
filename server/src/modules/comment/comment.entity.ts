@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 import { Article } from '../article/article.entity'
+
 @Entity()
 export class Comment {
   @PrimaryGeneratedColumn()

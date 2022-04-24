@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository, getRepository } from 'typeorm'
 import { User } from './user.entity'
@@ -11,12 +11,7 @@ export class UserService {
   constructor() {}
 
   async login(body: { name: string; password: string }) {
-    try {
-      const data = await this.repository.findOne(body)
-      return data
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+    return await this.repository.findOne(body)
   }
 
   verifyToken(token) {
@@ -42,46 +37,28 @@ export class UserService {
 
   async create(body: User): Promise<any> {
     const { roles, ...others } = body
-    try {
-      const record = this.repository.create(others)
-      record.roles = roles
-      await this.repository.save(record)
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+    const record = this.repository.create(others)
+    record.roles = roles
+    await this.repository.save(record)
   }
 
   async findAll(query: Partial<User>): Promise<User[]> {
-    try {
-      const data = await getRepository(User)
-        .createQueryBuilder('user')
-        .select(['user', 'role.id', 'role.name'])
-        .leftJoin('user.roles', 'role')
-        .getMany()
-      return data
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+    return await getRepository(User)
+      .createQueryBuilder('user')
+      .select(['user', 'role.id', 'role.name'])
+      .leftJoin('user.roles', 'role')
+      .getMany()
   }
 
   async update(body: Partial<User>): Promise<any> {
     const { id, roles, ...others } = body
-    try {
-      const record = this.repository.create(others)
-      record.roles = roles
-      record.id = id
-      await this.repository.save(record)
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+    const record = this.repository.create(others)
+    record.roles = roles
+    record.id = id
+    await this.repository.save(record)
   }
 
-  async delete(body: Partial<User>): Promise<any> {
-    const { id } = body
-    try {
-      return await this.repository.delete(id)
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+  async delete(id): Promise<any> {
+    return await this.repository.delete(id)
   }
 }

@@ -14,7 +14,7 @@ export class CommentController {
   @Get('client/list')
   @SetMetadata('roles', ['all'])
   async getClientList(@Query('aid') aid) {
-    return this.service.findAll({ aid, status: 1, pageSize: 100 })
+    return this.findAll({ aid, status: 1, pageSize: 100 })
   }
 
   @Post('add')
@@ -29,7 +29,7 @@ export class CommentController {
   }
 
   @Post('delete')
-  async delete(@Body() body) {
-    return this.service.delete(body)
+  async delete(@Body('id') id) {
+    return this.service.delete(id)
   }
 }

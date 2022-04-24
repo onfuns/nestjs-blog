@@ -1,6 +1,6 @@
 import { Inject, Controller, Post, Get, Body } from '@nestjs/common'
 import { AuthService } from './auth.service'
-import { Auth } from './auth.entity'
+
 @Controller('/auth')
 export class AuthController {
   constructor(@Inject(AuthService) private readonly service: AuthService) {}
@@ -11,7 +11,7 @@ export class AuthController {
   }
 
   @Post('add')
-  async add(@Body() body: Auth) {
+  async add(@Body() body) {
     return this.service.create(body)
   }
 
@@ -21,7 +21,7 @@ export class AuthController {
   }
 
   @Post('delete')
-  async delete(@Body() body) {
-    return this.service.delete(body)
+  async delete(@Body('id') id) {
+    return this.service.delete(id)
   }
 }

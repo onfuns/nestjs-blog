@@ -1,19 +1,10 @@
-import {
-  Inject,
-  Controller,
-  Post,
-  Get,
-  Body,
-  SetMetadata,
-  Query,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common'
+import { Inject, Controller, Post, Get, Body, SetMetadata, Query } from '@nestjs/common'
 import { UserService } from './user.service'
 import * as md5 from 'md5'
 import { User } from './user.entity'
 import config from '@/config'
 import { IpAddress } from '@/decorator/IpAddress'
+
 @Controller('/user')
 export class UserController {
   constructor(@Inject(UserService) private readonly service: UserService) {}
@@ -21,24 +12,20 @@ export class UserController {
   @Post('login')
   @SetMetadata('roles', ['all'])
   async login(@Body() body: User, @IpAddress() cleintIp: string) {
-    try {
-      const { name, password } = body
-      const data: User = await this.service.login({ name, password: md5(password) })
-      if (!data) return { success: false, msg: '用户名或密码错误' }
-      const token = this.service.createToken({
-        secret: config.jwtToken,
-        id: data.id,
-        name: data.name,
-      })
-      await this.service.update({
-        id: data.id,
-        last_login_at: new Date().toString(),
-        last_login_ip: cleintIp,
-      })
-      return { userName: name, token }
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+    const { name, password } = body
+    const data: User = await this.service.login({ name, password: md5(password) })
+    if (!data) return { success: false, msg: '用户名或密码错误' }
+    const token = this.service.createToken({
+      secret: config.jwtToken,
+      id: data.id,
+      name: data.name,
+    })
+    await this.service.update({
+      id: data.id,
+      last_login_at: new Date().toString(),
+      last_login_ip: cleintIp,
+    })
+    return { userName: name, token }
   }
 
   @Get('list')
@@ -47,7 +34,7 @@ export class UserController {
   }
 
   @Post('add')
-  async add(@Body() body: User) {
+  async add(@Body() body) {
     return this.service.create(body)
   }
 
@@ -57,7 +44,7 @@ export class UserController {
   }
 
   @Post('delete')
-  async delete(@Body() body) {
-    return this.service.delete(body)
+  async delete(@Body('id') id) {
+    return this.service.delete(id)
   }
 }

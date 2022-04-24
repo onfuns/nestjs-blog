@@ -1,6 +1,7 @@
 import { Inject, Controller, Post, Get, Body, Query } from '@nestjs/common'
 import { RoleService } from './role.service'
 import { Role } from './role.entity'
+
 @Controller('/role')
 export class RoleController {
   constructor(@Inject(RoleService) private readonly service: RoleService) {}
@@ -11,8 +12,7 @@ export class RoleController {
   }
 
   @Get('info')
-  async detail(@Query() query) {
-    const { id } = query
+  async detail(@Query('id') id) {
     return this.service.findOne(id)
   }
 

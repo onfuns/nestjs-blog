@@ -20,7 +20,7 @@ export class Role {
   @Column()
   description: string
 
-  @ManyToMany(type => Auth, { cascade: true })
+  @ManyToMany(() => Auth, { cascade: true })
   @JoinTable({
     name: 'role_auth_relation',
     joinColumns: [{ name: 'role_id' }],
