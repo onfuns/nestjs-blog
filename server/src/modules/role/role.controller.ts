@@ -13,7 +13,7 @@ export class RoleController {
 
   @Get('info')
   async detail(@Query('id') id) {
-    return this.service.findOne(id)
+    return this.service.findById(id)
   }
 
   @Post('add')

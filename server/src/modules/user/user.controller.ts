@@ -20,9 +20,9 @@ export class UserController {
       id: data.id,
       name: data.name,
     })
-    await this.service.update({
+    await this.service.updateLoginInfo({
       id: data.id,
-      last_login_at: new Date().toString(),
+      last_login_at: new Date(),
       last_login_ip: cleintIp,
     })
     return { userName: name, token }
@@ -30,7 +30,7 @@ export class UserController {
 
   @Get('list')
   async findAll(@Query() query) {
-    return this.service.findAll(query)
+    return this.service.findAll()
   }
 
   @Post('add')

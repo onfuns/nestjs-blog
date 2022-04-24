@@ -38,7 +38,7 @@ export class UserGuard implements CanActivate {
     if (!data) this.fail()
     /** token 鉴权 end */
     /** 接口鉴权 begin */
-    const roleInfo = await this.roleService.findOne({ id: data.role_id })
+    const roleInfo = await this.roleService.findById(data.role_id)
     const authinfo = await this.authService.verify('1')
     const url = request.path.replace(Config.base, '')
     if (!authinfo?.some(({ code }) => code === url)) {

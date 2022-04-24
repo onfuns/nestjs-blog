@@ -4,6 +4,7 @@ import { getDashboardInfo } from '@/actions/common'
 type IDashboardInfoProps = {
   article?: { count: number }
   comment?: { count: number; data: any[] }
+  user?: Record<any, string>
 }
 
 export class CommonStore {

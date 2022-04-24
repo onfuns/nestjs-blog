@@ -15,8 +15,8 @@ export class CommentService {
     return await this.repository.save(data)
   }
 
-  async findOne(query): Promise<Comment> {
-    return await this.repository.findOne(query)
+  async findById(id): Promise<Comment> {
+    return await this.repository.findOneBy(id)
   }
 
   async findAll(query: any = {}): Promise<{ data: Comment[]; count: number }> {

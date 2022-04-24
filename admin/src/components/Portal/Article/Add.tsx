@@ -3,11 +3,11 @@ import { Form, Input, message, Radio, DatePicker, Select } from 'antd'
 import { inject, observer } from 'mobx-react'
 import { ArticleStore, TagStore } from '@/store'
 import MDEditor from '@/components/Editor/MDEditor'
-import HTMLEditor from '@/components/Editor/HTMLEditor'
-import JSONEditor from '@/components/Editor/JSONEditor'
+// import HTMLEditor from '@/components/Editor/HTMLEditor'
+// import JSONEditor from '@/components/Editor/JSONEditor'
 import dayjs from 'dayjs'
 import CategoryCascader from '@/components/Portal/Category/Cascader'
-import Drawer from '@/components/UI/Drawer'
+import Drawer from '@/components/Widgets/Drawer'
 
 interface IProps {
   articleStore?: ArticleStore

@@ -54,7 +54,7 @@ export class ArticleController {
   @Get('info')
   @SetMetadata('roles', ['all'])
   async detail(@Query('id') id: string) {
-    const data = await this.service.findOne(id)
+    const data = await this.service.findById(id)
     const list = await this.getRelationTags([data])
     return list?.[0]
   }

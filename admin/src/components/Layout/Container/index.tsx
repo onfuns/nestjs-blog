@@ -4,9 +4,7 @@ import zhCN from 'antd/lib/locale/zh_CN'
 import * as store from '@/store'
 import '@/styles/global.less'
 import styles from './style.less'
-import TagPanel from '@/components/UI/TagPanel'
-import Header from '@/components/UI/Header'
-import Menu from '@/components/UI/Menu'
+import { Header, Menu, TagPanel } from '..'
 
 const Container = props => {
   return (

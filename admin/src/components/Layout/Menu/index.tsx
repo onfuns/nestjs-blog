@@ -22,6 +22,7 @@ const MenuComp = ({ headerStore }: { headerStore?: HeaderStore }) => {
     .split('/')
     .map(url => `/${url}`)
   const [openKeys, setOpenKeys] = useState([pathArr?.[0]])
+  console.log(`openKeys`, openKeys)
 
   const onOpenChange = openKeys => {
     setOpenKeys([...openKeys])

@@ -70,7 +70,7 @@ export const routes = [
     component: '@/pages/login',
   },
   {
-    component: '@/components/UI/Container',
+    component: '@/components/Layout/Container',
     routes: [
       {
         path: '/',

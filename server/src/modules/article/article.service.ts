@@ -14,7 +14,7 @@ export class ArticleService {
     return await this.repository.save(body)
   }
 
-  async findOne(id): Promise<Article> {
+  async findById(id): Promise<Article> {
     return await this.repository.findOne({
       where: { id },
       relations: {

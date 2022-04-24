@@ -16,6 +16,13 @@ export class UserService {
     })
   }
 
+  createToken(data) {
+    const token = jwt.sign(data, config.jwtToken, {
+      expiresIn: '24h',
+    })
+    return token
+  }
+
   verifyToken(token) {
     const { jwtToken } = config
     try {
@@ -30,13 +37,6 @@ export class UserService {
     }
   }
 
-  createToken(data) {
-    const token = jwt.sign(data, config.jwtToken, {
-      expiresIn: '24h',
-    })
-    return token
-  }
-
   async create(body: User): Promise<any> {
     const { roles, ...others } = body
     const record = this.repository.create(others)
@@ -44,12 +44,16 @@ export class UserService {
     await this.repository.save(record)
   }
 
-  async findAll(query: Partial<User>): Promise<User[]> {
+  async findAll(): Promise<User[]> {
     return await getRepository(User)
       .createQueryBuilder('user')
       .select(['user', 'role.id', 'role.name'])
       .leftJoin('user.roles', 'role')
       .getMany()
+  }
+
+  async findById(id): Promise<any> {
+    return this.repository.findOneBy({ id })
   }
 
   async update(body: Partial<User>): Promise<any> {
@@ -58,6 +62,11 @@ export class UserService {
     record.roles = roles
     record.id = id
     await this.repository.save(record)
+  }
+
+  async updateLoginInfo(body): Promise<any> {
+    const { id, ...others } = body
+    await this.repository.update(id, others)
   }
 
   async delete(id): Promise<any> {

@@ -6,7 +6,7 @@ import { message } from 'antd'
 
 const request = (options, showMsg = true) => {
   const { base } = config
-  const { token } = getLocalUser()
+  const { token = '' } = getLocalUser()
   axios.defaults.baseURL = base
   axios.defaults.headers.common['x-auth-id-token'] = token
   const { url, method = 'GET', params } = options
