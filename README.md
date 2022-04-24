@@ -3,7 +3,7 @@
 ## 预览
 
 - 用户前台：[https://demo.onfuns.com](https://demo.onfuns.com)
-- 管理后台：[https://demo.onfuns.com/admin/login](https://onfuns.onfuns.com/admin/login)
+- 管理后台：[https://demo.onfuns.com/admin/login](https://demo.onfuns.com/admin/login)
 
 ## 启动
 
