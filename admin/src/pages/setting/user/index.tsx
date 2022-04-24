@@ -59,6 +59,7 @@ const UserList = ({ userStore }: { userStore?: UserStore }) => {
     {
       title: '最后登录IP',
       dataIndex: 'last_login_ip',
+      render: (_, { last_login_ip }) => last_login_ip && last_login_ip.replace('::ffff:', ''),
     },
     {
       title: '创建时间',

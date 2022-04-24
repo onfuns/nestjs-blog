@@ -38,10 +38,10 @@ export class Article {
   @Column({ type: 'text', nullable: true, comment: '内容' })
   content: string
 
-  @Column({ default: 1, comment: '审核状态' })
+  @Column({ default: 1, comment: '是否审核' })
   pass_flag: number
 
-  @Column({ default: 0, comment: '评论状态' })
+  @Column({ default: 0, comment: '是否评论' })
   comment_flag: number
 
   @Column({ comment: '发布时间' })

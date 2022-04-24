@@ -74,7 +74,7 @@ export const routes = [
     routes: [
       {
         path: '/',
-        redirect: '/portal/article',
+        redirect: '/dashboard',
       },
       ...getRoutes(adminRoutes),
       {

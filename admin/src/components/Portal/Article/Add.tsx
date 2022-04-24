@@ -107,7 +107,7 @@ const ArticleAdd = ({ articleStore, tagStore, onCancel, onSuccess, detail = {} }
           </Select>
         </Form.Item>
 
-        <Form.Item label="审核状态" name="pass_flag">
+        <Form.Item label="审核" name="pass_flag">
           <Radio.Group>
             <Radio value={1}>通过</Radio>
             <Radio value={0}>待审核</Radio>

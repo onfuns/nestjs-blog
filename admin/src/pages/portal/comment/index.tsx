@@ -86,7 +86,7 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
       render: (_, { created_at }) => created_at && dayjs(created_at).format('YYYY-MM-DD HH:mm'),
     },
     {
-      title: '审核状态',
+      title: '审核',
       dataIndex: 'status',
       hideInSearch: true,
       width: 100,

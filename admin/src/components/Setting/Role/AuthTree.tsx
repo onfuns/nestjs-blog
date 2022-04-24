@@ -20,9 +20,7 @@ const AuthTree = ({ authStore, roleStore, detail, onSuccess, onCancel }: IProps)
     ;(async () => {
       await authStore.get()
       //有权限且不是菜单，因为树是受控的，当子元素都选中父级肯定也会选中
-      console.log(auths)
       const keys = auths?.filter(d => d.type === 2).map(d => d.id)
-      console.log(keys)
       setSelectedKeys([...keys])
     })()
   }, [])

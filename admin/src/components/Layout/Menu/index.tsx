@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'umi'
 import { Menu } from 'antd'
 import styles from './style.less'
@@ -17,16 +17,14 @@ import classnames from 'classnames'
 const SubMenu = Menu.SubMenu
 const MenuComp = ({ headerStore }: { headerStore?: HeaderStore }) => {
   const { pathname } = useLocation()
-  const pathArr = pathname
-    .slice(1)
-    .split('/')
-    .map(url => `/${url}`)
-  const [openKeys, setOpenKeys] = useState([pathArr?.[0]])
-  console.log(`openKeys`, openKeys)
-
-  const onOpenChange = openKeys => {
-    setOpenKeys([...openKeys])
+  const getOpenKeys = () => {
+    const paths = pathname
+      .slice(1)
+      .split('/')
+      .map(url => `/${url}`)
+    return paths?.[0]
   }
+  const [openKeys, setOpenKeys] = useState([getOpenKeys()])
 
   const renderIcon = (icon: string) => {
     const icons = {
@@ -71,7 +69,7 @@ const MenuComp = ({ headerStore }: { headerStore?: HeaderStore }) => {
           inlineCollapsed={menuCollapsed}
           openKeys={openKeys}
           selectedKeys={[pathname]}
-          onOpenChange={onOpenChange}
+          onOpenChange={keys => setOpenKeys([...keys])}
         >
           {renderMenu(adminRoutes)}
         </Menu>
