@@ -35,14 +35,14 @@ const request = (options, showMsg = true) => {
       const { status, data } = response
       const msg = data?.message
       if (status === 403) {
-        if (msg === 'TOKEN_INVALID') {
+        if (msg === 'INVALID_TOKEN') {
           message.error('登录过期，请重新登录', 2).then(() => {
             window.location.href = '/admin/login'
           })
           return false
         }
 
-        if (msg === 'AUTH_INVALID') {
+        if (msg === 'INVALID_AUTH') {
           return message.error('抱歉，无权限操作')
         }
       }

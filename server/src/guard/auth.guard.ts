@@ -9,20 +9,15 @@ import {
 import { Reflector } from '@nestjs/core'
 import { Request } from 'express'
 import { UserService } from '@/modules/user/user.service'
-import { RoleService } from '@/modules/role/role.service'
-import { AuthService } from '@/modules/auth/auth.service'
+import { User } from '@/modules/user/user.entity'
 import Config from '@/config'
 @Injectable()
 export class UserGuard implements CanActivate {
   private readonly reflector: Reflector = new Reflector()
 
   constructor(
-    @Inject(RoleService)
-    private readonly roleService: RoleService,
     @Inject(UserService)
     private readonly userService: UserService,
-    @Inject(AuthService)
-    private readonly authService: AuthService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<any> {
@@ -34,20 +29,25 @@ export class UserGuard implements CanActivate {
     const token = request.headers['x-auth-id-token']
     console.log('guard x-auth-id-token received:', token)
     if (!token) return this.fail()
-    const data = await this.userService.verifyToken(token)
-    if (!data) this.fail()
+    const tokenInfo = await this.userService.verifyToken(token)
+    if (!tokenInfo) this.fail()
     /** token 鉴权 end */
+
     /** 接口鉴权 begin */
-    const roleInfo = await this.roleService.findById(data.role_id)
-    const authinfo = await this.authService.verify('1')
+    const user: User = await this.userService.findById(tokenInfo.id)
+    const auths = []
+    for (let i = 0; i < user.roles.length; i++) {
+      const role = user.roles[i]
+      if (role.enable === 1) auths.push(...(role.auths || []))
+    }
     const url = request.path.replace(Config.base, '')
-    if (!authinfo?.some(({ code }) => code === url)) {
-      throw new HttpException('AUTH_INVALID', HttpStatus.FORBIDDEN)
+    if (!auths?.some(({ code }) => code.split(',').includes(url))) {
+      throw new HttpException('INVALID_AUTH', HttpStatus.FORBIDDEN)
     }
     /** 接口鉴权 end */
     return true
   }
   fail() {
-    throw new HttpException('TOKEN_INVALID', HttpStatus.FORBIDDEN)
+    throw new HttpException('INVALID_TOKEN', HttpStatus.FORBIDDEN)
   }
 }
