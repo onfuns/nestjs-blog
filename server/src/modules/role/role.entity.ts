@@ -17,7 +17,7 @@ export class Role {
   @Column({ unique: true })
   name: string
 
-  @Column()
+  @Column({ nullable: true })
   description: string
 
   @ManyToMany(() => Auth, { cascade: true })

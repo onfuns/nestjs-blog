@@ -11,6 +11,7 @@ interface IProps {
 }
 
 const AddFormModal = ({ roleStore, onSuccess, onCancel, detail }: IProps) => {
+  const store = roleStore!
   const [form] = Form.useForm()
 
   useEffect(() => {
@@ -24,16 +25,18 @@ const AddFormModal = ({ roleStore, onSuccess, onCancel, detail }: IProps) => {
       const params = {
         ...values,
       }
-      let fn = roleStore.add
+      let fn = store.add
       // 编辑
       if (!!detail.id) {
-        fn = roleStore.update
+        fn = store.update
         params.id = detail.id
       }
-      const { success } = await fn(params)
+      const { success, msg = '操作失败' } = await fn(params)
       if (success) {
         message.success('操作成功')
         onSuccess()
+      } else {
+        message.error(msg)
       }
     })
   }
@@ -42,7 +45,7 @@ const AddFormModal = ({ roleStore, onSuccess, onCancel, detail }: IProps) => {
     <Modal
       title="角色信息"
       visible={true}
-      width={600}
+      width={500}
       onOk={onFinish}
       onCancel={onCancel}
       destroyOnClose
@@ -54,17 +57,12 @@ const AddFormModal = ({ roleStore, onSuccess, onCancel, detail }: IProps) => {
         initialValues={{ enable: 1 }}
       >
         <Form.Item label="名称" name="name" rules={[{ required: true }]}>
-          <Input placeholder="请输入名称" />
+          <Input placeholder="请输入名称" maxLength={10} />
         </Form.Item>
-
-        <Form.Item label="描述" name="description" rules={[{ required: true }]}>
-          <Input.TextArea placeholder="请输入描述" />
-        </Form.Item>
-
-        <Form.Item label="状态" name="enable" rules={[{ required: true }]}>
+        <Form.Item label="启用" name="enable" rules={[{ required: true }]}>
           <Radio.Group>
-            <Radio value={1}>启用</Radio>
-            <Radio value={0}>停用</Radio>
+            <Radio value={1}>是</Radio>
+            <Radio value={0}>否</Radio>
           </Radio.Group>
         </Form.Item>
       </Form>
