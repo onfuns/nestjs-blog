@@ -19,6 +19,7 @@ export class ArticleService {
       where: { id },
       relations: {
         category: true,
+        tags: true,
       },
     })
   }
@@ -38,14 +39,17 @@ export class ArticleService {
       order: {
         created_at: 'DESC',
       },
-      relations: ['category'],
+      relations: ['category', 'tags'],
     })
     return { data, count }
   }
 
   async update(body: Article): Promise<any> {
-    const { id, ...others } = body
-    return await this.repository.update(id, others)
+    const { id, tags, ...others } = body
+    const record = this.repository.create(others)
+    record.tags = tags
+    record.id = id
+    return await this.repository.save(record)
   }
 
   async delete(id): Promise<any> {

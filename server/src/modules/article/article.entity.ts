@@ -4,10 +4,13 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  ManyToMany,
+  JoinTable,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm'
 import { Category } from '@/modules/category/category.entity'
+import { Tag } from '@/modules/tag/tag.entity'
 @Entity()
 export class Article {
   @PrimaryGeneratedColumn('uuid')
@@ -23,8 +26,13 @@ export class Article {
   @Column({ comment: '分类ID' })
   category_id: number
 
-  @Column({ comment: '标签ID' })
-  tag_id: string
+  @ManyToMany(() => Tag, { cascade: true })
+  @JoinTable({
+    name: 'article_tag_relation',
+    joinColumns: [{ name: 'article_id' }],
+    inverseJoinColumns: [{ name: 'tag_id' }],
+  })
+  tags: Tag[]
 
   @Column({ comment: '标题' })
   title: string

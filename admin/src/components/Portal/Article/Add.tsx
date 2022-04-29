@@ -27,12 +27,12 @@ const ArticleAdd = ({ articleStore, tagStore, onCancel, onSuccess, detail = {} }
     await articleStore.getInfoById({ id: detail.id })
     //表单赋值
     const { detail: acticleDetail } = articleStore
-    const { publish_time, category, tag_id, content } = acticleDetail
+    const { publish_time, category, tags, content } = acticleDetail
     setContent(content)
     form.setFieldsValue({
       ...acticleDetail,
       publish_time: dayjs(publish_time),
-      tag_id: tag_id ? tag_id.split(',').map(id => Number(id)) : undefined,
+      tags: tags?.map(({ id }) => id),
       category_id: category?.pid === 0 ? [category.id] : [category.pid, category.id],
     })
   }
@@ -46,12 +46,12 @@ const ArticleAdd = ({ articleStore, tagStore, onCancel, onSuccess, detail = {} }
     form
       .validateFields()
       .then(async values => {
-        const { publish_time, category_id, tag_id = [] } = values
+        const { publish_time, category_id, tags = [] } = values
         const params = {
           ...values,
           publish_time: dayjs(publish_time).format(formatDate),
           category_id: category_id.pop(),
-          tag_id: tag_id.join(','),
+          tags: tags.map(id => ({ id })),
           content,
         }
         if (!content) return message.warn('请输入内容')
@@ -97,7 +97,7 @@ const ArticleAdd = ({ articleStore, tagStore, onCancel, onSuccess, detail = {} }
           <CategoryCascader root={false} />
         </Form.Item>
 
-        <Form.Item label="标签" name="tag_id">
+        <Form.Item label="标签" name="tags">
           <Select mode="multiple" style={{ width: '100%' }} placeholder="请选择标签">
             {tagList.map((item, index) => (
               <Select.Option key={index} value={item.id}>
