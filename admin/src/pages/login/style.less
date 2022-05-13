@@ -1,30 +1,30 @@
 .loginPage {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  bottom: 0px;
   background: linear-gradient(to left bottom, #6c0584 0%, #44106d 100%);
   background-size: cover;
 
   .content {
     display: flex;
-    align-items: center;
-    flex-shrink: 0;
+    overflow: hidden;
     width: 1080px;
     height: 600px;
+    flex-shrink: 0;
+    align-items: center;
     background: #fff;
     border-radius: 10px;
-    overflow: hidden;
     .carousel {
       display: flex;
-      align-items: center;
       width: 500px;
       height: 100%;
+      align-items: center;
       background: #fafbfc;
       & > div {
         width: 100%;
@@ -34,21 +34,21 @@
       width: 350px;
       margin: 0 0 0 100px;
       .title {
-        font-size: 30px;
         margin-bottom: 40px;
+        font-size: 30px;
       }
       .button {
         width: 100%;
-        border-radius: 6px;
         height: 50px;
+        border-radius: 6px;
       }
       :global {
         .ant-input-affix-wrapper {
           border-radius: 6px;
         }
         input {
-          padding-left: 5px;
           height: 35px;
+          padding-left: 5px;
         }
       }
     }

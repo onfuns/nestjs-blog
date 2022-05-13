@@ -1,8 +1,8 @@
 .tagsPanel {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
   width: 100%;
+  flex-wrap: wrap;
+  align-items: center;
   padding: 5px 10px;
   background: #fff;
   overflow-x: auto;
@@ -11,28 +11,28 @@
     display: inline-flex;
     align-items: center;
     padding: 3px 12px;
-    font-size: 13px;
+    border: 1px solid #e6e6e6;
     margin-right: 5px;
     border-radius: 2px;
-    border: 1px solid #e6e6e6;
+    font-size: 13px;
     .icon {
       margin-left: 5px;
     }
   }
   .active {
-    background: #4bc2c5;
     border-color: #4bc2c5;
+    background: #4bc2c5;
     color: #fff;
 
     &:before {
-      content: '';
-      background: #fff;
+      position: relative;
       display: inline-block;
       width: 8px;
       height: 8px;
-      border-radius: 50%;
-      position: relative;
       margin-right: 5px;
+      background: #fff;
+      border-radius: 50%;
+      content: '';
       opacity: 1;
     }
   }
