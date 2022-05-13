@@ -2,21 +2,24 @@ import { Menu, Dropdown } from 'antd'
 import { getLocalUser, removeLocalUser } from '@/actions/user'
 import styles from './style.less'
 import { LogoutOutlined } from '@ant-design/icons'
-import { useHistory } from 'umi'
+import { history } from 'umi'
 import AvatarImage from '@/assets/images/avatar.png'
+import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
+import { inject, observer } from 'mobx-react'
 
-export default () => {
-  const history = useHistory()
-
+const Header = ({ headerStore }) => {
   const onLogout = () => {
     removeLocalUser()
     history.push('/login')
   }
 
   const { userName = 'demo' } = getLocalUser()
+  const MenuIcon = headerStore.menuCollapsed ? MenuUnfoldOutlined : MenuFoldOutlined
   return (
     <div className={styles.header}>
-      <div className={styles.logoText}>管理后台</div>
+      <div>
+        <MenuIcon onClick={() => headerStore.setMenuCollaps()} style={{ fontSize: 17 }} />
+      </div>
       <div className={styles.tools}>
         <Dropdown
           overlay={
@@ -40,3 +43,5 @@ export default () => {
     </div>
   )
 }
+
+export default inject('headerStore')(observer(Header))

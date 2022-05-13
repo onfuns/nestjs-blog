@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Form, Input, Button, Carousel } from 'antd'
 import styles from './style.less'
-import { useHistory } from 'umi'
+import { history } from 'umi'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { saveLocalUser, loginUser } from '@/actions/user'
 import LoginImage from '@/assets/images/login-bg.png'
@@ -9,18 +9,15 @@ import LoginImage from '@/assets/images/login-bg.png'
 export default () => {
   const [loading, setLoading] = useState(false)
   const [form] = Form.useForm()
-  const history = useHistory()
 
   const onSubmit = async () => {
     form.validateFields().then(async values => {
       setLoading(true)
       const { name, password } = values
-      const { success, data } = await loginUser({ name, password })
+      const { data } = await loginUser({ name, password })
       setLoading(false)
-      if (success) {
-        saveLocalUser(data)
-        history.push('/dashboard')
-      }
+      saveLocalUser(data)
+      history.push('/dashboard')
     })
   }
   return (

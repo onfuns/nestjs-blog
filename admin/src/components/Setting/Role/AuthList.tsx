@@ -5,6 +5,7 @@ import { RoleStore, AuthStore } from '@/store'
 import { toTree } from '@/utils'
 import { cloneDeep } from 'lodash'
 import AddModal from './AuthAddModal'
+import { useSetState } from 'ahooks'
 import styles from './Auth.less'
 
 interface IProps {
@@ -20,12 +21,8 @@ interface IModalProps {
 
 const AuthList = ({ roleStore, authStore }: IProps) => {
   const [selectedKeys, setSelectedKeys] = useState<number[]>([])
-  const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useSetState<IModalProps>({ visible: false })
   const { detail: { id: roleId, auths } = {} } = roleStore
-
-  const onSetModalProps = (props: IModalProps = {}) => {
-    setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
-  }
 
   useEffect(() => {
     if (!roleId) return
@@ -58,26 +55,22 @@ const AuthList = ({ roleStore, authStore }: IProps) => {
       const ids = findAllParent(id)
       ids.map(id => resources.add(id))
     })
-    const { success } = await roleStore.update({
+    await roleStore.update({
       id: roleId,
       auths: [...resources].map(id => ({ id })),
     })
-    if (success) {
-      message.success('保存成功')
-      //刷新角色列表，切换角色时可以获取最新的角色权限数据
-      roleStore.get()
-    }
+    message.success('保存成功')
+    //刷新角色列表，切换角色时可以获取最新的角色权限数据
+    roleStore.get()
   }
 
   const onDetele = async item => {
     if (item?.children?.length > 0) {
       return message.warn('请先删除子节点')
     }
-    const { success } = await roleStore.delete({ id: item.id })
-    if (success) {
-      message.success('删除成功')
-      authStore.get()
-    }
+    await roleStore.delete({ id: item.id })
+    message.success('删除成功')
+    authStore.get()
   }
 
   const listData = toTree(cloneDeep(authStore.result))
@@ -88,7 +81,10 @@ const AuthList = ({ roleStore, authStore }: IProps) => {
         defaultActiveKey="1"
         tabBarExtraContent={
           <Space style={{ padding: '0 10px' }}>
-            <Button type="ghost" onClick={() => onSetModalProps({ type: 'add', record: {} })}>
+            <Button
+              type="ghost"
+              onClick={() => setModalProps({ visible: true, type: 'add', record: {} })}
+            >
               新增权限
             </Button>
             <Popconfirm title="确定保存？" onConfirm={onSave} placement="topLeft">
@@ -111,7 +107,9 @@ const AuthList = ({ roleStore, authStore }: IProps) => {
               titleRender={(node: any) => (
                 <div className={styles.titleRow}>
                   <span>{node.name}</span>
-                  <a onClick={() => onSetModalProps({ type: 'edit', record: node })}>编辑</a>
+                  <a onClick={() => setModalProps({ visible: true, type: 'edit', record: node })}>
+                    编辑
+                  </a>
                   <a style={{ color: 'red' }} onClick={() => onDetele(node)}>
                     删除
                   </a>
@@ -126,9 +124,9 @@ const AuthList = ({ roleStore, authStore }: IProps) => {
           detail={modalProps.record || {}}
           onSuccess={() => {
             authStore.get()
-            onSetModalProps()
+            setModalProps({ visible: false })
           }}
-          onCancel={onSetModalProps}
+          onCancel={() => setModalProps({ visible: false })}
         />
       )}
     </>

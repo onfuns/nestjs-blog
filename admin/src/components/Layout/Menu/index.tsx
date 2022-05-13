@@ -1,17 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Link, useLocation } from 'umi'
 import { Menu } from 'antd'
 import styles from './style.less'
-import { adminRoutes } from '@/routes'
+import { baseRoutes } from '@/routes'
 import { inject, observer } from 'mobx-react'
 import { HeaderStore } from '@/store'
-import {
-  HomeOutlined,
-  AppstoreOutlined,
-  SettingOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-} from '@ant-design/icons'
+import { HomeOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons'
 import classnames from 'classnames'
 
 const SubMenu = Menu.SubMenu
@@ -62,6 +56,10 @@ const MenuComp = ({ headerStore }: { headerStore?: HeaderStore }) => {
         [styles.collapsedMenu]: menuCollapsed,
       })}
     >
+      <div className={styles.logoText}>
+        <img src="http://preview.ballcat.cn/assets/logo.f9330552.svg" />
+        {!menuCollapsed && <h1>后台</h1>}
+      </div>
       <div className={styles.menuTree}>
         <Menu
           mode="inline"
@@ -71,14 +69,8 @@ const MenuComp = ({ headerStore }: { headerStore?: HeaderStore }) => {
           selectedKeys={[pathname]}
           onOpenChange={keys => setOpenKeys([...keys])}
         >
-          {renderMenu(adminRoutes)}
+          {renderMenu(baseRoutes)}
         </Menu>
-      </div>
-
-      <div className={styles.footer}>
-        <a onClick={() => headerStore.setMenuCollaps()}>
-          {headerStore.menuCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-        </a>
       </div>
     </div>
   )

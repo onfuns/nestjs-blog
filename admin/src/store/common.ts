@@ -19,8 +19,8 @@ export class CommonStore {
   }
 
   async getDashboardInfo(params?: Record<string, any>) {
-    const { success, data } = await getDashboardInfo(params)
-    if (success) {
+    const { data } = await getDashboardInfo(params)
+    if (data) {
       this.set('dashboardInfo', data)
     }
   }

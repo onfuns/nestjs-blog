@@ -4,20 +4,33 @@ import { unset } from 'lodash'
 import { getLocalUser } from '@/actions/user'
 import { message } from 'antd'
 
-const onMessage = (msg = '请求出错，请重试') => {
+const onError = (msg = '请求出错，请重试') => {
   message.error(msg)
+  Promise.reject(msg)
 }
 
-const request = (options, showMsg = true) => {
+const request = (
+  options: {
+    url: string
+    method?: string
+    params?: Record<string, any>
+    data?: Record<string, any>
+    [key: string]: any
+  },
+  extraConfig = {
+    msg: true,
+  },
+) => {
   const { base } = config
   const { token = '' } = getLocalUser()
   axios.defaults.baseURL = base
   axios.defaults.headers.common['x-auth-id-token'] = token
-  const { url, method = 'GET', params } = options
+  const { url, method = 'GET', params, ...otherOptions } = options
+  let axiosOptions: any = {}
   if (method === 'GET') {
-    options.params = params
+    axiosOptions.params = params
   } else {
-    options.data = params
+    axiosOptions.data = params
     unset(options, 'params')
   }
 
@@ -25,10 +38,13 @@ const request = (options, showMsg = true) => {
     url,
     withCredentials: false,
     timeout: 1000 * 10,
-    ...options,
+    ...axiosOptions,
+    ...otherOptions,
   })
     .then(({ data }) => {
-      if (showMsg && data.success === false) onMessage(data?.message)
+      if (extraConfig.msg && data?.success === false && data?.message) {
+        onError(data?.message)
+      }
       return data
     })
     .catch(({ response }) => {
@@ -43,11 +59,10 @@ const request = (options, showMsg = true) => {
         }
 
         if (msg === 'INVALID_AUTH') {
-          return message.error('抱歉，无权限操作')
+          return onError('抱歉，无权限操作')
         }
       }
-      if (showMsg && data.success === false) onMessage(msg)
-      return { message: msg, success: false }
+      onError(msg)
     })
 }
 

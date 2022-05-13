@@ -13,8 +13,8 @@ export class AuthStore {
   }
 
   async get(params?: Record<string, any>) {
-    const { success, data } = await getAuthList(params)
-    if (success) {
+    const { data } = await getAuthList(params)
+    if (data) {
       this.set('result', data)
     }
   }

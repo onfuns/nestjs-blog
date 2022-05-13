@@ -5,6 +5,7 @@ import { CategoryStore } from '@/store'
 import { Button, Popconfirm, message, Switch, Space } from 'antd'
 import { CATEGORT_TYPE } from '@/constants'
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
+import { useSetState } from 'ahooks'
 
 interface IProps {
   categoryStore: CategoryStore
@@ -18,35 +19,28 @@ interface IModalProps {
 
 const CategoryPage = ({ categoryStore }: IProps) => {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useSetState<IModalProps>({ visible: false })
   const [expandKeys, setExpandKeys] = useState([])
-
-  const onSetModalProps = (props: IModalProps = {}) => {
-    setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
-  }
 
   const onLoadData = () => {
     actionRef?.current.reload()
   }
 
-  const onAction = async (record: any = {}, type: 'add' | 'edit' | 'delete' | 'status') => {
+  const onAction = async (type: 'add' | 'edit' | 'delete' | 'status', record: any = {}) => {
     if (type === 'add' || type === 'edit') {
-      onSetModalProps({ record, visible: true })
-    } else if (type === 'delete') {
-      const { success } = await categoryStore.delete({ id: record.id })
-      if (success) {
-        message.success('删除成功')
-        onLoadData()
+      setModalProps({ visible: true, type, record })
+    } else if (type === 'delete' || type === 'status') {
+      if (type === 'delete') {
+        await categoryStore.delete({ id: record.id })
       }
-    } else if (type === 'status') {
-      const { success } = await categoryStore.update({
-        id: record.id,
-        status: Number(!record.status),
-      })
-      if (success) {
-        message.success('操作成功')
-        onLoadData()
+      if (type === 'status') {
+        await categoryStore.update({
+          id: record.id,
+          status: Number(!record.status),
+        })
       }
+      message.success('操作成功')
+      onLoadData()
     }
   }
 
@@ -71,7 +65,7 @@ const CategoryPage = ({ categoryStore }: IProps) => {
       render: (_, record) => (
         <Switch
           checked={record.status === 1}
-          onChange={() => onAction(record, 'status')}
+          onChange={() => onAction('status', record)}
           size="small"
         />
       ),
@@ -83,14 +77,10 @@ const CategoryPage = ({ categoryStore }: IProps) => {
       render: (_, record) => {
         return (
           <Space>
-            <Button size="small" onClick={() => onAction(record, 'edit')}>
-              编辑
-            </Button>
+            <a onClick={() => onAction('edit', record)}>编辑</a>
             {record.pid === 0 && record?.children?.length ? null : (
-              <Popconfirm title="确定删除？" onConfirm={() => onAction(record, 'delete')}>
-                <Button size="small" danger>
-                  删除
-                </Button>
+              <Popconfirm title="确定删除？" onConfirm={() => onAction('delete', record)}>
+                <a className="danger">删除</a>
               </Popconfirm>
             )}
           </Space>
@@ -127,21 +117,21 @@ const CategoryPage = ({ categoryStore }: IProps) => {
         }}
         pagination={false}
         toolBarRender={() => [
-          <Button key="add" type="primary" onClick={() => onAction({}, 'add')}>
+          <Button key="add" type="primary" onClick={() => onAction('add', {})}>
             新增
           </Button>,
         ]}
-        size="small"
+        defaultSize="small"
       />
 
       {modalProps.visible && (
         <AddModal
+          detail={modalProps.record || {}}
           onSuccess={() => {
-            onSetModalProps({ visible: false })
+            setModalProps({ visible: false })
             onLoadData()
           }}
-          onCancel={() => onSetModalProps({ visible: false })}
-          detail={modalProps.record || {}}
+          onCancel={() => setModalProps({ visible: false })}
         />
       )}
     </>

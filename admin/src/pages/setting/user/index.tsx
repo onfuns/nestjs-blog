@@ -1,10 +1,11 @@
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import { Button, Popconfirm, Space, message, Tag } from 'antd'
 import AddModal from '@/components/Setting/User/Add'
 import { inject, observer } from 'mobx-react'
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
 import { UserStore } from '@/store'
 import dayjs from 'dayjs'
+import { useSetState } from 'ahooks'
 
 interface IModalProps {
   visible?: boolean
@@ -16,25 +17,22 @@ const fromatDate = date => date && dayjs(date).format('YYYY-MM-DD HH:mm')
 
 const UserList = ({ userStore }: { userStore?: UserStore }) => {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
-
-  const onSetModalProps = (props: IModalProps = {}) => {
-    setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
-  }
+  const [modalProps, setModalProps] = useSetState<IModalProps>({ visible: false })
 
   const onLoadData = () => {
     actionRef?.current.reload()
   }
 
-  const onAction = async (record: any = {}, type: 'add' | 'edit' | 'delete') => {
+  const onAction = async (
+    type: 'add' | 'edit' | 'delete',
+    record: Record<string, any> | undefined = {},
+  ) => {
     if (type === 'add' || type === 'edit') {
-      onSetModalProps({ record, visible: true })
+      setModalProps({ visible: true, record })
     } else if (type === 'delete') {
-      const { success } = await userStore.delete({ id: record.id })
-      if (success) {
-        message.success('删除成功')
-        onLoadData()
-      }
+      await userStore.delete({ id: record.id })
+      message.success('操作成功')
+      onLoadData()
     }
   }
 
@@ -88,14 +86,10 @@ const UserList = ({ userStore }: { userStore?: UserStore }) => {
       render: (_, record) => {
         return (
           <Space>
-            <Button size="small" onClick={() => onAction(record, 'edit')}>
-              编辑
-            </Button>
+            <a onClick={() => onAction('edit', record)}>编辑</a>
             {record.pid === 0 && record?.children?.length ? null : (
-              <Popconfirm title="确定删除？" onConfirm={() => onAction(record, 'delete')}>
-                <Button size="small" danger>
-                  删除
-                </Button>
+              <Popconfirm title="确定删除？" onConfirm={() => onAction('delete', record)}>
+                <a className="danger">删除</a>
               </Popconfirm>
             )}
           </Space>
@@ -119,21 +113,21 @@ const UserList = ({ userStore }: { userStore?: UserStore }) => {
         }}
         pagination={false}
         toolBarRender={() => [
-          <Button key="add" type="primary" onClick={() => onAction({}, 'add')}>
+          <Button key="add" type="primary" onClick={() => onAction('add', {})}>
             新增
           </Button>,
         ]}
-        size="small"
+        defaultSize="small"
       />
 
       {modalProps.visible && (
         <AddModal
+          detail={modalProps.record}
           onSuccess={() => {
-            onSetModalProps({ visible: false })
+            setModalProps({ visible: false })
             onLoadData()
           }}
-          onCancel={() => onSetModalProps({ visible: false })}
-          detail={modalProps.record}
+          onCancel={() => setModalProps({ visible: false })}
         />
       )}
     </>

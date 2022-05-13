@@ -31,13 +31,9 @@ const AddFormModal = ({ roleStore, onSuccess, onCancel, detail }: IProps) => {
         fn = store.update
         params.id = detail.id
       }
-      const { success, msg = '操作失败' } = await fn(params)
-      if (success) {
-        message.success('操作成功')
-        onSuccess()
-      } else {
-        message.error(msg)
-      }
+      await fn(params)
+      message.success('操作成功')
+      onSuccess()
     })
   }
 

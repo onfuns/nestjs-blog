@@ -13,8 +13,8 @@ export class UserStore {
   }
 
   async get(params?: Record<string, any>) {
-    const { success, data } = await getUserList(params)
-    if (success) {
+    const { data } = await getUserList(params)
+    if (data) {
       this.set('result', data)
     }
   }

@@ -39,11 +39,9 @@ const Add = ({ userStore, roleStore, onSuccess, onCancel, detail }: IProps) => {
       } else {
         params.password = md5(values.password)
       }
-      const { success } = await fn(params)
-      if (success) {
-        message.success('操作成功')
-        onSuccess()
-      }
+      await fn(params)
+      message.success('操作成功')
+      onSuccess()
     })
   }
 

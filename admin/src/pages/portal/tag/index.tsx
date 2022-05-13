@@ -1,9 +1,10 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import AddModal from '@/components/Portal/Tag/Add'
 import { TagStore } from '@/store'
 import { inject, observer } from 'mobx-react'
 import { Button, Popconfirm, message, Space } from 'antd'
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
+import { useSetState } from 'ahooks'
 interface IProps {
   tagStore: TagStore
 }
@@ -16,25 +17,22 @@ interface IModalProps {
 
 const TagPage = ({ tagStore }: IProps) => {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
-
-  const onSetModalProps = (props: IModalProps = {}) => {
-    setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
-  }
+  const [modalProps, setModalProps] = useSetState<IModalProps>({ visible: false })
 
   const onLoadData = () => {
     actionRef?.current.reload()
   }
 
-  const onAction = async (record: any = {}, type) => {
+  const onAction = async (
+    type: 'add' | 'edit' | 'delete',
+    record: Record<string, any> | undefined = {},
+  ) => {
     if (type === 'add' || type === 'edit') {
-      onSetModalProps({ record, visible: true })
+      setModalProps({ visible: true, record })
     } else if (type === 'delete') {
-      const { success } = await tagStore.delete({ id: record.id })
-      if (success) {
-        message.success('删除成功')
-        onLoadData()
-      }
+      await tagStore.delete({ id: record.id })
+      message.success('操作成功')
+      onLoadData()
     }
   }
 
@@ -55,13 +53,9 @@ const TagPage = ({ tagStore }: IProps) => {
       render: (_, record) => {
         return (
           <Space>
-            <Button size="small" onClick={() => onAction(record, 'edit')}>
-              编辑
-            </Button>
-            <Popconfirm title="确定删除？" onConfirm={() => onAction(record, 'delete')}>
-              <Button size="small" danger>
-                删除
-              </Button>
+            <a onClick={() => onAction('edit', record)}>编辑</a>
+            <Popconfirm title="确定删除？" onConfirm={() => onAction('delete', record)}>
+              <a className="danger">删除</a>
             </Popconfirm>
           </Space>
         )
@@ -84,21 +78,21 @@ const TagPage = ({ tagStore }: IProps) => {
         }}
         pagination={false}
         toolBarRender={() => [
-          <Button key="add" type="primary" onClick={() => onAction({}, 'add')}>
+          <Button key="add" type="primary" onClick={() => onAction('add', {})}>
             新增
           </Button>,
         ]}
-        size="small"
+        defaultSize="small"
       />
 
       {modalProps.visible && (
         <AddModal
+          detail={modalProps.record || {}}
           onSuccess={() => {
-            onSetModalProps({ visible: false })
+            setModalProps({ visible: false })
             onLoadData()
           }}
-          onCancel={() => onSetModalProps({ visible: false })}
-          detail={modalProps.record || {}}
+          onCancel={() => setModalProps({ visible: false })}
         />
       )}
     </>

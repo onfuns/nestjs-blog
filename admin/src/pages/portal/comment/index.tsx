@@ -1,10 +1,11 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import AddModal from '@/components/Portal/Comment/Add'
 import { inject, observer } from 'mobx-react'
 import { CommentStore } from '@/store'
 import { Button, Popconfirm, Switch, message, Space } from 'antd'
 import dayjs from 'dayjs'
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
+import { useSetState } from 'ahooks'
 
 interface IModalProps {
   visible?: boolean
@@ -14,34 +15,27 @@ interface IModalProps {
 
 const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
-
-  const onSetModalProps = (props: IModalProps = {}) => {
-    setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
-  }
+  const [modalProps, setModalProps] = useSetState<IModalProps>({ visible: false })
 
   const onLoadData = () => {
     actionRef?.current.reload()
   }
 
-  const onAction = async (record: any = {}, type) => {
-    if (type === 'reply') {
-      onSetModalProps({ record, visible: true })
-    } else if (type === 'delete') {
-      const { success } = await commentStore.delete({ id: record?.id })
-      if (success) {
-        message.success('删除成功')
-        onLoadData()
+  const onAction = async (
+    type: 'add' | 'reply' | 'delete' | 'pass',
+    record: Record<string, any> | undefined = {},
+  ) => {
+    if (type === 'add' || type === 'reply') {
+      setModalProps({ visible: true, record })
+    } else if (type === 'delete' || type === 'pass') {
+      if (type === 'delete') {
+        await commentStore.delete({ id: record?.id })
       }
-    } else if (type === 'pass') {
-      const { success } = await commentStore.update({
-        id: record?.id,
-        status: Number(!record.status),
-      })
-      if (success) {
-        message.success('操作成功')
-        onLoadData()
+      if (type === 'pass') {
+        await commentStore.update({ id: record?.id, status: Number(!record.status) })
       }
+      message.success('操作成功')
+      onLoadData()
     }
   }
 
@@ -93,7 +87,7 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
       render: (_, record) => (
         <Switch
           checked={record.status === 1}
-          onChange={() => onAction(record, 'pass')}
+          onChange={() => onAction('pass', record)}
           size="small"
         />
       ),
@@ -105,13 +99,9 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
       render: (_, record) => {
         return (
           <Space>
-            <Button size="small" onClick={() => onAction(record, 'reply')}>
-              回复
-            </Button>
-            <Popconfirm title="确定删除？" onConfirm={() => onAction(record, 'delete')}>
-              <Button size="small" danger>
-                删除
-              </Button>
+            <a onClick={() => onAction('reply', record)}>回复</a>
+            <Popconfirm title="确定删除？" onConfirm={() => onAction('delete', record)}>
+              <a className="danger">删除</a>
             </Popconfirm>
           </Space>
         )
@@ -132,20 +122,20 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
           return { success: true, data: commentStore.result.data }
         }}
         toolBarRender={() => [
-          <Button key="add" type="primary" onClick={() => onAction({}, 'add')}>
+          <Button key="add" type="primary" onClick={() => onAction('add', {})}>
             新增
           </Button>,
         ]}
-        size="small"
+        defaultSize="small"
       />
 
       {modalProps.visible && (
         <AddModal
+          onCancel={() => setModalProps({ visible: false })}
           onSuccess={() => {
-            onSetModalProps({ visible: false })
+            setModalProps({ visible: false })
             onLoadData()
           }}
-          onCancel={() => onSetModalProps({ visible: false })}
           detail={modalProps.record || {}}
         />
       )}

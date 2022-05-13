@@ -1,10 +1,11 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { inject, observer } from 'mobx-react'
 import { ArticleStore } from '@/store'
 import dayjs from 'dayjs'
 import { Button, Popconfirm, Switch, message, Space } from 'antd'
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
 import ArticleAdd from '@/components/Portal/Article/Add'
+import { useSetState } from 'ahooks'
 
 interface IProps {
   articleStore: ArticleStore
@@ -17,13 +18,13 @@ interface IModalProps {
 
 const Article = ({ articleStore }: IProps) => {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useSetState<IModalProps>({ visible: false })
 
-  const onSetModalProps = (props: IModalProps = {}) => {
-    setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
-  }
-
-  const onAction = async ({ id = '', sort = 0, pass_flag = 0 } = {}, type) => {
+  const onAction = async (
+    type: 'sort' | 'pass_flag' | 'delete' | 'pass',
+    record: Record<string, any> | undefined = {},
+  ) => {
+    const { id = '', sort = 0, pass_flag = 0 } = record
     let params: any = { id }
     let fn = articleStore.update
     //置顶
@@ -36,18 +37,13 @@ const Article = ({ articleStore }: IProps) => {
       params.pass_flag = Number(!Boolean(pass_flag))
     }
     //删除
-    else if (type === 'delete' || type === 'delete_all') {
-      params = {
-        id: type === 'delete_all' ? [] : [id],
-      }
+    else if (type === 'delete') {
       fn = articleStore.delete
     }
 
-    const { success } = await fn(params)
-    if (success) {
-      message.success('操作成功')
-      actionRef?.current.reload()
-    }
+    await fn(params)
+    message.success('操作成功')
+    actionRef?.current.reload()
   }
 
   const columns: ProColumns<any>[] = [
@@ -90,8 +86,8 @@ const Article = ({ articleStore }: IProps) => {
         '-1': '否',
       },
       width: 100,
-      render: (_, { id, sort }) => (
-        <Switch checked={sort > 0} onChange={() => onAction({ id, sort }, 'sort')} size="small" />
+      render: (_, record) => (
+        <Switch checked={record.sort > 0} onChange={() => onAction('sort', record)} size="small" />
       ),
     },
     {
@@ -102,10 +98,10 @@ const Article = ({ articleStore }: IProps) => {
         2: '未审核',
       },
       width: 100,
-      render: (_, { id, pass_flag }) => (
+      render: (_, record) => (
         <Switch
-          checked={pass_flag === 1}
-          onChange={() => onAction({ id, pass_flag }, 'pass_flag')}
+          checked={record.pass_flag === 1}
+          onChange={() => onAction('pass_flag', record)}
           size="small"
         />
       ),
@@ -118,13 +114,9 @@ const Article = ({ articleStore }: IProps) => {
       render: (_, record) => {
         return (
           <Space>
-            <Button size="small" onClick={() => onSetModalProps({ record, visible: true })}>
-              编辑
-            </Button>
-            <Popconfirm title="确定删除？" onConfirm={() => onAction(record, 'delete')}>
-              <Button size="small" danger>
-                删除
-              </Button>
+            <a onClick={() => setModalProps({ visible: true, record })}>编辑</a>
+            <Popconfirm title="确定删除？" onConfirm={() => onAction('delete', record)}>
+              <a className="danger">删除</a>
             </Popconfirm>
           </Space>
         )
@@ -145,21 +137,25 @@ const Article = ({ articleStore }: IProps) => {
           return { success: true, data: articleStore.result.data }
         }}
         toolBarRender={() => [
-          <Button key="add" type="primary" onClick={() => onSetModalProps({ visible: true })}>
+          <Button
+            key="add"
+            type="primary"
+            onClick={() => setModalProps({ visible: true, record: {} })}
+          >
             新增
           </Button>,
         ]}
         scroll={{ x: '100%' }}
-        size="small"
+        defaultSize="small"
       />
       {modalProps.visible && (
         <ArticleAdd
+          detail={modalProps.record || {}}
           onSuccess={() => {
-            onSetModalProps({ visible: false })
+            setModalProps({ visible: false })
             actionRef?.current.reload()
           }}
-          onCancel={() => onSetModalProps({ visible: false })}
-          detail={modalProps.record || {}}
+          onCancel={() => setModalProps({ visible: false })}
         />
       )}
     </>

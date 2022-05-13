@@ -60,11 +60,9 @@ const ArticleAdd = ({ articleStore, tagStore, onCancel, onSuccess, detail = {} }
           fn = articleStore.update
           params.id = detail.id
         }
-        const { success } = await fn(params)
-        if (success) {
-          message.success('操作成功')
-          onSuccess()
-        }
+        await fn(params)
+        message.success('操作成功')
+        onSuccess()
       })
       .catch(err => {
         form.scrollToField(err['errorFields'][0]['name'][0], { behavior: 'smooth' })

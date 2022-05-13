@@ -13,8 +13,8 @@ export class CommentStore {
   }
 
   async get(params?: Record<string, any>) {
-    const { success, data } = await getCommentList(params)
-    if (success) {
+    const { data } = await getCommentList(params)
+    if (data) {
       this.set('result', data)
     }
   }

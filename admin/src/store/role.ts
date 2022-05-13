@@ -14,8 +14,8 @@ export class RoleStore {
   }
 
   async get(params?: Record<string, any>) {
-    const { success, data } = await getRoleList(params)
-    if (success) {
+    const { data } = await getRoleList(params)
+    if (data) {
       this.set('result', data)
       if (!this.detail.id) this.set('detail', data?.[0] || {})
     }

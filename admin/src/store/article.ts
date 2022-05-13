@@ -20,8 +20,8 @@ export class ArticleStore {
   }
 
   async get(params?: Record<string, any>) {
-    const { success, data } = await getArticleList(params)
-    if (success) {
+    const { data } = await getArticleList(params)
+    if (data) {
       this.set('result', data)
     }
   }
@@ -39,8 +39,8 @@ export class ArticleStore {
   }
 
   async getInfoById(params?: Record<string, any>) {
-    const { success, data } = await getArticleInfoById(params)
-    if (success) {
+    const { data } = await getArticleInfoById(params)
+    if (data) {
       this.set('detail', data)
     }
   }

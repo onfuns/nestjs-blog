@@ -13,8 +13,8 @@ export class TagStore {
   }
 
   async get(params?: Record<string, any>) {
-    const { success, data } = await getTagList(params)
-    if (success) {
+    const { data } = await getTagList(params)
+    if (data) {
       this.set('result', data)
     }
   }

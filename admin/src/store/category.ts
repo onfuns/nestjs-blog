@@ -13,8 +13,8 @@ export class CategoryStore {
   }
 
   async get(params?: Record<string, any>) {
-    const { success, data } = await getCategoryList(params)
-    if (success) {
+    const { data } = await getCategoryList(params)
+    if (data) {
       this.set('result', data)
     }
   }

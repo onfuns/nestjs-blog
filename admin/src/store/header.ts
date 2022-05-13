@@ -1,23 +1,43 @@
 import { makeAutoObservable } from 'mobx'
+import React from 'react'
+
+export type ITabProps = {
+  compoent: Function | React.Component
+  exact: boolean
+  name: string
+  path: string
+  state: Record<string, any> | undefined
+  search: string
+  tag?: boolean
+}
 
 export class HeaderStore {
-  tagsPanel: any[] = []
+  tab: ITabProps[] = []
   menuCollapsed: boolean = false
+  currentTabPath: string = ''
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  updateTagsPanel = (route: any = {}, type?: string) => {
-    if (type === 'remove') {
-      const list = this.tagsPanel.filter((item: any) => item.path !== route.path)
-      this.tagsPanel = [...list]
-    } else if (type === 'removeAll') {
-      this.tagsPanel = []
+  updateTab(router: any = {}) {
+    if (router.tag === false) return
+    //如果有则更新，否则新增
+    const index = this.tab.findIndex(t => t.path === router.path)
+    if (index > -1) {
+      this.tab[index] = { ...this.tab[index], ...router }
     } else {
-      if (this.tagsPanel.some(item => item.path === route.path) || route.tag === false) return
-      this.tagsPanel = [...this.tagsPanel, route]
+      this.tab.push(router)
     }
+  }
+
+  removeTab(path) {
+    const list = this.tab.filter(item => item.path !== path)
+    this.tab = [...list]
+  }
+
+  setCurrentTabPath(path) {
+    this.currentTabPath = path
   }
 
   setMenuCollaps() {

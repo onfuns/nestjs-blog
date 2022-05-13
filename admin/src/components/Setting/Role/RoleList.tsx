@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { inject, observer } from 'mobx-react'
 import { RoleStore } from '@/store'
 import styles from './Role.less'
 import { Modal, message, Menu, Dropdown, Tag } from 'antd'
 import classnames from 'classnames'
 import AddModal from './RoleAddModal'
+import { useSetState } from 'ahooks'
 import { DownOutlined } from '@ant-design/icons'
 
 interface IProps {
@@ -18,7 +19,7 @@ interface IModalProps {
 }
 
 const RoleList = ({ roleStore }: IProps) => {
-  const [modalProps, setModalProps] = useState<IModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useSetState<IModalProps>({ visible: false })
 
   useEffect(() => {
     onReload()
@@ -29,10 +30,6 @@ const RoleList = ({ roleStore }: IProps) => {
     onSelected(roleStore.result?.[0])
   }
 
-  const onSetModalProps = (props: IModalProps = {}) => {
-    setModalProps({ ...modalProps, visible: !modalProps.visible, ...props })
-  }
-
   const onSelected = record => {
     roleStore.set('detail', record)
   }
@@ -41,11 +38,9 @@ const RoleList = ({ roleStore }: IProps) => {
     Modal.confirm({
       title: '确定删除选中角色？',
       onOk: async () => {
-        const { success } = await roleStore.delete({ id })
-        if (success) {
-          message.success('删除成功')
-          onReload()
-        }
+        await roleStore.delete({ id })
+        message.success('删除成功')
+        onReload()
       },
     })
   }
@@ -54,7 +49,7 @@ const RoleList = ({ roleStore }: IProps) => {
     <div className={styles.page}>
       <div className={styles.header}>
         角色列表
-        <a onClick={() => onSetModalProps({ type: 'add', record: {} })}>创建角色</a>
+        <a onClick={() => setModalProps({ type: 'add', record: {} })}>创建角色</a>
       </div>
       <ul className={styles.list}>
         {roleStore.result?.map(item => (
@@ -73,7 +68,11 @@ const RoleList = ({ roleStore }: IProps) => {
                 overlay={
                   <Menu>
                     <Menu.Item key="edit">
-                      <a onClick={() => onSetModalProps({ record: item, type: 'edit' })}>编辑</a>
+                      <a
+                        onClick={() => setModalProps({ visible: true, type: 'edit', record: item })}
+                      >
+                        编辑
+                      </a>
                     </Menu.Item>
                     <Menu.Item key="add">
                       <a style={{ color: 'red' }} onClick={() => onDelete(item.id)}>
@@ -94,9 +93,9 @@ const RoleList = ({ roleStore }: IProps) => {
           detail={modalProps.record || {}}
           onSuccess={() => {
             roleStore.get()
-            onSetModalProps()
+            setModalProps({ visible: false })
           }}
-          onCancel={onSetModalProps}
+          onCancel={() => setModalProps({ visible: false })}
         />
       )}
     </div>

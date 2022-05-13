@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Form, Input, message, Radio, Modal } from 'antd'
 import { CategoryStore } from '@/store'
 import CategoryCascader from '@/components/Portal/Category/Cascader'
@@ -12,12 +12,11 @@ interface IProps {
 
 const AddFormModal = ({ categoryStore, onSuccess, onCancel, detail }: IProps) => {
   const [form] = Form.useForm()
-  const [formVaules, setFormValues] = useState({} as any)
+  const categoryType = Form.useWatch('type', form)
 
   useEffect(() => {
     if (!!detail.id) {
       form.setFieldsValue({ ...detail, pid: [detail.pid] })
-      setFormValues({ ...detail })
     }
   }, [])
 
@@ -31,11 +30,9 @@ const AddFormModal = ({ categoryStore, onSuccess, onCancel, detail }: IProps) =>
         fn = categoryStore.update
         params.id = detail.id
       }
-      const { success } = await fn(params)
-      if (success) {
-        message.success('操作成功')
-        onSuccess()
-      }
+      await fn(params)
+      message.success('操作成功')
+      onSuccess()
     })
   }
 
@@ -52,7 +49,6 @@ const AddFormModal = ({ categoryStore, onSuccess, onCancel, detail }: IProps) =>
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 20 }}
         form={form}
-        onValuesChange={(_, values) => setFormValues(values)}
         initialValues={{
           pid: [0],
           type: 1,
@@ -79,7 +75,7 @@ const AddFormModal = ({ categoryStore, onSuccess, onCancel, detail }: IProps) =>
           </Radio.Group>
         </Form.Item>
 
-        {formVaules.type === 3 && (
+        {categoryType === 3 && (
           <Form.Item shouldUpdate label="外链地址" name="url" rules={[{ required: true }]}>
             <Input placeholder="请输入外链地址" />
           </Form.Item>

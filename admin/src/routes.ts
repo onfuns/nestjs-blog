@@ -1,4 +1,4 @@
-export const adminRoutes = [
+export const baseRoutes = [
   {
     name: '工作台',
     path: '/dashboard',
@@ -58,7 +58,14 @@ export const adminRoutes = [
 
 const getRoutes = (data, flatRoutes = []) => {
   data.map(({ name, path, component, children, ...other }) => {
-    component && flatRoutes.push({ name, path, component, ...other })
+    component &&
+      flatRoutes.push({
+        name,
+        path,
+        component,
+        wrappers: ['@/components/Widgets/KeepAlive'],
+        ...other,
+      })
     if (children) getRoutes(children, flatRoutes)
   })
   return flatRoutes
@@ -66,20 +73,26 @@ const getRoutes = (data, flatRoutes = []) => {
 
 export const routes = [
   {
-    component: '@/components/Layout/Container',
+    component: '@/components/Layout',
     routes: [
       {
         path: '/login',
         component: '@/pages/login',
       },
       {
-        path: '/',
-        redirect: '/dashboard',
-      },
-      ...getRoutes(adminRoutes),
-      {
-        path: '*',
-        component: '@/pages/404',
+        component: '@/components/Layout/Container',
+        // wrappers: ['@/components/Widgets/KeepAlive'],
+        routes: [
+          {
+            path: '/',
+            redirect: '/dashboard',
+          },
+          ...getRoutes(baseRoutes),
+          {
+            path: '*',
+            component: '@/pages/404',
+          },
+        ],
       },
     ],
   },

@@ -44,11 +44,9 @@ const AddModal = ({ authStore, onSuccess, onCancel, detail }: IProps) => {
         fn = authStore.update
         params.id = detail.id
       }
-      const { success } = await fn(params)
-      if (success) {
-        message.success('操作成功')
-        onSuccess()
-      }
+      await fn(params)
+      message.success('操作成功')
+      onSuccess()
     })
   }
 
