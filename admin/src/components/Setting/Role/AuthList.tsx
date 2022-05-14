@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, message, Tree, Popconfirm, Tabs, Space } from 'antd'
+import { Card, Button, message, Tree, Popconfirm, Space } from 'antd'
 import { inject, observer } from 'mobx-react'
 import { RoleStore, AuthStore } from '@/store'
 import { toTree } from '@/utils'
@@ -77,9 +77,11 @@ const AuthList = ({ roleStore, authStore }: IProps) => {
 
   return (
     <>
-      <Tabs
-        defaultActiveKey="1"
-        tabBarExtraContent={
+      <Card
+        title="权限配置"
+        size="small"
+        style={{ width: '100%' }}
+        extra={
           <Space style={{ padding: '0 10px' }}>
             <Button
               type="ghost"
@@ -92,33 +94,30 @@ const AuthList = ({ roleStore, authStore }: IProps) => {
             </Popconfirm>
           </Space>
         }
-        style={{ width: '100%' }}
       >
-        <Tabs.TabPane tab="权限配置" key="1">
-          {!!listData.length && (
-            <Tree
-              className={styles.tree}
-              checkable
-              defaultExpandAll
-              checkedKeys={selectedKeys}
-              onCheck={onSelect}
-              fieldNames={{ title: 'name', key: 'id', children: 'children' }}
-              treeData={listData}
-              titleRender={(node: any) => (
-                <div className={styles.titleRow}>
-                  <span>{node.name}</span>
-                  <a onClick={() => setModalProps({ visible: true, type: 'edit', record: node })}>
-                    编辑
-                  </a>
-                  <a style={{ color: 'red' }} onClick={() => onDetele(node)}>
-                    删除
-                  </a>
-                </div>
-              )}
-            />
-          )}
-        </Tabs.TabPane>
-      </Tabs>
+        {!!listData.length && (
+          <Tree
+            className={styles.tree}
+            checkable
+            defaultExpandAll
+            checkedKeys={selectedKeys}
+            onCheck={onSelect}
+            fieldNames={{ title: 'name', key: 'id', children: 'children' }}
+            treeData={listData}
+            titleRender={(node: any) => (
+              <div className={styles.titleRow}>
+                <span>{node.name}</span>
+                <a onClick={() => setModalProps({ visible: true, type: 'edit', record: node })}>
+                  编辑
+                </a>
+                <a style={{ color: 'red' }} onClick={() => onDetele(node)}>
+                  删除
+                </a>
+              </div>
+            )}
+          />
+        )}
+      </Card>
       {modalProps.visible && (
         <AddModal
           detail={modalProps.record || {}}

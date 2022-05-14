@@ -73,7 +73,7 @@ const CategoryPage = ({ categoryStore }: IProps) => {
     {
       title: '操作',
       dataIndex: 'option',
-      width: 200,
+      width: 120,
       render: (_, record) => {
         return (
           <Space>

@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { inject, observer } from 'mobx-react'
 import { RoleStore } from '@/store'
 import styles from './Role.less'
-import { Modal, message, Menu, Dropdown, Tag } from 'antd'
+import { Modal, Card, message, Menu, Dropdown, Tag } from 'antd'
 import classnames from 'classnames'
 import AddModal from './RoleAddModal'
 import { useSetState } from 'ahooks'
@@ -46,48 +46,54 @@ const RoleList = ({ roleStore }: IProps) => {
   }
 
   return (
-    <div className={styles.page}>
-      <div className={styles.header}>
-        角色列表
-        <a onClick={() => setModalProps({ type: 'add', record: {} })}>创建角色</a>
-      </div>
-      <ul className={styles.list}>
-        {roleStore.result?.map(item => (
-          <li
-            key={item.id}
-            className={classnames(styles.item, {
-              [styles.active]: roleStore.detail.id === item.id,
-            })}
-            onClick={() => onSelected(item)}
-          >
-            <div className={styles.name}>{item.name}</div>
-            <div>
-              {item.enable === 0 && <Tag color="red">已停用</Tag>}
-              <Dropdown
-                trigger={['click']}
-                overlay={
-                  <Menu>
-                    <Menu.Item key="edit">
-                      <a
-                        onClick={() => setModalProps({ visible: true, type: 'edit', record: item })}
-                      >
-                        编辑
-                      </a>
-                    </Menu.Item>
-                    <Menu.Item key="add">
-                      <a style={{ color: 'red' }} onClick={() => onDelete(item.id)}>
-                        删除
-                      </a>
-                    </Menu.Item>
-                  </Menu>
-                }
-              >
-                <DownOutlined style={{ color: '#ccc', fontSize: 14 }} />
-              </Dropdown>
-            </div>
-          </li>
-        ))}
-      </ul>
+    <div className={styles.roles}>
+      <Card
+        title="角色列表"
+        size="small"
+        extra={<a onClick={() => setModalProps({ type: 'add', record: {} })}>创建角色</a>}
+        className={styles.card}
+      >
+        <ul className={styles.list}>
+          {roleStore.result?.map(item => (
+            <li
+              key={item.id}
+              className={classnames(styles.item, {
+                [styles.active]: roleStore.detail.id === item.id,
+              })}
+              onClick={() => onSelected(item)}
+            >
+              <div className={styles.name}>{item.name}</div>
+              <div>
+                {item.enable === 0 && <Tag color="red">已停用</Tag>}
+                <Dropdown
+                  trigger={['click']}
+                  overlay={
+                    <Menu>
+                      <Menu.Item key="edit">
+                        <a
+                          onClick={() =>
+                            setModalProps({ visible: true, type: 'edit', record: item })
+                          }
+                        >
+                          编辑
+                        </a>
+                      </Menu.Item>
+                      <Menu.Item key="add">
+                        <a style={{ color: 'red' }} onClick={() => onDelete(item.id)}>
+                          删除
+                        </a>
+                      </Menu.Item>
+                    </Menu>
+                  }
+                >
+                  <DownOutlined style={{ color: '#ccc', fontSize: 14 }} />
+                </Dropdown>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </Card>
+
       {modalProps.visible && (
         <AddModal
           detail={modalProps.record || {}}

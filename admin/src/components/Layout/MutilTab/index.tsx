@@ -28,7 +28,6 @@ const TagPanel = (props: IProps) => {
   //params 为 state,search 集合，每次更新路由都更新到最新的数组里缓存
   const onChangeRouter = (path, { state, search = '' }) => {
     const router = route?.routes?.find((item: any) => item.path === path) || {}
-    console.log(path, route.routes)
     headerStore?.updateTab({ ...router, state, search })
     headerStore?.setCurrentTabPath(path)
   }

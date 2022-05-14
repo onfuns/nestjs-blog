@@ -1,37 +1,32 @@
-.page {
+.roles {
   width: 250px;
   flex-shrink: 0;
-  border: 1px solid #e6e7eb;
-  border-top: none;
-  border-bottom: none;
-  margin-right: 20px;
-  .header {
+  .card {
+    height: 100%;
+    :global {
+      .ant-card-body {
+        padding: 0;
+      }
+    }
+  }
+  .item {
     display: flex;
+    height: 40px;
     align-items: center;
     justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #e6e7eb;
-  }
-  .list {
-    .item {
-      display: flex;
-      height: 40px;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 15px;
-      color: #333;
-      cursor: pointer;
-      font-size: 13px;
-      list-style: none;
-      &.active {
-        background-color: #f5f5f7;
-      }
-      .name {
-        overflow: hidden;
-        max-width: 140px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+    padding: 0 15px;
+    color: #333;
+    cursor: pointer;
+    font-size: 13px;
+    list-style: none;
+    &.active {
+      background-color: #f5f5f7;
+    }
+    .name {
+      overflow: hidden;
+      max-width: 140px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 }

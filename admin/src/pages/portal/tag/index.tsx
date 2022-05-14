@@ -49,7 +49,8 @@ const TagPage = ({ tagStore }: IProps) => {
     {
       title: '操作',
       dataIndex: 'option',
-      width: 200,
+      valueType: 'option',
+      width: 120,
       render: (_, record) => {
         return (
           <Space>
