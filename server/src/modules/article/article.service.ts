@@ -3,8 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { pickBy } from 'lodash'
 import { Repository, Like, MoreThan } from 'typeorm'
 import { Article } from './article.entity'
+import { LoggerService } from '@/shared/logger/logger.service'
 @Injectable()
 export class ArticleService {
+  private readonly logger = new LoggerService(ArticleService.name)
   constructor(
     @InjectRepository(Article)
     private readonly repository: Repository<Article>,
@@ -14,7 +16,7 @@ export class ArticleService {
     return await this.repository.save(body)
   }
 
-  async findById(id): Promise<Article> {
+  async findById(id: string): Promise<Article> {
     return await this.repository.findOne({
       where: { id },
       relations: {
@@ -32,6 +34,7 @@ export class ArticleService {
       category_id,
       pass_flag,
     })
+    this.logger.info('findAll where: ', where)
     const [data, count] = await this.repository.findAndCount({
       where,
       skip: pageSize * (current - 1),

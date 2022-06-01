@@ -1,7 +1,11 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common'
 import { Request, Response } from 'express'
+import { LoggerService } from '@/shared/logger/logger.service'
+
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
+  private logger = new LoggerService('HttpExceptionFilter')
+
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp()
     const response = ctx.getResponse<Response>()
@@ -11,7 +15,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR
 
     const success = status >= 200 && status <= 300
-    !success && console.log(exception)
+    !success && this.logger.error(exception)
     const errorResponse = {
       success,
       data: null,

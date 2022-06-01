@@ -3,6 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import config from '@/config'
 import { APP_GUARD } from '@nestjs/core'
 import { UserGuard } from '@/guard/auth.guard'
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler'
+import { IS_DEV } from '@/util'
+
 import { ArticleModule } from '@/modules/article/article.module'
 import { CategoryeModule } from '@/modules/category/category.module'
 import { TagModule } from '@/modules/tag/tag.module'
@@ -11,9 +14,14 @@ import { RoleModule } from '@/modules/role/role.module'
 import { AuthModule } from '@/modules/auth/auth.module'
 import { CommentModule } from '@/modules/comment/comment.module'
 import { CommonModule } from '@/modules/common/common.module'
+
 @Module({
   imports: [
     TypeOrmModule.forRoot(config.db),
+    ThrottlerModule.forRoot({
+      ttl: 10, // 秒
+      limit: 20, // 次数
+    }),
     ArticleModule,
     CategoryeModule,
     TagModule,
@@ -25,10 +33,8 @@ import { CommonModule } from '@/modules/common/common.module'
   ],
   controllers: [],
   providers: [
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: UserGuard,
-    // },
-  ],
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    !IS_DEV ? { provide: APP_GUARD, useClass: UserGuard } : null,
+  ].filter(provider => !!provider),
 })
 export class AppModule {}

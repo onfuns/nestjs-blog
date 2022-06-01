@@ -9,3 +9,7 @@ export const toTree = (data, options = {}) => {
   })
   return ltt.GetTree() || []
 }
+
+export const IS_DEV = process.env.NODE_ENV !== 'production'
+
+export const isObject = data => Object.is(Object.prototype.toString.call(data), '[object Object]')
