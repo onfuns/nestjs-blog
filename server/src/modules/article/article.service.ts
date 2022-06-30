@@ -4,6 +4,8 @@ import { pickBy } from 'lodash'
 import { Repository, Like, MoreThan } from 'typeorm'
 import { Article } from './article.entity'
 import { LoggerService } from '@/shared/logger/logger.service'
+import { IArticleVO } from './interface'
+import { QueryDto } from './article.dto'
 @Injectable()
 export class ArticleService {
   private readonly logger = new LoggerService(ArticleService.name)
@@ -26,8 +28,8 @@ export class ArticleService {
     })
   }
 
-  async findAll(query: any = {}): Promise<{ data: Article[]; count: number }> {
-    const { current = 1, pageSize = 20, sort, title, category_id, pass_flag } = query
+  async findAll(query?: QueryDto): Promise<IArticleVO> {
+    const { current = 1, pageSize = 20, sort, title, category_id, pass_flag } = query ?? {}
     const where: any = pickBy({
       title: title ? Like(`%${title}%`) : undefined,
       sort: sort > 0 ? MoreThan(sort) : undefined,
@@ -47,7 +49,7 @@ export class ArticleService {
     return { data, count }
   }
 
-  async update(body: Article): Promise<any> {
+  async update(body: Article): Promise<Article> {
     const { id, tags, ...others } = body
     const record = this.repository.create(others)
     record.tags = tags
@@ -55,7 +57,7 @@ export class ArticleService {
     return await this.repository.save(record)
   }
 
-  async delete(id): Promise<any> {
+  async delete(id: string): Promise<any> {
     return await this.repository.delete(id)
   }
 }

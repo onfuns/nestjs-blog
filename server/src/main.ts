@@ -22,13 +22,20 @@ async function bootstrap() {
   app.use(cookieParse())
 
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .setTitle('API')
+    .setDescription('API description')
     .setVersion('1.0')
-    .addTag('cats')
     .build()
   const document = SwaggerModule.createDocument(app, config)
-  SwaggerModule.setup('swagger', app, document)
+  IS_DEV &&
+    SwaggerModule.setup('swagger', app, document, {
+      swaggerOptions: {
+        explorer: true,
+        docExpansion: 'list',
+        filter: true,
+        showRequestDuration: true,
+      },
+    })
 
   const port = process.env.PORT || 4000
   await app.listen(port)

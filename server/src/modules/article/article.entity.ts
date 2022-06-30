@@ -11,6 +11,7 @@ import {
 } from 'typeorm'
 import { Category } from '@/modules/category/category.entity'
 import { Tag } from '@/modules/tag/tag.entity'
+
 @Entity()
 export class Article {
   @PrimaryGeneratedColumn('uuid')

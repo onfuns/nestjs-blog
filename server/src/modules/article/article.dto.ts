@@ -1,14 +1,45 @@
-import { IsNotEmpty } from 'class-validator'
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator'
+import { Transform } from 'class-transformer'
+import { transformToNumber } from '@/util'
+
+export class ActionDto {
+  @IsNotEmpty()
+  readonly id: string
+}
 
 export class CreateDto {
-  @IsNotEmpty({ message: '文章标题不能为空' })
+  @IsNotEmpty()
   readonly title: string
 
-  @IsNotEmpty({ message: '文章内容不能为空' })
+  @IsNotEmpty()
   readonly content: string
 }
 
-export class UpdateDto {
-  @IsNotEmpty({ message: 'id不能为空' })
-  readonly id: string
+export class QueryDto {
+  @IsNumber()
+  @IsOptional()
+  @Transform(({ value }) => transformToNumber(value))
+  current?: number
+
+  @IsNumber()
+  @IsOptional()
+  @Transform(({ value }) => transformToNumber(value))
+  pageSize?: number
+
+  @IsNumber()
+  @IsOptional()
+  @Transform(({ value }) => transformToNumber(value))
+  sort?: number
+
+  @IsOptional()
+  title?: string
+
+  @IsOptional()
+  @Transform(({ value }) => transformToNumber(value))
+  category_id?: number
+
+  @IsNumber()
+  @IsOptional()
+  @Transform(({ value }) => transformToNumber(value))
+  pass_flag?: number
 }
