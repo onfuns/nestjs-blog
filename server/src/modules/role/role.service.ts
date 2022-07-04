@@ -17,7 +17,7 @@ export class RoleService {
     return await this.repository.save(record)
   }
 
-  async findById(id): Promise<Role> {
+  async findById(id: number): Promise<Role> {
     return await this.repository.findOneBy({ id })
   }
 
@@ -28,15 +28,15 @@ export class RoleService {
       .getMany()
   }
 
-  async update(body: Role): Promise<any> {
-    const { id, auths, ...others } = body
+  async update(id: number, body: Role): Promise<any> {
+    const { auths, ...others } = body
     const record = this.repository.create(others)
     record.auths = auths
     record.id = id
     return await this.repository.save(record)
   }
 
-  async delete(id): Promise<any> {
+  async delete(id: number): Promise<any> {
     return await this.repository.delete(id)
   }
 }

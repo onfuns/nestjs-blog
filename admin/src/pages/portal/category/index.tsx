@@ -31,11 +31,10 @@ const CategoryPage = ({ categoryStore }: IProps) => {
       setModalProps({ visible: true, type, record })
     } else if (type === 'delete' || type === 'status') {
       if (type === 'delete') {
-        await categoryStore.delete({ id: record.id })
+        await categoryStore.delete(record.id)
       }
       if (type === 'status') {
-        await categoryStore.update({
-          id: record.id,
+        await categoryStore.update(record.id, {
           status: Number(!record.status),
         })
       }

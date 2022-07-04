@@ -1,4 +1,4 @@
-import { Inject, Controller, Post, Get, Body, Query } from '@nestjs/common'
+import { Inject, Controller, Post, Get, Put, Delete, Param, Body } from '@nestjs/common'
 import { RoleService } from './role.service'
 import { Role } from './role.entity'
 
@@ -6,28 +6,28 @@ import { Role } from './role.entity'
 export class RoleController {
   constructor(@Inject(RoleService) private readonly service: RoleService) {}
 
-  @Get('list')
+  @Get()
   async findAll() {
     return this.service.findAll()
   }
 
   @Get('info')
-  async detail(@Query('id') id) {
+  async detail(@Param('id') id: number) {
     return this.service.findById(id)
   }
 
-  @Post('add')
+  @Post()
   async add(@Body() body: Role) {
     return this.service.create(body)
   }
 
-  @Post('update')
-  async update(@Body() body) {
-    return this.service.update(body)
+  @Put(':id')
+  async update(@Param('id') id: number, @Body() body) {
+    return this.service.update(id, body)
   }
 
-  @Post('delete')
-  async delete(@Body('id') id) {
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
     return this.service.delete(id)
   }
 }

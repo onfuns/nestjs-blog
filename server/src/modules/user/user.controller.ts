@@ -1,4 +1,4 @@
-import { Inject, Controller, Post, Get, Body, Query } from '@nestjs/common'
+import { Inject, Controller, Post, Get, Put, Delete, Param, Body } from '@nestjs/common'
 import { UserService } from './user.service'
 import * as md5 from 'md5'
 import { User } from './user.entity'
@@ -21,31 +21,30 @@ export class UserController {
       id: data.id,
       name: data.name,
     })
-    await this.service.updateLoginInfo({
-      id: data.id,
+    await this.service.updateLoginInfo(data.id, {
       last_login_at: new Date(),
       last_login_ip: cleintIp,
     })
     return { userName: name, token }
   }
 
-  @Get('list')
-  async findAll(@Query() query) {
+  @Get()
+  async findAll() {
     return this.service.findAll()
   }
 
-  @Post('add')
+  @Post()
   async add(@Body() body) {
     return this.service.create(body)
   }
 
-  @Post('update')
-  async update(@Body() body) {
-    return this.service.update(body)
+  @Put(':id')
+  async update(@Param('id') id: number, @Body() body) {
+    return this.service.update(id, body)
   }
 
-  @Post('delete')
-  async delete(@Body('id') id) {
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
     return this.service.delete(id)
   }
 }

@@ -38,7 +38,7 @@ const RoleList = ({ roleStore }: IProps) => {
     Modal.confirm({
       title: '确定删除选中角色？',
       onOk: async () => {
-        await roleStore.delete({ id })
+        await roleStore.delete(id)
         message.success('删除成功')
         onReload()
       },
@@ -68,22 +68,30 @@ const RoleList = ({ roleStore }: IProps) => {
                 <Dropdown
                   trigger={['click']}
                   overlay={
-                    <Menu>
-                      <Menu.Item key="edit">
-                        <a
-                          onClick={() =>
-                            setModalProps({ visible: true, type: 'edit', record: item })
-                          }
-                        >
-                          编辑
-                        </a>
-                      </Menu.Item>
-                      <Menu.Item key="add">
-                        <a style={{ color: 'red' }} onClick={() => onDelete(item.id)}>
-                          删除
-                        </a>
-                      </Menu.Item>
-                    </Menu>
+                    <Menu
+                      items={[
+                        {
+                          key: 'edit',
+                          label: (
+                            <a
+                              onClick={() =>
+                                setModalProps({ visible: true, type: 'edit', record: item })
+                              }
+                            >
+                              编辑
+                            </a>
+                          ),
+                        },
+                        {
+                          key: 'delete',
+                          label: (
+                            <a style={{ color: 'red' }} onClick={() => onDelete(item.id)}>
+                              删除
+                            </a>
+                          ),
+                        },
+                      ]}
+                    ></Menu>
                   }
                 >
                   <DownOutlined style={{ color: '#ccc', fontSize: 14 }} />

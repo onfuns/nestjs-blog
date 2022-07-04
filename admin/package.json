@@ -5,7 +5,8 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "start:dev": "cross-env PORT=8001 umi dev",
-    "build": "umi build"
+    "build": "umi build",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\""
   },
   "dependencies": {
     "@ant-design/icons": "^4.6.2",

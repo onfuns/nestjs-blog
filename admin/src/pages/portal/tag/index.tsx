@@ -30,7 +30,7 @@ const TagPage = ({ tagStore }: IProps) => {
     if (type === 'add' || type === 'edit') {
       setModalProps({ visible: true, record })
     } else if (type === 'delete') {
-      await tagStore.delete({ id: record.id })
+      await tagStore.delete(record.id)
       message.success('操作成功')
       onLoadData()
     }

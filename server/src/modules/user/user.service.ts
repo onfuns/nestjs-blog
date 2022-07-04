@@ -56,20 +56,19 @@ export class UserService {
     return this.repository.findOneBy({ id })
   }
 
-  async update(body: Partial<User>): Promise<any> {
-    const { id, roles, ...others } = body
+  async update(id: number, body: User): Promise<any> {
+    const { roles, ...others } = body
     const record = this.repository.create(others)
     record.roles = roles
     record.id = id
     await this.repository.save(record)
   }
 
-  async updateLoginInfo(body): Promise<any> {
-    const { id, ...others } = body
-    await this.repository.update(id, others)
+  async updateLoginInfo(id: number, body): Promise<any> {
+    await this.repository.update(id, body)
   }
 
-  async delete(id): Promise<any> {
+  async delete(id: number): Promise<any> {
     return await this.repository.delete(id)
   }
 }

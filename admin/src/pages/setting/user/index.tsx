@@ -30,7 +30,7 @@ const UserList = ({ userStore }: { userStore?: UserStore }) => {
     if (type === 'add' || type === 'edit') {
       setModalProps({ visible: true, record })
     } else if (type === 'delete') {
-      await userStore.delete({ id: record.id })
+      await userStore.delete(record.id)
       message.success('操作成功')
       onLoadData()
     }

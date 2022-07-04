@@ -23,14 +23,15 @@ const Header = ({ headerStore }) => {
       <div className={styles.tools}>
         <Dropdown
           overlay={
-            <Menu>
-              <Menu.Item key={1} className={styles.menuItem}>
-                <a onClick={onLogout}>
-                  <LogoutOutlined style={{ marginRight: 5 }} />
-                  退出
-                </a>
-              </Menu.Item>
-            </Menu>
+            <Menu
+              items={[
+                {
+                  key: 1,
+                  icon: <LogoutOutlined style={{ marginRight: 5 }} />,
+                  label: <a onClick={onLogout}>退出</a>,
+                },
+              ]}
+            ></Menu>
           }
           trigger={['click']}
         >

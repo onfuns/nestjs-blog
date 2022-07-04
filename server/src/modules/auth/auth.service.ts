@@ -22,11 +22,11 @@ export class AuthService {
     })
   }
 
-  async update(id: string, body: Auth): Promise<any> {
+  async update(id: number, body: Auth): Promise<any> {
     return await this.repository.update(id, body)
   }
 
-  async delete(id: string): Promise<any> {
+  async delete(id: number): Promise<any> {
     return await this.repository.delete(id)
   }
 

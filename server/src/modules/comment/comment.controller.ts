@@ -24,12 +24,12 @@ export class CommentController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() body) {
+  async update(@Param('id') id: number, @Body() body) {
     return this.service.update(id, body)
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {
+  async delete(@Param('id') id: number) {
     return this.service.delete(id)
   }
 }

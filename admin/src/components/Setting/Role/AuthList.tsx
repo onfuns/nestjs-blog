@@ -63,11 +63,11 @@ const AuthList = ({ roleStore, authStore }: IProps) => {
     roleStore.get()
   }
 
-  const onDetele = async item => {
-    if (item?.children?.length > 0) {
+  const onDetele = async record => {
+    if (record?.children?.length > 0) {
       return message.warn('请先删除子节点')
     }
-    await roleStore.delete({ id: item.id })
+    await roleStore.delete(record.id)
     message.success('删除成功')
     authStore.get()
   }

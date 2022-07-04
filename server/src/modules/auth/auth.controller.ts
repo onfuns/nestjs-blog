@@ -16,12 +16,12 @@ export class AuthController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() body) {
+  async update(@Param('id') id: number, @Body() body) {
     return this.service.update(id, body)
   }
 
   @Delete(':id')
-  async delete(@Body('id') id: string) {
+  async delete(@Body('id') id: number) {
     return this.service.delete(id)
   }
 }

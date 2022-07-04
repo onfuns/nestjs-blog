@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Tag } from './tag.entity'
@@ -22,12 +22,11 @@ export class TagService {
     })
   }
 
-  async update(body): Promise<any> {
-    const { id, ...others } = body
-    return await this.repository.update(id, others)
+  async update(id: number, body): Promise<any> {
+    return await this.repository.update(id, body)
   }
 
-  async delete(id): Promise<any> {
+  async delete(id: number): Promise<any> {
     return await this.repository.delete(id)
   }
 }
