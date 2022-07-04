@@ -1,43 +1,43 @@
-import { Inject, Controller, Post, Get, Body, Query, SetMetadata } from '@nestjs/common'
+import { Inject, Controller, Post, Get, Put, Delete, Param, Body, Query } from '@nestjs/common'
 import { ArticleService } from './article.service'
 import { Article } from './article.entity'
 import { QueryDto, CreateDto, ActionDto } from './article.dto'
 import { IArticleVO } from './interface'
+import { NoPermission } from '@/decorator/permission.decorator'
 
 @Controller('/article')
 export class ArticleController {
   constructor(@Inject(ArticleService) private readonly service: ArticleService) {}
 
-  @Get('list')
+  @Get()
   async findAll(@Query() query: QueryDto): Promise<IArticleVO> {
     return this.service.findAll(query)
   }
 
-  @Get('client/list')
-  @SetMetadata('roles', ['all'])
+  @Get('list')
+  @NoPermission()
   async getClientList(@Query() query: QueryDto): Promise<IArticleVO> {
     return this.findAll({ ...query, pass_flag: 1 })
   }
 
-  @Post('create')
+  @Post()
   async add(@Body() body: CreateDto) {
     return this.service.create(body as Article)
   }
 
-  @Post('update')
-  async update(@Body() body: ActionDto) {
-    return this.service.update(body as Article)
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() body) {
+    return this.service.update(id, body)
   }
 
-  @Post('delete')
-  async delete(@Body() body: ActionDto) {
-    const { id } = body
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
     return this.service.delete(id)
   }
 
-  @Get('info')
-  @SetMetadata('roles', ['all'])
-  async info(@Query('id') id: string) {
+  @Get(':id')
+  @NoPermission()
+  async info(@Param('id') id: string) {
     return this.service.findById(id)
   }
 }

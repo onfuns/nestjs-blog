@@ -17,9 +17,7 @@ export class ApiInterceptor implements NestInterceptor {
     const response = ctx.getResponse()
     const request = ctx.getRequest()
     // 统一调整返回状态码为200
-    if (['POST', 'PUT', 'DELETE', 'OPTIONS'].includes(request.method)) {
-      response.status(HttpStatus.OK)
-    }
+    response.status(HttpStatus.OK)
     const resMapData = map((data: any) => {
       let result = { success: true, message: '请求成功', data: null }
       if (data && typeof data === 'object' && 'success' in data) {

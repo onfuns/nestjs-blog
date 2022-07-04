@@ -45,12 +45,11 @@ export class CommentService {
     return { data, count }
   }
 
-  async update(body): Promise<any> {
-    const { id, ...others } = body
-    return await this.repository.update(id, others)
+  async update(id: string, body: Comment): Promise<any> {
+    return await this.repository.update(id, body)
   }
 
-  async delete(id): Promise<any> {
+  async delete(id: string): Promise<any> {
     return await this.repository.delete(id)
   }
 }

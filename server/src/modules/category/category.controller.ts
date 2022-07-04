@@ -1,4 +1,4 @@
-import { Inject, Controller, Post, Get, Body } from '@nestjs/common'
+import { Inject, Controller, Post, Get, Put, Delete, Param, Body } from '@nestjs/common'
 import { CategoryService } from './category.service'
 import { Category } from './category.entity'
 import { toTree } from '@/util'
@@ -7,24 +7,24 @@ import { toTree } from '@/util'
 export class CategoryController {
   constructor(@Inject(CategoryService) private readonly service: CategoryService) {}
 
-  @Get('list')
+  @Get()
   async findAll() {
     const data = await this.service.findAll()
     return toTree(data)
   }
 
-  @Post('add')
+  @Post()
   async add(@Body() body: Category) {
     return this.service.create(body)
   }
 
-  @Post('update')
-  async update(@Body() body) {
-    return this.service.update(body)
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() body) {
+    return this.service.update(id, body)
   }
 
-  @Post('delete')
-  async delete(@Body('id') id) {
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
     return this.service.delete(id)
   }
 }

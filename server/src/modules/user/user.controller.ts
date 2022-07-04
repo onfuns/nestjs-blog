@@ -1,17 +1,18 @@
-import { Inject, Controller, Post, Get, Body, SetMetadata, Query } from '@nestjs/common'
+import { Inject, Controller, Post, Get, Body, Query } from '@nestjs/common'
 import { UserService } from './user.service'
 import * as md5 from 'md5'
 import { User } from './user.entity'
 import config from '@/config'
-import { IpAddress } from '@/decorator/IpAddress'
+import { IP } from '@/decorator/ip.decorator'
+import { NoPermission } from '@/decorator/permission.decorator'
 
 @Controller('/user')
 export class UserController {
   constructor(@Inject(UserService) private readonly service: UserService) {}
 
   @Post('login')
-  @SetMetadata('roles', ['all'])
-  async login(@Body() body: User, @IpAddress() cleintIp: string) {
+  @NoPermission()
+  async login(@Body() body: User, @IP() cleintIp: string) {
     const { name, password } = body
     const data: User = await this.service.login({ name, password: md5(password) })
     if (!data) return { success: false, message: '用户名或密码错误' }

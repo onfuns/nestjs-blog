@@ -49,8 +49,8 @@ export class ArticleService {
     return { data, count }
   }
 
-  async update(body: Article): Promise<Article> {
-    const { id, tags, ...others } = body
+  async update(id: string, body: Article): Promise<Article> {
+    const { tags, ...others } = body
     const record = this.repository.create(others)
     record.tags = tags
     record.id = id

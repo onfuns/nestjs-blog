@@ -1,33 +1,35 @@
-import { Inject, Controller, Post, Get, Body, SetMetadata, Query } from '@nestjs/common'
+import { Inject, Controller, Post, Get, Put, Delete, Param, Body, Query } from '@nestjs/common'
 import { CommentService } from './comment.service'
+import { NoPermission } from '@/decorator/permission.decorator'
+
 @Controller('/comment')
 export class CommentController {
   constructor(@Inject(CommentService) private readonly service: CommentService) {}
 
-  @Get('list')
+  @Get()
   async findAll(@Query() query) {
     return this.service.findAll(query)
   }
 
-  @Get('client/list')
-  @SetMetadata('roles', ['all'])
+  @Get('list')
+  @NoPermission()
   async getClientList(@Query('aid') aid) {
     return this.findAll({ aid, status: 1, pageSize: 100 })
   }
 
-  @Post('add')
-  @SetMetadata('roles', ['all'])
+  @Post()
+  @NoPermission()
   async add(@Body() body) {
     return this.service.create(body)
   }
 
-  @Post('update')
-  async update(@Body() body) {
-    return this.service.update(body)
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() body) {
+    return this.service.update(id, body)
   }
 
-  @Post('delete')
-  async delete(@Body('id') id) {
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
     return this.service.delete(id)
   }
 }

@@ -22,12 +22,11 @@ export class CategoryService {
     })
   }
 
-  async update(body): Promise<any> {
-    const { id, ...others } = body
-    return await this.repository.update(id, others)
+  async update(id: string, body: Category): Promise<any> {
+    return await this.repository.update(id, body)
   }
 
-  async delete(id): Promise<any> {
+  async delete(id: string): Promise<any> {
     try {
       return await this.repository.delete(id)
     } catch (err) {

@@ -1,27 +1,27 @@
-import { Inject, Controller, Post, Get, Body } from '@nestjs/common'
+import { Inject, Controller, Post, Get, Put, Delete, Param, Body } from '@nestjs/common'
 import { AuthService } from './auth.service'
 
 @Controller('/auth')
 export class AuthController {
   constructor(@Inject(AuthService) private readonly service: AuthService) {}
 
-  @Get('list')
+  @Get()
   async findAll() {
     return this.service.findAll()
   }
 
-  @Post('add')
+  @Post()
   async add(@Body() body) {
     return this.service.create(body)
   }
 
-  @Post('update')
-  async update(@Body() body) {
-    return this.service.update(body)
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() body) {
+    return this.service.update(id, body)
   }
 
-  @Post('delete')
-  async delete(@Body('id') id) {
+  @Delete(':id')
+  async delete(@Body('id') id: string) {
     return this.service.delete(id)
   }
 }

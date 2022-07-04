@@ -22,10 +22,9 @@ export class UserGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<any> {
     const request = context.switchToHttp().getRequest<Request>()
-    const roles = this.reflector.get<string[]>('roles', context.getHandler())
+    const NO_PERMISSION = this.reflector.get<string[]>('NO_PERMISSION', context.getHandler())
+    if (NO_PERMISSION) return true
     /** token 鉴权 begin */
-    //有 all标志的说明接口不做鉴权
-    if (roles && roles.includes('all')) return true
     const token = request.headers['x-auth-id-token']
     console.log('guard x-auth-id-token received:', token)
     if (!token) return this.fail()

@@ -22,18 +22,17 @@ export class AuthService {
     })
   }
 
-  async update(body): Promise<any> {
-    const { id, ...others } = body
-    return await this.repository.update(id, others)
+  async update(id: string, body: Auth): Promise<any> {
+    return await this.repository.update(id, body)
   }
 
-  async delete(id): Promise<any> {
+  async delete(id: string): Promise<any> {
     return await this.repository.delete(id)
   }
 
-  async verify(body: string) {
-    const ids = body?.split(',')
+  async verify(ids: string) {
+    const idArr = ids?.split(',')
     const data = await this.findAll()
-    return data.filter(d => ids.includes(d.id.toString()))
+    return data.filter(d => idArr.includes(d.id.toString()))
   }
 }
