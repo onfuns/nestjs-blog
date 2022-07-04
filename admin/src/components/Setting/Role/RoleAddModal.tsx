@@ -25,13 +25,11 @@ const AddFormModal = ({ roleStore, onSuccess, onCancel, detail }: IProps) => {
       const params = {
         ...values,
       }
-      let fn = store.add
-      // 编辑
       if (!!detail.id) {
-        fn = store.update
-        params.id = detail.id
+        await store.update(detail.id, params)
+      } else {
+        await store.add(params)
       }
-      await fn(params)
       message.success('操作成功')
       onSuccess()
     })

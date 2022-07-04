@@ -19,16 +19,16 @@ export class UserStore {
     }
   }
 
-  async update(params?: Record<string, any>) {
-    return await updateUser(params)
+  async update(id: number, params?: Record<string, any>) {
+    return await updateUser(id, params)
   }
 
   async add(params?: Record<string, any>) {
     return await addUser(params)
   }
 
-  async delete(params?: Record<string, any>) {
-    return await deleteUser(params)
+  async delete(id: number) {
+    return await deleteUser(id)
   }
 
   async login(params?: Record<string, any>) {

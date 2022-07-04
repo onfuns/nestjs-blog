@@ -21,16 +21,16 @@ export class RoleStore {
     }
   }
 
-  async update(params?: Record<string, any>) {
-    return await updateRole(params)
+  async update(id: number, params?: Record<string, any>) {
+    return await updateRole(id, params)
   }
 
   async add(params?: Record<string, any>) {
     return await addRole(params)
   }
 
-  async delete(params?: Record<string, any>) {
-    return await deleteRole(params)
+  async delete(id: number) {
+    return await deleteRole(id)
   }
 }
 

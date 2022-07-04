@@ -1,8 +1,9 @@
 import request from '@/utils/request'
+const url = '/role'
 
 export const getRoleList = async (params = {}) => {
   return request({
-    url: '/role/list',
+    url,
     method: 'GET',
     params,
   })
@@ -10,24 +11,23 @@ export const getRoleList = async (params = {}) => {
 
 export const addRole = async (params = {}) => {
   return request({
-    url: '/role/add',
+    url,
     method: 'POST',
     params,
   })
 }
 
-export const updateRole = async (params = {}) => {
+export const updateRole = async (id, params = {}) => {
   return request({
-    url: '/role/update',
-    method: 'POST',
+    url: `${url}/${id}`,
+    method: 'PUT',
     params,
   })
 }
 
-export const deleteRole = async (params = {}) => {
+export const deleteRole = async id => {
   return request({
-    url: '/role/delete',
-    method: 'POST',
-    params,
+    url: `${url}/${id}`,
+    method: 'DELETE',
   })
 }

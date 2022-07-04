@@ -1,8 +1,9 @@
 import request from '@/utils/request'
+const url = '/tag'
 
 export const getTagList = async (params = {}) => {
   return request({
-    url: '/tag/list',
+    url,
     method: 'GET',
     params,
   })
@@ -10,24 +11,23 @@ export const getTagList = async (params = {}) => {
 
 export const addTag = async (params = {}) => {
   return request({
-    url: '/tag/add',
+    url,
     method: 'POST',
     params,
   })
 }
 
-export const updateTag = async (params = {}) => {
+export const updateTag = async (id, params = {}) => {
   return request({
-    url: '/tag/update',
-    method: 'POST',
+    url: `${url}/${id}`,
+    method: 'PUT',
     params,
   })
 }
 
-export const deleteTag = async (params = {}) => {
+export const deleteTag = async id => {
   return request({
-    url: '/tag/delete',
-    method: 'POST',
-    params,
+    url: `${url}/${id}`,
+    method: 'DELETE',
   })
 }

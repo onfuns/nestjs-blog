@@ -19,16 +19,16 @@ export class TagStore {
     }
   }
 
-  async update(params?: Record<string, any>) {
-    return await updateTag(params)
+  async update(id: number, params?: Record<string, any>) {
+    return await updateTag(id, params)
   }
 
   async add(params?: Record<string, any>) {
     return await addTag(params)
   }
 
-  async delete(params?: Record<string, any>) {
-    return await deleteTag(params)
+  async delete(id: number) {
+    return await deleteTag(id)
   }
 }
 

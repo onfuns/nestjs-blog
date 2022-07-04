@@ -29,10 +29,10 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
       setModalProps({ visible: true, record })
     } else if (type === 'delete' || type === 'pass') {
       if (type === 'delete') {
-        await commentStore.delete({ id: record?.id })
+        await commentStore.delete(record.id)
       }
       if (type === 'pass') {
-        await commentStore.update({ id: record?.id, status: Number(!record.status) })
+        await commentStore.update(record.id, { status: Number(!record.status) })
       }
       message.success('操作成功')
       onLoadData()

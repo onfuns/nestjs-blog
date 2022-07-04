@@ -1,8 +1,9 @@
 import request from '@/utils/request'
+const url = '/category'
 
 export const getCategoryList = async (params = {}) => {
   return request({
-    url: '/category/list',
+    url,
     method: 'GET',
     params,
   })
@@ -10,24 +11,23 @@ export const getCategoryList = async (params = {}) => {
 
 export const addCategory = async (params = {}) => {
   return request({
-    url: '/category/add',
+    url,
     method: 'POST',
     params,
   })
 }
 
-export const updateCategory = async (params = {}) => {
+export const updateCategory = async (id, params = {}) => {
   return request({
-    url: '/category/update',
-    method: 'POST',
+    url: `${url}/${id}`,
+    method: 'PUT',
     params,
   })
 }
 
-export const deleteCategory = async (params = {}) => {
+export const deleteCategory = async id => {
   return request({
-    url: '/category/delete',
-    method: 'POST',
-    params,
+    url: `${url}/${id}`,
+    method: 'DELETE',
   })
 }

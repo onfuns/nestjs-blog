@@ -24,7 +24,7 @@ const ArticleAdd = ({ articleStore, tagStore, onCancel, onSuccess, detail = {} }
   const [form] = Form.useForm()
 
   const loadData = async () => {
-    await articleStore.getInfoById({ id: detail.id })
+    await articleStore.getInfoById(detail.id)
     //表单赋值
     const { detail: acticleDetail } = articleStore
     const { publish_time, category, tags, content } = acticleDetail
@@ -55,12 +55,11 @@ const ArticleAdd = ({ articleStore, tagStore, onCancel, onSuccess, detail = {} }
           content,
         }
         if (!content) return message.warn('请输入内容')
-        let fn = articleStore.add
         if (detail.id) {
-          fn = articleStore.update
-          params.id = detail.id
+          await articleStore.update(detail.id, params)
+        } else {
+          await articleStore.add(params)
         }
-        await fn(params)
         message.success('操作成功')
         onSuccess()
       })

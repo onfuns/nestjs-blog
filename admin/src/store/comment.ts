@@ -19,16 +19,16 @@ export class CommentStore {
     }
   }
 
-  async update(params?: Record<string, any>) {
-    return await updateComment(params)
+  async update(id: number, params?: Record<string, any>) {
+    return await updateComment(id, params)
   }
 
   async add(params?: Record<string, any>) {
     return await addComment(params)
   }
 
-  async delete(params?: Record<string, any>) {
-    return await deleteComment(params)
+  async delete(id: number) {
+    return await deleteComment(id)
   }
 }
 

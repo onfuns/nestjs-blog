@@ -55,8 +55,7 @@ const AuthList = ({ roleStore, authStore }: IProps) => {
       const ids = findAllParent(id)
       ids.map(id => resources.add(id))
     })
-    await roleStore.update({
-      id: roleId,
+    await roleStore.update(roleId, {
       auths: [...resources].map(id => ({ id })),
     })
     message.success('保存成功')

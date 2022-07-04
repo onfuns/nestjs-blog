@@ -32,14 +32,12 @@ const Add = ({ userStore, roleStore, onSuccess, onCancel, detail }: IProps) => {
         ...values,
         roles: values.roles.map(id => ({ id })),
       }
-      let fn = userStore.add
-      if (isEdit) {
-        fn = userStore.update
-        params.id = detail.id
+      if (!!detail.id) {
+        await userStore.update(detail.id, params)
       } else {
         params.password = md5(values.password)
+        await userStore.add(params)
       }
-      await fn(params)
       message.success('操作成功')
       onSuccess()
     })

@@ -25,23 +25,22 @@ const Article = ({ articleStore }: IProps) => {
     record: Record<string, any> | undefined = {},
   ) => {
     const { id = '', sort = 0, pass_flag = 0 } = record
-    let params: any = { id }
-    let fn = articleStore.update
-    //置顶
-    if (type === 'sort') {
-      // > 0 说明取消置顶
-      params.sort = Number(sort) > 0 ? 0 : dayjs().unix()
-    }
-    //审核
-    else if (type === 'pass_flag') {
-      params.pass_flag = Number(!Boolean(pass_flag))
-    }
-    //删除
-    else if (type === 'delete') {
-      fn = articleStore.delete
-    }
+    let params: any = {}
 
-    await fn(params)
+    if (type === 'delete') {
+      await articleStore.delete(id)
+    } else {
+      //置顶
+      if (type === 'sort') {
+        // > 0 说明取消置顶
+        params.sort = Number(sort) > 0 ? 0 : dayjs().unix()
+      }
+      //审核
+      else if (type === 'pass_flag') {
+        params.pass_flag = Number(!Boolean(pass_flag))
+      }
+      await articleStore.update(id, params)
+    }
     message.success('操作成功')
     actionRef?.current.reload()
   }

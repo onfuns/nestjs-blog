@@ -26,20 +26,20 @@ export class ArticleStore {
     }
   }
 
-  async update(params?: Record<string, any>) {
-    return await updateArticle(params)
+  async update(id: number, params?: Record<string, any>) {
+    return await updateArticle(id, params)
   }
 
   async add(params?: Record<string, any>) {
     return await addArticle(params)
   }
 
-  async delete(params?: Record<string, any>) {
-    return await deleteArticle(params)
+  async delete(id: number) {
+    return await deleteArticle(id)
   }
 
-  async getInfoById(params?: Record<string, any>) {
-    const { data } = await getArticleInfoById(params)
+  async getInfoById(id: number) {
+    const { data } = await getArticleInfoById(id)
     if (data) {
       this.set('detail', data)
     }

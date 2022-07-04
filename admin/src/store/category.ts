@@ -19,16 +19,16 @@ export class CategoryStore {
     }
   }
 
-  async update(params?: Record<string, any>) {
-    return await updateCategory(params)
+  async update(id: number, params?: Record<string, any>) {
+    return await updateCategory(id, params)
   }
 
   async add(params?: Record<string, any>) {
     return await addCategory(params)
   }
 
-  async delete(params?: Record<string, any>) {
-    return await deleteCategory(params)
+  async delete(id: number) {
+    return await deleteCategory(id)
   }
 }
 

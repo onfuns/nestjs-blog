@@ -38,13 +38,11 @@ const AddModal = ({ authStore, onSuccess, onCancel, detail }: IProps) => {
         ...values,
         pid: values.pid.pop(),
       }
-      let fn = authStore.add
-      // 编辑
       if (!!detail.id) {
-        fn = authStore.update
-        params.id = detail.id
+        await authStore.update(detail.id, params)
+      } else {
+        await authStore.add(params)
       }
-      await fn(params)
       message.success('操作成功')
       onSuccess()
     })

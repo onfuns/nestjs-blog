@@ -19,16 +19,16 @@ export class AuthStore {
     }
   }
 
-  async update(params?: Record<string, any>) {
-    return await updateAuth(params)
+  async update(id: number, params?: Record<string, any>) {
+    return await updateAuth(id, params)
   }
 
   async add(params?: Record<string, any>) {
     return await addAuth(params)
   }
 
-  async delete(params?: Record<string, any>) {
-    return await deleteAuth(params)
+  async delete(id: number) {
+    return await deleteAuth(id)
   }
 }
 

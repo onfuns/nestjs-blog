@@ -1,8 +1,9 @@
 import request from '@/utils/request'
+const url = '/comment'
 
 export const getCommentList = async (params = {}) => {
   return request({
-    url: '/comment/list',
+    url,
     method: 'GET',
     params,
   })
@@ -10,24 +11,23 @@ export const getCommentList = async (params = {}) => {
 
 export const addComment = async (params = {}) => {
   return request({
-    url: '/comment/add',
+    url,
     method: 'POST',
     params,
   })
 }
 
-export const updateComment = async (params = {}) => {
+export const updateComment = async (id, params = {}) => {
   return request({
-    url: '/comment/update',
-    method: 'POST',
+    url: `${url}/${id}`,
+    method: 'PUT',
     params,
   })
 }
 
-export const deleteComment = async (params = {}) => {
+export const deleteComment = async id => {
   return request({
-    url: '/comment/delete',
-    method: 'POST',
-    params,
+    url: `${url}/${id}`,
+    method: 'DELETE',
   })
 }

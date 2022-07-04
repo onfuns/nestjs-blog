@@ -24,12 +24,11 @@ const AddFormModal = ({ tagStore, onSuccess, onCancel, detail }: IProps) => {
       const params = {
         ...values,
       }
-      let fn = tagStore.add
-      if (detail.id) {
-        fn = tagStore.update
-        params.id = detail.id
+      if (!!detail.id) {
+        await tagStore.update(detail.id, params)
+      } else {
+        await tagStore.add(params)
       }
-      await fn(params)
       message.success('操作成功')
       onSuccess()
     })

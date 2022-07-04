@@ -25,12 +25,11 @@ const AddFormModal = ({ categoryStore, onSuccess, onCancel, detail }: IProps) =>
       const params = {
         ...values,
       }
-      let fn = categoryStore.add
       if (!!detail.id) {
-        fn = categoryStore.update
-        params.id = detail.id
+        await categoryStore.update(detail.id, params)
+      } else {
+        await categoryStore.add(params)
       }
-      await fn(params)
       message.success('操作成功')
       onSuccess()
     })

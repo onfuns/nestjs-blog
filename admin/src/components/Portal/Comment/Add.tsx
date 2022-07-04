@@ -13,11 +13,7 @@ const AddFormModal = ({ commentStore, onSuccess, onCancel, detail }: IProps) => 
 
   const onFinish = () => {
     form.validateFields().then(async values => {
-      const params = {
-        ...values,
-        id: detail.id,
-      }
-      await commentStore.update(params)
+      await commentStore.update(detail.id, values)
       message.success('操作成功')
       onSuccess()
     })
