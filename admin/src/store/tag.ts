@@ -8,7 +8,7 @@ export class TagStore {
     makeAutoObservable(this)
   }
 
-  set(key: 'result', value: any) {
+  set(key: keyof NonFunctionProperties<TagStore>, value: any) {
     this[key] = value
   }
 

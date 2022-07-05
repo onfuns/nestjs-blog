@@ -8,7 +8,7 @@ export class UserStore {
     makeAutoObservable(this)
   }
 
-  set(key: 'result', value: any) {
+  set(key: keyof NonFunctionProperties<UserStore>, value: any) {
     this[key] = value
   }
 

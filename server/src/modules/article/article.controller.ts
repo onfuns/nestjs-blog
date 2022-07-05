@@ -1,7 +1,7 @@
 import { Inject, Controller, Post, Get, Put, Delete, Param, Body, Query } from '@nestjs/common'
 import { ArticleService } from './article.service'
 import { Article } from './article.entity'
-import { QueryDto, CreateDto, ActionDto } from './article.dto'
+import { QueryDto, CreateDto } from './article.dto'
 import { IArticleVO } from './interface'
 import { NoPermission } from '@/decorator/permission.decorator'
 

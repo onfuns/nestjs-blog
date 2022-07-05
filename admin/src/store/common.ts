@@ -14,7 +14,7 @@ export class CommonStore {
     makeAutoObservable(this)
   }
 
-  set(key: 'dashboardInfo', value: any) {
+  set(key: keyof NonFunctionProperties<CommonStore>, value: any) {
     this[key] = value
   }
 

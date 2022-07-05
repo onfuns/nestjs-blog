@@ -15,7 +15,7 @@ export class ArticleStore {
     makeAutoObservable(this)
   }
 
-  set(key: 'result' | 'detail', value: any) {
+  set(key: keyof NonFunctionProperties<ArticleStore>, value: any) {
     this[key] = value
   }
 

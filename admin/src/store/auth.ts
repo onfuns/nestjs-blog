@@ -8,7 +8,7 @@ export class AuthStore {
     makeAutoObservable(this)
   }
 
-  set(key: 'result', value: any) {
+  set(key: keyof NonFunctionProperties<AuthStore>, value: any) {
     this[key] = value
   }
 

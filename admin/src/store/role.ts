@@ -9,7 +9,7 @@ export class RoleStore {
     makeAutoObservable(this)
   }
 
-  set(key: 'result' | 'detail', value: any) {
+  set(key: keyof NonFunctionProperties<RoleStore>, value: any) {
     this[key] = value
   }
 

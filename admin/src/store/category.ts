@@ -8,7 +8,7 @@ export class CategoryStore {
     makeAutoObservable(this)
   }
 
-  set(key: 'result', value: any) {
+  set(key: keyof NonFunctionProperties<CategoryStore>, value: any) {
     this[key] = value
   }
 
