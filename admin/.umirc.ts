@@ -11,6 +11,8 @@ export default defineConfig({
   fastRefresh: {},
   base: '/admin',
   publicPath: '/admin/',
+  favicon: '/admin/images/logo.png',
+  title: 'Nest-Blog Admin',
   dynamicImport: {},
   hash: true,
   proxy: {

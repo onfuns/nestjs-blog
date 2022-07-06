@@ -23,7 +23,7 @@ const AddFormModal = ({ commentStore, onSuccess, onCancel, detail }: IProps) => 
     <Modal
       title="评论信息"
       visible={true}
-      width={600}
+      width={800}
       onOk={onFinish}
       onCancel={onCancel}
       destroyOnClose

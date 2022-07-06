@@ -47,7 +47,7 @@ const Add = ({ userStore, roleStore, onSuccess, onCancel, detail }: IProps) => {
     <Modal
       title="用户信息"
       visible={true}
-      width={600}
+      width={800}
       onOk={onFinish}
       onCancel={onCancel}
       destroyOnClose
@@ -71,7 +71,7 @@ const Add = ({ userStore, roleStore, onSuccess, onCancel, detail }: IProps) => {
         )}
 
         <Form.Item label="所属角色" name="roles" rules={[{ required: true }]}>
-          <Select mode="multiple">
+          <Select mode="multiple" placeholder="请选择">
             {roleStore.result?.map((r: any) => (
               <Option key={r.id} value={r.id}>
                 {r.name}

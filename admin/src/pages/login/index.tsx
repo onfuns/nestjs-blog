@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Form, Input, Button, Carousel } from 'antd'
+import { Form, Input, Button, Carousel, message } from 'antd'
 import styles from './style.less'
 import { history } from 'umi'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
@@ -11,14 +11,17 @@ export default () => {
   const [form] = Form.useForm()
 
   const onSubmit = async () => {
-    form.validateFields().then(async values => {
+    try {
+      const values = await form.validateFields()
       setLoading(true)
       const { name, password } = values
       const { data } = await loginUser({ name, password })
       setLoading(false)
       saveLocalUser(data)
-      history.push('/dashboard')
-    })
+      message.success('登录成功', 2, () => history.push('/dashboard'))
+    } catch (error) {
+      message.error('登录失败')
+    }
   }
   return (
     <div className={styles.loginPage}>

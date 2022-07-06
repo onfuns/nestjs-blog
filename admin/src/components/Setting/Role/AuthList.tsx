@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Card, Button, message, Tree, Popconfirm, Space } from 'antd'
+import { Card, message, Tree, Popconfirm, Space } from 'antd'
 import { inject, observer } from 'mobx-react'
 import { RoleStore, AuthStore } from '@/store'
 import { toTree } from '@/utils'
@@ -13,15 +13,9 @@ interface IProps {
   authStore?: AuthStore
 }
 
-interface IModalProps {
-  visible?: boolean
-  type?: 'add' | 'edit' | undefined
-  record?: Record<string, any>
-}
-
 const AuthList = ({ roleStore, authStore }: IProps) => {
   const [selectedKeys, setSelectedKeys] = useState<number[]>([])
-  const [modalProps, setModalProps] = useSetState<IModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({ visible: false })
   const { detail: { id: roleId, auths } = {} } = roleStore
 
   useEffect(() => {
@@ -81,16 +75,15 @@ const AuthList = ({ roleStore, authStore }: IProps) => {
         size="small"
         style={{ width: '100%' }}
         extra={
-          <Space style={{ padding: '0 10px' }}>
-            <Button
-              type="ghost"
-              onClick={() => setModalProps({ visible: true, type: 'add', record: {} })}
-            >
+          <Space>
+            <a onClick={() => setModalProps({ visible: true, type: 'add', record: {} })}>
               新增权限
-            </Button>
-            <Popconfirm title="确定保存？" onConfirm={onSave} placement="topLeft">
-              <Button type="primary">保存</Button>
-            </Popconfirm>
+            </a>
+            {!!listData.length && (
+              <Popconfirm title="确定保存？" onConfirm={onSave} placement="topLeft">
+                <a>保存</a>
+              </Popconfirm>
+            )}
           </Space>
         }
       >

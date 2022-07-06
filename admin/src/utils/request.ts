@@ -6,7 +6,7 @@ import { message } from 'antd'
 
 const onError = (msg = '请求出错，请重试') => {
   message.error(msg)
-  Promise.reject(msg)
+  return Promise.reject(msg)
 }
 
 const request = (
@@ -17,16 +17,14 @@ const request = (
     data?: Record<string, any>
     [key: string]: any
   },
-  extraConfig = {
-    msg: true,
-  },
+  extraConfig = { msg: true },
 ) => {
   const { base } = config
   const { token = '' } = getLocalUser()
   axios.defaults.baseURL = base
   axios.defaults.headers.common['x-auth-id-token'] = token
   const { url, method = 'GET', params, ...otherOptions } = options
-  let axiosOptions: any = {}
+  const axiosOptions: any = {}
   if (method === 'GET') {
     axiosOptions.params = params
   } else {
@@ -36,6 +34,7 @@ const request = (
 
   return axios({
     url,
+    method,
     withCredentials: false,
     timeout: 1000 * 10,
     ...axiosOptions,
@@ -43,7 +42,7 @@ const request = (
   })
     .then(({ data }) => {
       if (extraConfig.msg && data?.success === false && data?.message) {
-        onError(data?.message)
+        return onError(data?.message)
       }
       return data
     })
@@ -62,7 +61,7 @@ const request = (
           return onError('抱歉，无权限操作')
         }
       }
-      onError(msg)
+      return onError(msg)
     })
 }
 

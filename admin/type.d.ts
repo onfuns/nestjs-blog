@@ -3,3 +3,9 @@ type NonFunctionPropertyNames<T> = {
 }[keyof T]
 
 type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>
+
+type ICreateModalProps = {
+  visible?: boolean
+  type?: 'add' | 'edit'
+  record?: Record<string, any>
+}

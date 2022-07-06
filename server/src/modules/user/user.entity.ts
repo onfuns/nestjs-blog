@@ -31,6 +31,9 @@ export class User {
   @Column({ default: 1 })
   enable: number
 
+  @Column({ default: 0 })
+  super: number
+
   @Column({ nullable: true })
   last_login_ip: string
 

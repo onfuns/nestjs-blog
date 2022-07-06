@@ -2,7 +2,7 @@ import { useState, useRef } from 'react'
 import { inject, observer } from 'mobx-react'
 import AddModal from '@/components/Portal/Category/Add'
 import { CategoryStore } from '@/store'
-import { Button, Popconfirm, message, Switch, Space } from 'antd'
+import { Button, Popconfirm, message, Switch, Space, Tag } from 'antd'
 import { CATEGORT_TYPE } from '@/constants'
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
 import { useSetState } from 'ahooks'
@@ -11,22 +11,19 @@ interface IProps {
   categoryStore: CategoryStore
 }
 
-interface IModalProps {
-  visible?: boolean
-  type?: 'add' | 'edit' | undefined
-  record?: Record<string, any>
-}
-
 const CategoryPage = ({ categoryStore }: IProps) => {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useSetState<IModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({ visible: false })
   const [expandKeys, setExpandKeys] = useState([])
 
   const onLoadData = () => {
     actionRef?.current.reload()
   }
 
-  const onAction = async (type: 'add' | 'edit' | 'delete' | 'status', record: any = {}) => {
+  const onAction = async (
+    type: 'add' | 'edit' | 'delete' | 'status',
+    record: ICreateModalProps['record'] = {},
+  ) => {
     if (type === 'add' || type === 'edit') {
       setModalProps({ visible: true, type, record })
     } else if (type === 'delete' || type === 'status') {
@@ -56,7 +53,12 @@ const CategoryPage = ({ categoryStore }: IProps) => {
     {
       title: '类别',
       dataIndex: 'type',
-      render: (_, { type, url }) => CATEGORT_TYPE[type] + (type === 3 ? `（${url}）` : ''),
+      render: (_, { type, url }) => (
+        <Tag color="green">
+          {CATEGORT_TYPE[type]}
+          {type === 3 ? `（${url}）` : ''}
+        </Tag>
+      ),
     },
     {
       title: '显示',

@@ -17,7 +17,7 @@ export class RoleStore {
     const { data } = await getRoleList(params)
     if (data) {
       this.set('result', data)
-      if (!this.detail.id) this.set('detail', data?.[0] || {})
+      if (!this.detail?.id) this.set('detail', data?.[0] || {})
     }
   }
 

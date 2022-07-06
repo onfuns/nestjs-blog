@@ -7,17 +7,11 @@ import { UserStore } from '@/store'
 import dayjs from 'dayjs'
 import { useSetState } from 'ahooks'
 
-interface IModalProps {
-  visible?: boolean
-  type?: 'add' | 'edit' | undefined
-  record?: Record<string, any>
-}
-
 const fromatDate = date => date && dayjs(date).format('YYYY-MM-DD HH:mm')
 
 const UserList = ({ userStore }: { userStore?: UserStore }) => {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useSetState<IModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({ visible: false })
 
   const onLoadData = () => {
     actionRef?.current.reload()
@@ -25,7 +19,7 @@ const UserList = ({ userStore }: { userStore?: UserStore }) => {
 
   const onAction = async (
     type: 'add' | 'edit' | 'delete',
-    record: Record<string, any> | undefined = {},
+    record: ICreateModalProps['record'] = {},
   ) => {
     if (type === 'add' || type === 'edit') {
       setModalProps({ visible: true, record })
@@ -87,7 +81,7 @@ const UserList = ({ userStore }: { userStore?: UserStore }) => {
         return (
           <Space>
             <a onClick={() => onAction('edit', record)}>编辑</a>
-            {record.pid === 0 && record?.children?.length ? null : (
+            {record.super !== 1 && (
               <Popconfirm title="确定删除？" onConfirm={() => onAction('delete', record)}>
                 <a className="danger">删除</a>
               </Popconfirm>

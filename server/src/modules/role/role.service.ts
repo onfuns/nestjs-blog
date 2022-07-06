@@ -32,8 +32,7 @@ export class RoleService {
     const { auths, ...others } = body
     const record = this.repository.create(others)
     record.auths = auths
-    record.id = id
-    return await this.repository.save(record)
+    return await this.repository.update(id, record)
   }
 
   async delete(id: number): Promise<any> {

@@ -7,15 +7,12 @@ import dayjs from 'dayjs'
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
 import { useSetState } from 'ahooks'
 
-interface IModalProps {
-  visible?: boolean
-  type?: 'add' | 'edit' | undefined
-  record?: Record<string, any>
-}
-
 const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useSetState<IModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({
+    visible: false,
+    record: undefined,
+  })
 
   const onLoadData = () => {
     actionRef?.current.reload()
@@ -23,7 +20,7 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
 
   const onAction = async (
     type: 'add' | 'reply' | 'delete' | 'pass',
-    record: Record<string, any> | undefined = {},
+    record: ICreateModalProps['record'] = {},
   ) => {
     if (type === 'add' || type === 'reply') {
       setModalProps({ visible: true, record })

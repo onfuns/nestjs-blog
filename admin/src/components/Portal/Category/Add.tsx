@@ -39,7 +39,7 @@ const AddFormModal = ({ categoryStore, onSuccess, onCancel, detail }: IProps) =>
     <Modal
       title="分类信息"
       visible={true}
-      width={600}
+      width={800}
       onOk={onFinish}
       onCancel={onCancel}
       destroyOnClose

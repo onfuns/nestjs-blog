@@ -55,7 +55,7 @@ const AddModal = ({ authStore, onSuccess, onCancel, detail }: IProps) => {
     <Modal
       title="权限信息"
       visible={true}
-      width={600}
+      width={800}
       onOk={onFinish}
       onCancel={onCancel}
       destroyOnClose

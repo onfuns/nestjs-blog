@@ -10,19 +10,17 @@ import { useSetState } from 'ahooks'
 interface IProps {
   articleStore: ArticleStore
 }
-interface IModalProps {
-  visible?: boolean
-  type?: 'add' | 'edit' | undefined
-  record?: Record<string, any>
-}
 
 const Article = ({ articleStore }: IProps) => {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useSetState<IModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({
+    visible: false,
+    record: undefined,
+  })
 
   const onAction = async (
     type: 'sort' | 'pass_flag' | 'delete' | 'pass',
-    record: Record<string, any> | undefined = {},
+    record: ICreateModalProps['record'] = {},
   ) => {
     const { id = '', sort = 0, pass_flag = 0 } = record
     let params: any = {}
@@ -33,7 +31,7 @@ const Article = ({ articleStore }: IProps) => {
       //置顶
       if (type === 'sort') {
         // > 0 说明取消置顶
-        params.sort = Number(sort) > 0 ? 0 : dayjs().unix()
+        params.sort = Number(sort) > 0 ? 0 : dayjs().valueOf()
       }
       //审核
       else if (type === 'pass_flag') {
@@ -82,7 +80,7 @@ const Article = ({ articleStore }: IProps) => {
       dataIndex: 'sort',
       valueEnum: {
         1: '是',
-        '-1': '否',
+        0: '否',
       },
       width: 100,
       render: (_, record) => (

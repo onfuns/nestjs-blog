@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { pickBy } from 'lodash'
-import { Repository, Like, MoreThan } from 'typeorm'
+import { Repository, Like, MoreThan, Equal } from 'typeorm'
 import { Article } from './article.entity'
 import { LoggerService } from '@/shared/logger/logger.service'
 import { IArticleVO } from './interface'
@@ -32,7 +32,7 @@ export class ArticleService {
     const { current = 1, pageSize = 20, sort, title, category_id, pass_flag } = query ?? {}
     const where: any = pickBy({
       title: title ? Like(`%${title}%`) : undefined,
-      sort: sort > 0 ? MoreThan(sort) : undefined,
+      sort: sort > 0 ? MoreThan(sort) : sort === 0 ? Equal(0) : undefined,
       category_id,
       pass_flag,
     })

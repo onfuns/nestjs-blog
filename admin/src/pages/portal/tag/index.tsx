@@ -9,15 +9,9 @@ interface IProps {
   tagStore: TagStore
 }
 
-interface IModalProps {
-  visible?: boolean
-  type?: 'add' | 'edit' | undefined
-  record?: Record<string, any>
-}
-
 const TagPage = ({ tagStore }: IProps) => {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useSetState<IModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({ visible: false })
 
   const onLoadData = () => {
     actionRef?.current.reload()
@@ -25,7 +19,7 @@ const TagPage = ({ tagStore }: IProps) => {
 
   const onAction = async (
     type: 'add' | 'edit' | 'delete',
-    record: Record<string, any> | undefined = {},
+    record: ICreateModalProps['record'] = {},
   ) => {
     if (type === 'add' || type === 'edit') {
       setModalProps({ visible: true, record })

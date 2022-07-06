@@ -12,14 +12,11 @@ interface IProps {
   roleStore?: RoleStore
 }
 
-interface IModalProps {
-  visible?: boolean
-  type?: 'add' | 'edit' | undefined
-  record?: Record<string, any>
-}
-
 const RoleList = ({ roleStore }: IProps) => {
-  const [modalProps, setModalProps] = useSetState<IModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({
+    visible: false,
+    record: undefined,
+  })
 
   useEffect(() => {
     onReload()
@@ -50,21 +47,25 @@ const RoleList = ({ roleStore }: IProps) => {
       <Card
         title="角色列表"
         size="small"
-        extra={<a onClick={() => setModalProps({ type: 'add', record: {} })}>创建角色</a>}
+        extra={
+          <a onClick={() => setModalProps({ visible: true, type: 'add', record: undefined })}>
+            创建角色
+          </a>
+        }
         className={styles.card}
       >
         <ul className={styles.list}>
-          {roleStore.result?.map(item => (
+          {roleStore.result?.map(role => (
             <li
-              key={item.id}
+              key={role.id}
               className={classnames(styles.item, {
-                [styles.active]: roleStore.detail.id === item.id,
+                [styles.active]: roleStore.detail.id === role.id,
               })}
-              onClick={() => onSelected(item)}
+              onClick={() => onSelected(role)}
             >
-              <div className={styles.name}>{item.name}</div>
+              <div className={styles.name}>{role.name}</div>
               <div>
-                {item.enable === 0 && <Tag color="red">已停用</Tag>}
+                {role.enable === 0 && <Tag color="red">已停用</Tag>}
                 <Dropdown
                   trigger={['click']}
                   overlay={
@@ -75,7 +76,7 @@ const RoleList = ({ roleStore }: IProps) => {
                           label: (
                             <a
                               onClick={() =>
-                                setModalProps({ visible: true, type: 'edit', record: item })
+                                setModalProps({ visible: true, type: 'edit', record: role })
                               }
                             >
                               编辑
@@ -85,7 +86,7 @@ const RoleList = ({ roleStore }: IProps) => {
                         {
                           key: 'delete',
                           label: (
-                            <a style={{ color: 'red' }} onClick={() => onDelete(item.id)}>
+                            <a style={{ color: 'red' }} onClick={() => onDelete(role.id)}>
                               删除
                             </a>
                           ),
