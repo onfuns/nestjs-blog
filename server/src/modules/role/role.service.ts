@@ -11,9 +11,7 @@ export class RoleService {
   ) {}
 
   async create(body: Role): Promise<Role> {
-    const { auths, ...others } = body
-    const record = this.repository.create(others)
-    record.auths = auths
+    const record = this.repository.create(body)
     return await this.repository.save(record)
   }
 
@@ -29,10 +27,9 @@ export class RoleService {
   }
 
   async update(id: number, body: Role): Promise<any> {
-    const { auths, ...others } = body
-    const record = this.repository.create(others)
-    record.auths = auths
-    return await this.repository.update(id, record)
+    const record = this.repository.create(body)
+    record.id = id
+    return await this.repository.save(record)
   }
 
   async delete(id: number): Promise<any> {

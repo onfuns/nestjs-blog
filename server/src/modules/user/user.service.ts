@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository, getRepository, DataSource } from 'typeorm'
+import { Repository, getRepository } from 'typeorm'
 import { User } from './user.entity'
 import * as jwt from 'jsonwebtoken'
 import config from '@/config'
@@ -52,14 +52,12 @@ export class UserService {
       .getMany()
   }
 
-  async findById(id): Promise<any> {
+  async findById(id: number): Promise<any> {
     return this.repository.findOneBy({ id })
   }
 
   async update(id: number, body: User): Promise<any> {
-    const { roles, ...others } = body
-    const record = this.repository.create(others)
-    record.roles = roles
+    const record = this.repository.create(body)
     record.id = id
     await this.repository.save(record)
   }

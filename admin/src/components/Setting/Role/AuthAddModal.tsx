@@ -79,6 +79,7 @@ const AddModal = ({ authStore, onSuccess, onCancel, detail }: IProps) => {
             allowClear={false}
             options={[{ id: 0, name: '一级菜单' }].concat(authList)}
             fieldNames={{ label: 'name', value: 'id', children: 'children' }}
+            changeOnSelect
             getPopupContainer={(node: HTMLElement) => node.parentNode as HTMLElement}
           />
         </Form.Item>

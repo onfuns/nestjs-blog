@@ -1,4 +1,15 @@
-import { Inject, Controller, Post, Get, Put, Delete, Param, Body, Query } from '@nestjs/common'
+import {
+  Inject,
+  Controller,
+  Post,
+  Get,
+  Put,
+  Delete,
+  Param,
+  Body,
+  Query,
+  ParseIntPipe,
+} from '@nestjs/common'
 import { CommentService } from './comment.service'
 import { NoPermission } from '@/decorator/permission.decorator'
 
@@ -24,12 +35,12 @@ export class CommentController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: number, @Body() body) {
+  async update(@Param('id', ParseIntPipe) id: number, @Body() body) {
     return this.service.update(id, body)
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: number) {
+  async delete(@Param('id', ParseIntPipe) id: number) {
     return this.service.delete(id)
   }
 }

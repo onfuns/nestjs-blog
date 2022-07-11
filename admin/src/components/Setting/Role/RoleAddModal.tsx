@@ -11,7 +11,6 @@ interface IProps {
 }
 
 const AddFormModal = ({ roleStore, onSuccess, onCancel, detail }: IProps) => {
-  const store = roleStore!
   const [form] = Form.useForm()
 
   useEffect(() => {
@@ -26,9 +25,9 @@ const AddFormModal = ({ roleStore, onSuccess, onCancel, detail }: IProps) => {
         ...values,
       }
       if (!!detail.id) {
-        await store.update(detail.id, params)
+        await roleStore.update(detail.id, params)
       } else {
-        await store.add(params)
+        await roleStore.add(params)
       }
       message.success('操作成功')
       onSuccess()

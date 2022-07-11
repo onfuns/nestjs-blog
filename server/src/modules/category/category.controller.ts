@@ -1,4 +1,14 @@
-import { Inject, Controller, Post, Get, Put, Delete, Param, Body } from '@nestjs/common'
+import {
+  Inject,
+  Controller,
+  Post,
+  Get,
+  Put,
+  Delete,
+  Param,
+  Body,
+  ParseIntPipe,
+} from '@nestjs/common'
 import { CategoryService } from './category.service'
 import { Category } from './category.entity'
 import { toTree } from '@/util'
@@ -19,12 +29,12 @@ export class CategoryController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: number, @Body() body) {
+  async update(@Param('id', ParseIntPipe) id: number, @Body() body) {
     return this.service.update(id, body)
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: number) {
+  async delete(@Param('id', ParseIntPipe) id: number) {
     return this.service.delete(id)
   }
 }

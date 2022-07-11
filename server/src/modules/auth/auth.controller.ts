@@ -1,4 +1,14 @@
-import { Inject, Controller, Post, Get, Put, Delete, Param, Body } from '@nestjs/common'
+import {
+  Inject,
+  Controller,
+  Post,
+  Get,
+  Put,
+  Delete,
+  Param,
+  Body,
+  ParseIntPipe,
+} from '@nestjs/common'
 import { AuthService } from './auth.service'
 
 @Controller('/auth')
@@ -16,12 +26,12 @@ export class AuthController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: number, @Body() body) {
+  async update(@Param('id', ParseIntPipe) id: number, @Body() body) {
     return this.service.update(id, body)
   }
 
   @Delete(':id')
-  async delete(@Body('id') id: number) {
+  async delete(@Body('id', ParseIntPipe) id: number) {
     return this.service.delete(id)
   }
 }

@@ -7,6 +7,7 @@ import { inject, observer } from 'mobx-react'
 import { HeaderStore } from '@/store'
 import { HomeOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons'
 import classnames from 'classnames'
+import Logo from '@/public/images/logo.png'
 
 const SubMenu = Menu.SubMenu
 const MenuComp = ({ headerStore }: { headerStore?: HeaderStore }) => {
@@ -57,8 +58,8 @@ const MenuComp = ({ headerStore }: { headerStore?: HeaderStore }) => {
       })}
     >
       <div className={styles.logoText}>
-        <img src="http://preview.ballcat.cn/assets/logo.f9330552.svg" />
-        {!menuCollapsed && <h1>后台</h1>}
+        <img src={Logo} />
+        {!menuCollapsed && <h1>管理后台</h1>}
       </div>
       <div className={styles.menuTree}>
         <Menu

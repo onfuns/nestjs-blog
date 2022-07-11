@@ -119,11 +119,6 @@ const CommentPage = ({ commentStore }: { commentStore: CommentStore }) => {
           await commentStore.get({ ...params })
           return { success: true, data: commentStore.result.data }
         }}
-        toolBarRender={() => [
-          <Button key="add" type="primary" onClick={() => onAction('add', {})}>
-            新增
-          </Button>,
-        ]}
         defaultSize="small"
       />
 

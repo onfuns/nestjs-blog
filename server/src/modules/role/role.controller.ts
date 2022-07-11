@@ -1,4 +1,14 @@
-import { Inject, Controller, Post, Get, Put, Delete, Param, Body } from '@nestjs/common'
+import {
+  Inject,
+  Controller,
+  Post,
+  Get,
+  Put,
+  Delete,
+  Param,
+  Body,
+  ParseIntPipe,
+} from '@nestjs/common'
 import { RoleService } from './role.service'
 import { Role } from './role.entity'
 
@@ -12,7 +22,7 @@ export class RoleController {
   }
 
   @Get('info')
-  async detail(@Param('id') id: number) {
+  async detail(@Param('id', ParseIntPipe) id) {
     return this.service.findById(id)
   }
 
@@ -22,12 +32,12 @@ export class RoleController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: number, @Body() body) {
+  async update(@Param('id', ParseIntPipe) id, @Body() body) {
     return this.service.update(id, body)
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: number) {
+  async delete(@Param('id', ParseIntPipe) id) {
     return this.service.delete(id)
   }
 }
