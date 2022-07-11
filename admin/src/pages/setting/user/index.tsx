@@ -78,16 +78,14 @@ const UserList = ({ userStore }: { userStore?: UserStore }) => {
       valueType: 'option',
       width: 120,
       render: (_, record) => {
-        return (
+        return record.super !== 1 ? (
           <Space>
             <a onClick={() => onAction('edit', record)}>编辑</a>
-            {record.super !== 1 && (
-              <Popconfirm title="确定删除？" onConfirm={() => onAction('delete', record)}>
-                <a className="danger">删除</a>
-              </Popconfirm>
-            )}
+            <Popconfirm title="确定删除？" onConfirm={() => onAction('delete', record)}>
+              <a className="danger">删除</a>
+            </Popconfirm>
           </Space>
-        )
+        ) : null
       },
     },
   ]

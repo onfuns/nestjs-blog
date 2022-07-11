@@ -11,6 +11,8 @@ import { Request } from 'express'
 import { UserService } from '@/modules/user/user.service'
 import { User } from '@/modules/user/user.entity'
 import Config from '@/config'
+import { pathToRegexp } from 'path-to-regexp'
+
 @Injectable()
 export class UserGuard implements CanActivate {
   private readonly reflector: Reflector = new Reflector()
@@ -25,8 +27,8 @@ export class UserGuard implements CanActivate {
     const NO_PERMISSION = this.reflector.get<string[]>('NO_PERMISSION', context.getHandler())
     if (NO_PERMISSION) return true
     /** token 鉴权 begin */
-    const token = request.headers['x-auth-id-token']
-    console.log('guard x-auth-id-token received:', token)
+    const token = request.headers['X-AUTH-ID-TOKEN'.toLowerCase()] as string
+    console.log('X-AUTH-ID-TOKEN received:', token)
     if (!token) return this.fail()
     const tokenInfo = await this.userService.verifyToken(token)
     if (!tokenInfo) this.fail()
@@ -35,12 +37,12 @@ export class UserGuard implements CanActivate {
     /** 接口鉴权 begin */
     const user: User = await this.userService.findById(tokenInfo.id)
     const auths = []
-    for (let i = 0; i < user.roles.length; i++) {
+    for (let i = 0; i < user?.roles?.length; i++) {
       const role = user.roles[i]
       if (role.enable === 1) auths.push(...(role.auths || []))
     }
     const url = request.path.replace(Config.base, '')
-    if (!auths?.some(({ code }) => code.split(',').includes(url))) {
+    if (!auths?.some(({ code }) => !!pathToRegexp(code).exec(url))) {
       throw new HttpException('INVALID_AUTH', HttpStatus.FORBIDDEN)
     }
     /** 接口鉴权 end */

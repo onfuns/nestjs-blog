@@ -10,9 +10,9 @@ export class UserService {
   @InjectRepository(User) private readonly repository: Repository<User>
   constructor() {}
 
-  async login(body: { name: string; password: string }) {
+  async login({ name, password }) {
     return await this.repository.findOne({
-      where: body,
+      where: { name, password },
     })
   }
 
@@ -23,7 +23,8 @@ export class UserService {
     return token
   }
 
-  verifyToken(token) {
+  verifyToken(token: string) {
+    console.log(`token`, token)
     const { jwtToken } = config
     try {
       const decoded = jwt.verify(token, jwtToken)
@@ -53,7 +54,7 @@ export class UserService {
   }
 
   async findById(id: number): Promise<any> {
-    return this.repository.findOneBy({ id })
+    return this.repository.findOne({ where: { id }, relations: ['roles', 'roles.auths'] })
   }
 
   async update(id: number, body: User): Promise<any> {

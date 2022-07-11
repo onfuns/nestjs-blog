@@ -4,7 +4,6 @@ import config from '@/config'
 import { APP_GUARD } from '@nestjs/core'
 import { UserGuard } from '@/guard/auth.guard'
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler'
-import { IS_DEV } from '@/util'
 
 import { ArticleModule } from '@/modules/article/article.module'
 import { CategoryeModule } from '@/modules/category/category.module'
@@ -34,7 +33,7 @@ import { CommonModule } from '@/modules/common/common.module'
   controllers: [],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },
-    !IS_DEV ? { provide: APP_GUARD, useClass: UserGuard } : null,
+    { provide: APP_GUARD, useClass: UserGuard },
   ].filter(provider => !!provider),
 })
 export class AppModule {}

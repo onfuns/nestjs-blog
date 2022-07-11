@@ -10,7 +10,6 @@ import {
   ParseIntPipe,
 } from '@nestjs/common'
 import { UserService } from './user.service'
-import * as md5 from 'md5'
 import { User } from './user.entity'
 import config from '@/config'
 import { IP } from '@/decorator/ip.decorator'
@@ -24,7 +23,7 @@ export class UserController {
   @NoPermission()
   async login(@Body() body: User, @IP() cleintIp: string) {
     const { name, password } = body
-    const data: User = await this.service.login({ name, password: md5(password) })
+    const data: User = await this.service.login({ name, password })
     if (!data) return { success: false, message: '用户名或密码错误' }
     const token = this.service.createToken({
       secret: config.jwtToken,

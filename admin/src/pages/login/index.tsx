@@ -5,22 +5,24 @@ import { history } from 'umi'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { saveLocalUser, loginUser } from '@/actions/user'
 import LoginImage from '@/assets/images/login-bg.png'
+import * as md5 from 'md5'
+import { baseRoutes } from '@/routes'
 
 export default () => {
   const [loading, setLoading] = useState(false)
   const [form] = Form.useForm()
 
   const onSubmit = async () => {
+    const values = await form.validateFields()
+    setLoading(true)
+    const { name, password } = values
     try {
-      const values = await form.validateFields()
-      setLoading(true)
-      const { name, password } = values
-      const { data } = await loginUser({ name, password })
+      const { data } = await loginUser({ name, password: md5(password) })
       setLoading(false)
       saveLocalUser(data)
-      message.success('登录成功', 2, () => history.push('/dashboard'))
+      message.success('登录成功', 1, () => history.push(baseRoutes[0].path))
     } catch (error) {
-      message.error('登录失败')
+      setLoading(false)
     }
   }
   return (

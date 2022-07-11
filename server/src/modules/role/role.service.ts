@@ -15,10 +15,6 @@ export class RoleService {
     return await this.repository.save(record)
   }
 
-  async findById(id: number): Promise<Role> {
-    return await this.repository.findOneBy({ id })
-  }
-
   async findAll(): Promise<Role[]> {
     return getRepository(Role)
       .createQueryBuilder('role')

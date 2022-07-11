@@ -1,15 +1,15 @@
 import axios from 'axios'
 import config from '@/config'
 import { unset } from 'lodash'
-import { getLocalUser } from '@/actions/user'
+import { getLocalUser, logoutUser } from '@/actions/user'
 import { message } from 'antd'
 
-const onError = (msg = '请求出错，请重试') => {
-  message.error(msg)
-  return Promise.reject(msg)
+const onError = (data: { success: boolean; message: string; data: any }) => {
+  message.error(data.message || '请求出错，请重试')
+  return Promise.reject(data)
 }
 
-const request = (
+const request = async (
   options: {
     url: string
     method?: string
@@ -22,7 +22,7 @@ const request = (
   const { base } = config
   const { token = '' } = getLocalUser()
   axios.defaults.baseURL = base
-  axios.defaults.headers.common['x-auth-id-token'] = token
+  axios.defaults.headers.common['X-AUTH-ID-TOKEN'] = token
   const { url, method = 'GET', params, ...otherOptions } = options
   const axiosOptions: any = {}
   if (method === 'GET') {
@@ -32,37 +32,35 @@ const request = (
     unset(options, 'params')
   }
 
-  return axios({
-    url,
-    method,
-    withCredentials: false,
-    timeout: 1000 * 10,
-    ...axiosOptions,
-    ...otherOptions,
-  })
-    .then(({ data }) => {
-      if (extraConfig.msg && data?.success === false && data?.message) {
-        return onError(data?.message)
-      }
-      return data
+  try {
+    const { data } = await axios({
+      url,
+      method,
+      withCredentials: false,
+      timeout: 1000 * 10,
+      ...axiosOptions,
+      ...otherOptions,
     })
-    .catch(({ response }) => {
-      const { status, data } = response
-      const msg = data?.message
-      if (status === 403) {
-        if (msg === 'INVALID_TOKEN') {
-          message.error('登录过期，请重新登录', 2).then(() => {
-            window.location.href = '/admin/login'
-          })
-          return false
-        }
+    if (extraConfig.msg && data?.success === false && data?.message) {
+      return onError(data)
+    }
+    return data
+  } catch ({ response }) {
+    const { status, data } = response
+    if (status === 403) {
+      if (data?.message === 'INVALID_TOKEN') {
+        message.error('登录过期，请重新登录', 2).then(() => {
+          logoutUser()
+        })
+        return false
+      }
 
-        if (msg === 'INVALID_AUTH') {
-          return onError('抱歉，无权限操作')
-        }
+      if (data?.message === 'INVALID_AUTH') {
+        return onError({ ...data, message: '抱歉，无权限操作' })
       }
-      return onError(msg)
-    })
+    }
+    return onError(data)
+  }
 }
 
 export default request

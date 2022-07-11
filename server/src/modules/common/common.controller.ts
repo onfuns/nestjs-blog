@@ -7,6 +7,7 @@ export class CommonController {
 
   @Get('dashboard')
   async findDashboardData(@Req() req) {
-    return this.service.findDashboardData(req.headers['x-auth-id-token'])
+    const token = req.headers['X-AUTH-ID-TOKEN'.toLowerCase()]
+    return this.service.findDashboardData(token)
   }
 }

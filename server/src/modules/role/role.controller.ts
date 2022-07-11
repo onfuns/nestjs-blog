@@ -21,11 +21,6 @@ export class RoleController {
     return this.service.findAll()
   }
 
-  @Get('info')
-  async detail(@Param('id', ParseIntPipe) id) {
-    return this.service.findById(id)
-  }
-
   @Post()
   async add(@Body() body: Role) {
     return this.service.create(body)

@@ -47,11 +47,6 @@ export const baseRoutes = [
         path: '/setting/role',
         component: '@/pages/setting/role',
       },
-      // {
-      //   name: '网站设置',
-      //   path: '/setting/website',
-      //   component: '@/pages/setting/website',
-      // },
     ],
   },
 ]
@@ -81,7 +76,7 @@ export const routes = [
       },
       {
         component: '@/components/Layout/Container',
-        // wrappers: ['@/components/Widgets/KeepAlive'],
+        wrappers: ['@/components/Widgets/Wrapper'],
         routes: [
           {
             path: '/',

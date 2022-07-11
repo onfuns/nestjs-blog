@@ -20,7 +20,7 @@ export class User {
   @Column({ select: false })
   password: string
 
-  @ManyToMany(type => Role, { cascade: true })
+  @ManyToMany(() => Role, { cascade: true })
   @JoinTable({
     name: 'user_role_relation',
     joinColumns: [{ name: 'user_id' }],

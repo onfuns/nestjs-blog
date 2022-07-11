@@ -11,7 +11,7 @@ export class CommonService {
     private readonly userService: UserService,
   ) {}
 
-  async findDashboardData(token): Promise<any> {
+  async findDashboardData(token: string): Promise<any> {
     const article = await this.articleService.findAll()
     const comment = await this.commentService.findAll()
     const tokenInfo = await this.userService.verifyToken(token)
