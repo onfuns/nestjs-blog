@@ -43,29 +43,24 @@ const ArticleAdd = ({ articleStore, tagStore, onCancel, onSuccess, detail = {} }
   }, [])
 
   const onSubmit = async () => {
-    form
-      .validateFields()
-      .then(async values => {
-        const { publish_time, category_id, tags = [] } = values
-        const params = {
-          ...values,
-          publish_time: dayjs(publish_time).format(formatDate),
-          category_id: category_id.pop(),
-          tags: tags.map(id => ({ id })),
-          content,
-        }
-        if (!content) return message.warn('请输入内容')
-        if (detail.id) {
-          await articleStore.update(detail.id, params)
-        } else {
-          await articleStore.add(params)
-        }
-        message.success('操作成功')
-        onSuccess()
-      })
-      .catch(err => {
-        form.scrollToField(err['errorFields'][0]['name'][0], { behavior: 'smooth' })
-      })
+    form.validateFields().then(async values => {
+      const { publish_time, category_id, tags = [] } = values
+      const params = {
+        ...values,
+        publish_time: dayjs(publish_time).format(formatDate),
+        category_id: category_id.pop(),
+        tags: tags.map(id => ({ id })),
+        content,
+      }
+      if (!content) return message.warn('请输入内容')
+      if (detail.id) {
+        await articleStore.update(detail.id, params)
+      } else {
+        await articleStore.add(params)
+      }
+      message.success('操作成功')
+      onSuccess()
+    })
   }
 
   const { result: tagList } = tagStore

@@ -11,7 +11,7 @@ import { Request } from 'express'
 import { UserService } from '@/modules/user/user.service'
 import { User } from '@/modules/user/user.entity'
 import Config from '@/config'
-import { pathToRegexp } from 'path-to-regexp'
+import { pathToRegexp, match } from 'path-to-regexp'
 
 @Injectable()
 export class UserGuard implements CanActivate {
@@ -42,7 +42,16 @@ export class UserGuard implements CanActivate {
       if (role.enable === 1) auths.push(...(role.auths || []))
     }
     const url = request.path.replace(Config.base, '')
-    if (!auths?.some(({ code }) => !!pathToRegexp(code).exec(url))) {
+    //code 格式  /role/:id::POST::PUT::DELETE
+    if (
+      !auths?.some(({ code }: { code: string }) => {
+        const methodsIndex = code.indexOf('::')
+        const codeKey = methodsIndex > -1 ? code.substring(0, methodsIndex) : code
+        return (
+          !!pathToRegexp(codeKey).exec(url) && code.includes(`::${request.method.toUpperCase()}`)
+        )
+      })
+    ) {
       throw new HttpException('INVALID_AUTH', HttpStatus.FORBIDDEN)
     }
     /** 接口鉴权 end */
