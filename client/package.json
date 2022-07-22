@@ -1,12 +1,13 @@
 {
   "name": "nest-blog-client",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "private": true,
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
     "start:dev": "cross-env NODE_ENV=development next dev -p 4001",
-    "start:prod": "pm2 start pm2-app.json",
+    "start:prod": "NODE_ENV=production next start -p 4001",
+    "start:pm2": "pm2 start pm2-app.json",
     "build": "next build"
   },
   "dependencies": {

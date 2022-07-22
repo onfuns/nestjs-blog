@@ -1,6 +1,6 @@
 {
   "name": "nest-blog-client",
-  "script": "node ./server",
+  "script": "next start",
   "env": {
     "PORT": 4001,
     "NODE_ENV": "production"
