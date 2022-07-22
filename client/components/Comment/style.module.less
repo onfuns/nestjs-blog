@@ -1,0 +1,88 @@
+.comment {
+  width: 720px;
+  background: #fff;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 4px;
+  .header {
+    font-size: 18px;
+    line-height: 30px;
+    font-weight: 600;
+    color: #252933;
+    margin-bottom: 10px;
+  }
+  .avatar {
+    margin-right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  .content {
+    display: flex;
+    align-items: flex-start;
+    .form {
+      flex: 1 1 auto;
+      position: relative;
+    }
+    .btns {
+      display: flex;
+      justify-content: space-between;
+      .tips {
+        color: #999;
+      }
+    }
+    .footer {
+      text-align: right;
+    }
+  }
+  :global {
+    .ant-form-item-explain,
+    .ant-form-item-explain-error {
+      display: none !important;
+    }
+    .ant-form-item {
+      margin-bottom: 10px !important;
+    }
+    .ant-input:focus,
+    .ant-input-focused {
+      box-shadow: none;
+    }
+  }
+  .listContent {
+    margin-top: 20px;
+    .list {
+      .listItem {
+        display: flex;
+        color: #515767;
+        padding: 10px 0;
+        .listRow {
+          flex: 1;
+        }
+        .listMeta {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 10px;
+          .name {
+            font-weight: 500;
+            font-size: 15px;
+            color: #252933;
+            max-width: 130px;
+            line-height: 26px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0;
+          }
+          .time {
+            color: #8a919f;
+          }
+        }
+        .replyContent {
+          padding: 16px;
+          background: rgba(247, 248, 250, 0.7);
+          border-radius: 4px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+.roles {
+  width: 250px;
+  flex-shrink: 0;
+  .card {
+    height: 100%;
+    border-right: 0;
+    :global {
+      .ant-card-body {
+        padding: 0;
+      }
+    }
+  }
+  .item {
+    display: flex;
+    height: 40px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    color: #333;
+    cursor: pointer;
+    font-size: 13px;
+    list-style: none;
+    &.active {
+      background-color: #f5f5f7;
+    }
+    .name {
+      overflow: hidden;
+      max-width: 140px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}

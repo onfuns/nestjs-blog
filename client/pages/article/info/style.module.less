@@ -1,0 +1,40 @@
+:global {
+  @import url('@/styles/md.theme.less');
+}
+.infoPage {
+  padding: 10px 0;
+  .container {
+    display: flex;
+    width: 100%;
+  }
+  .content {
+    padding: 24px;
+    background: #fff;
+    border-radius: 4px;
+    flex: 1;
+    .title {
+      margin-bottom: 6px;
+      line-height: 1.4;
+      font-size: 30px;
+      font-weight: 700;
+      color: #303030;
+      margin-left: 0;
+      text-indent: 0;
+      word-break: break-all;
+    }
+    .meta {
+      color: #666;
+      margin-top: 8px;
+      span {
+        display: inline-flex;
+        align-items: center;
+        margin-right: 12px;
+        i {
+          margin-right: 5px;
+          font-size: 14px;
+          font-style: normal;
+        }
+      }
+    }
+  }
+}
