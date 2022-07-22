@@ -2,7 +2,7 @@
   "name": "nest-blog-client",
   "script": "node ./server",
   "env": {
-    "PORT": 5000,
+    "PORT": 4001,
     "NODE_ENV": "production"
   },
   "error_file": "./logs/pm2/err.log",

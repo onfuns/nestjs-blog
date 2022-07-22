@@ -1,6 +1,6 @@
 import markdownIt from 'markdown-it'
 import markdownItAnchor from 'markdown-it-anchor'
-import styles from './detail.module.less'
+import styles from './style.module.less'
 import classnames from 'classnames'
 import Anchor from '@/components/Article/Anchor'
 import Comment from '@/components/Comment'
@@ -9,12 +9,12 @@ import dayjs from 'dayjs'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
 
-const ArticleDetail = ({ detail }) => {
-  const { id, title, content, category, tags, created_at, comment_flag } = detail || {}
+const ArticleInfo = ({ info }) => {
+  const { id, title, content, category, tags, created_at, comment_flag } = info || {}
   const { anchor } = parseHtml(content)
 
   return (
-    <div className={classnames('container', styles.detailPage)}>
+    <div className={classnames('container', styles.infoPage)}>
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.title}>{title}</div>
@@ -47,13 +47,11 @@ const ArticleDetail = ({ detail }) => {
   )
 }
 
-export const getServerSideProps = async ({ req }) => {
+export const getServerSideProps = async ({ req, params }) => {
   const { articleStore } = req.mobxStore
-  await articleStore.getInfoById({
-    id: req.params.id,
-  })
-  const detail = articleStore.detail
-  detail.content = markdownIt({
+  await articleStore.getInfoById(params?.id)
+  const { info } = articleStore
+  info.content = markdownIt({
     html: true,
     highlight: function (str, lang) {
       if (lang && hljs.getLanguage(lang)) {
@@ -67,12 +65,12 @@ export const getServerSideProps = async ({ req }) => {
     },
   })
     .use(markdownItAnchor)
-    .render(detail.content)
+    .render(info.content)
   return {
     props: {
-      detail,
+      info,
     },
   }
 }
 
-export default ArticleDetail
+export default ArticleInfo

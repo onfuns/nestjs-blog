@@ -78,8 +78,9 @@ const ArticleAdd = ({ articleStore, tagStore, onCancel, onSuccess, detail = {} }
         form={form}
         initialValues={{
           pass_flag: 1,
-          comment_flag: 1,
+          comment_flag: 0,
           publish_time: dayjs(),
+          author: 'onfuns',
         }}
       >
         <Form.Item label="标题" name="title" rules={[{ required: true }]}>
@@ -111,11 +112,18 @@ const ArticleAdd = ({ articleStore, tagStore, onCancel, onSuccess, detail = {} }
           </Radio.Group>
         </Form.Item>
 
+        <Form.Item label="开放评论" name="comment_flag">
+          <Radio.Group>
+            <Radio value={1}>是</Radio>
+            <Radio value={0}>否</Radio>
+          </Radio.Group>
+        </Form.Item>
+
         <Form.Item label="发布时间" name="publish_time" rules={[{ required: true }]}>
           <DatePicker showTime allowClear={false} format={formatDate} style={{ width: '100%' }} />
         </Form.Item>
 
-        <Form.Item label="发布人" name="author">
+        <Form.Item label="发布人" name="author" rules={[{ required: true }]}>
           <Input placeholder="请输入发布人" />
         </Form.Item>
 

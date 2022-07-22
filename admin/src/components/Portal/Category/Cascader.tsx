@@ -45,6 +45,7 @@ const CategoryCascader = (
       fieldNames={{ label: 'name', value: 'id', children: 'children' }}
       onChange={onTrigger}
       getPopupContainer={(node: HTMLElement) => node.parentNode as HTMLElement}
+      changeOnSelect
     />
   )
 }

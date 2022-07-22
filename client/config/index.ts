@@ -5,8 +5,8 @@ import getConfig from 'next/config'
 const { publicRuntimeConfig = {} } = getConfig()
 
 interface IConfig {
-  base?: string
-  server_api?: string
+  baseUrl?: string
+  serverApi?: string
 }
 
 let Config: IConfig = {}

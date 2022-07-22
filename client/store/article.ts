@@ -1,15 +1,15 @@
 import { makeAutoObservable } from 'mobx'
-import { getArticleList, getArticleDetailById } from '@/actions/article'
+import { getArticleList, getArticleInfoById } from '@/actions/article'
 
 export class ArticleStore {
   result = { data: [], count: 0 }
-  detail = {}
+  info = {}
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  set(key: 'result' | 'detail', value) {
+  set(key: keyof NonFunctionProperties<ArticleStore>, value) {
     this[key] = value
   }
 
@@ -19,9 +19,9 @@ export class ArticleStore {
     return this.result
   }
 
-  async getInfoById(params) {
-    const { data } = await getArticleDetailById(params)
-    this.set('detail', data || {})
+  async getInfoById(id) {
+    const { data } = await getArticleInfoById({ id })
+    this.set('info', data || {})
   }
 }
 

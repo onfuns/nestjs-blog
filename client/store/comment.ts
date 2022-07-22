@@ -8,7 +8,7 @@ export class CommentStore {
     makeAutoObservable(this)
   }
 
-  set(key: 'result', value) {
+  set(key: keyof NonFunctionProperties<CommentStore>, value) {
     this[key] = value
   }
 

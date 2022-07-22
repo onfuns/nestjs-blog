@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
-    "start:dev": "cross-env PORT=8001 umi dev",
+    "start:dev": "cross-env PORT=4002 umi dev",
     "build": "umi build",
     "format": "prettier --write \"src/**/*.{ts,tsx}\""
   },

@@ -4,9 +4,8 @@ import { unset } from 'lodash'
 import { isServer } from './util'
 
 const request = options => {
-  if (isServer) axios.defaults.baseURL = config['base']
-  const { server_api, base } = config
-  axios.defaults.baseURL = isServer ? server_api + base : base
+  const { serverApi, baseUrl } = config
+  axios.defaults.baseURL = isServer ? `${serverApi}${baseUrl}` : baseUrl
 
   const { url, method = 'GET', params = {} } = options
   if (method === 'GET') {

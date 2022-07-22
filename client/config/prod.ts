@@ -1,3 +1,3 @@
 export default {
-  server_api: 'http://localhost:4000',
+  serverApi: 'http://localhost:4000',
 }

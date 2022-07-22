@@ -29,7 +29,7 @@ export class ArticleService {
   }
 
   async findAll(query?: QueryDto): Promise<IArticleVO> {
-    const { current = 1, pageSize = 20, sort, title, category_id, pass_flag } = query ?? {}
+    const { current = 1, pageSize = 20, sort, title, cid: category_id, pass_flag } = query ?? {}
     const where: any = pickBy({
       title: title ? Like(`%${title}%`) : undefined,
       sort: sort > 0 ? MoreThan(sort) : sort === 0 ? Equal(0) : undefined,

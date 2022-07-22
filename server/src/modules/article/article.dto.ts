@@ -36,7 +36,7 @@ export class QueryDto {
 
   @IsOptional()
   @Transform(({ value }) => transformToNumber(value))
-  category_id?: number
+  cid?: number
 
   @IsNumber()
   @IsOptional()

@@ -5,5 +5,5 @@ export const addComment = async (params = {}) => {
 }
 
 export const getCommentList = async (params = {}) => {
-  return request({ url: '/comment/client/list', params })
+  return request({ url: '/comment/list', params })
 }

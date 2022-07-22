@@ -17,10 +17,10 @@ const Comment = ({ articeId, commentStore }: IProps) => {
     form.validateFields().then(async values => {
       const { success } = await commentStore.add({ ...values, aid: articeId })
       if (success) {
-        message.success('评论成功，等待小主审核哦~')
+        message.success('评论成功，请耐心等待审核哦~')
         form.resetFields()
       } else {
-        message.error('失败啦，歇会再试哦~')
+        message.error('失败啦，歇会再试吧~')
       }
     })
   }
@@ -87,6 +87,7 @@ const Comment = ({ articeId, commentStore }: IProps) => {
                     <span className={styles.time}>{dayjs(item.created_at).fromNow()}</span>
                   </div>
                   <p>{item.content}</p>
+                  {item.reply && <div className={styles.replyContent}>回复：{item.reply}</div>}
                 </div>
               </div>
             ))}

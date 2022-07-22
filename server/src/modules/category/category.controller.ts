@@ -12,6 +12,7 @@ import {
 import { CategoryService } from './category.service'
 import { Category } from './category.entity'
 import { toTree } from '@/util'
+import { NoPermission } from '@/decorator/permission.decorator'
 
 @Controller('/category')
 export class CategoryController {
@@ -21,6 +22,12 @@ export class CategoryController {
   async findAll() {
     const data = await this.service.findAll()
     return toTree(data)
+  }
+
+  @Get('list')
+  @NoPermission()
+  async listForClient() {
+    return await this.findAll()
   }
 
   @Post()

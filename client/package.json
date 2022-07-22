@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
-    "start:dev": "cross-env NODE_ENV=development node ./server",
+    "start:dev": "cross-env NODE_ENV=development next dev -p 4001",
     "start:prod": "pm2 start pm2-app.json",
     "build": "next build"
   },

@@ -12,7 +12,7 @@ const CustomApp = ({ Component, pageProps = {}, initialMobxState }) => {
   return (
     <Layout store={stores}>
       <Layout.Header />
-      <div className="main-page-content">
+      <div className="main-container">
         <Component {...pageProps} />
       </div>
       <Layout.Footer />

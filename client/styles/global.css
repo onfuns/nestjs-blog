@@ -22,11 +22,10 @@ ul li {
 
 * {
   box-sizing: border-box;
-  /**font-family: 'JetBrains Mono';*/
   font-size: 14px;
 }
 
-.main-page-content {
+.main-container {
   display: flex;
   flex: 1;
   background: #f4f5f5;

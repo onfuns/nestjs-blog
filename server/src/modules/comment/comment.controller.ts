@@ -29,8 +29,13 @@ export class CommentController {
   }
 
   @Post()
-  @NoPermission()
   async add(@Body() body) {
+    return this.service.create(body)
+  }
+
+  @Post('add')
+  @NoPermission()
+  async addForClient(@Body() body) {
     return this.service.create(body)
   }
 
