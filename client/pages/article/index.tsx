@@ -34,7 +34,6 @@ export const getServerSideProps = async ({ req, query }) => {
 
   if (ename) {
     const category = findByValue(categoryStore.result, 'ename', `/${ename}`)
-    console.log(`category`, category)
     if (category?.id) {
       params.cid = category?.id
     } else {

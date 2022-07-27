@@ -19,12 +19,3 @@ export const isInViewport = el => {
     return false
   }
 }
-
-export const initCashDom = () => {
-  try {
-    const $ = require('cash-dom')
-    return $
-  } catch (error) {
-    return {}
-  }
-}
