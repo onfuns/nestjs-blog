@@ -35,5 +35,3 @@ export class UserStore {
     return await loginUser(params)
   }
 }
-
-export default new UserStore()

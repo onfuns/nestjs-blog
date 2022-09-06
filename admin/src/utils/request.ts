@@ -1,30 +1,28 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import config from '@/config'
 import { unset } from 'lodash'
 import { getLocalUser, logoutUser } from '@/actions/user'
 import { message } from 'antd'
+
+type IOptions = {
+  url: string
+  method?: string
+  params?: Record<string, any>
+  [key: string]: any
+} & AxiosRequestConfig
 
 const onError = (data: { success: boolean; message: string; data: any }) => {
   message.error(data.message || '请求出错，请重试')
   return Promise.reject(data)
 }
 
-const request = async (
-  options: {
-    url: string
-    method?: string
-    params?: Record<string, any>
-    data?: Record<string, any>
-    [key: string]: any
-  },
-  extraConfig = { msg: true },
-) => {
+export default async (options: IOptions, extraConfig = { msg: true }) => {
   const { base } = config
-  const { token = '' } = getLocalUser()
+  const { token } = getLocalUser()
   axios.defaults.baseURL = base
-  axios.defaults.headers.common['X-AUTH-ID-TOKEN'] = token
-  const { url, method = 'GET', params, ...otherOptions } = options
-  const axiosOptions: any = {}
+  axios.defaults.headers.common['X-AUTH-ID-TOKEN'] = token || ''
+  const { url, method = 'GET', params, ...resetOptions } = options
+  const axiosOptions: AxiosRequestConfig = {}
   if (method === 'GET') {
     axiosOptions.params = params
   } else {
@@ -39,7 +37,7 @@ const request = async (
       withCredentials: false,
       timeout: 1000 * 10,
       ...axiosOptions,
-      ...otherOptions,
+      ...resetOptions,
     })
     if (extraConfig.msg && data?.success === false && data?.message) {
       return onError(data)
@@ -62,5 +60,3 @@ const request = async (
     return onError(data)
   }
 }
-
-export default request

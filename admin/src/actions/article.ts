@@ -9,7 +9,7 @@ export const getArticleList = async (params = {}) => {
   })
 }
 
-export const getArticleInfoById = async id => {
+export const getArticle = async id => {
   return request({
     url: `${url}/${id}`,
     method: 'GET',

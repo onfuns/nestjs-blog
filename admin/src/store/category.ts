@@ -31,5 +31,3 @@ export class CategoryStore {
     return await deleteCategory(id)
   }
 }
-
-export default new CategoryStore()

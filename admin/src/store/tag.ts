@@ -31,5 +31,3 @@ export class TagStore {
     return await deleteTag(id)
   }
 }
-
-export default new TagStore()

@@ -2,50 +2,47 @@ export const baseRoutes = [
   {
     name: '工作台',
     path: '/dashboard',
-    icon: 'home',
     component: '@/pages/dashboard',
   },
   {
     name: '门户管理',
     path: '/portal',
-    icon: 'portal',
     children: [
       {
         name: '栏目管理',
         path: '/portal/category',
-        component: '@/pages/portal/category',
+        component: '@/pages/category',
       },
       {
         name: '文章管理',
         path: '/portal/article',
-        component: '@/pages/portal/article',
+        component: '@/pages/article',
       },
       {
         name: '标签管理',
         path: '/portal/tag',
-        component: '@/pages/portal/tag',
+        component: '@/pages/tag',
       },
       {
         name: '评论管理',
         path: '/portal/comment',
-        component: '@/pages/portal/comment',
+        component: '@/pages/comment',
       },
     ],
   },
   {
     name: '系统设置',
     path: '/setting',
-    icon: 'setting',
     children: [
       {
         name: '用户管理',
         path: '/setting/user',
-        component: '@/pages/setting/user',
+        component: '@/pages/user',
       },
       {
         name: '角色管理',
         path: '/setting/role',
-        component: '@/pages/setting/role',
+        component: '@/pages/role',
       },
     ],
   },
@@ -58,7 +55,7 @@ const getRoutes = (data, flatRoutes = []) => {
         name,
         path,
         component,
-        wrappers: ['@/components/Widgets/KeepAlive'],
+        wrappers: ['@/components/KeepAlive'],
         ...other,
       })
     if (children) getRoutes(children, flatRoutes)
@@ -76,7 +73,6 @@ export const routes = [
       },
       {
         component: '@/components/Layout/Container',
-        wrappers: ['@/components/Widgets/Wrapper'],
         routes: [
           {
             path: '/',

@@ -31,5 +31,3 @@ export class CommentStore {
     return await deleteComment(id)
   }
 }
-
-export default new CommentStore()

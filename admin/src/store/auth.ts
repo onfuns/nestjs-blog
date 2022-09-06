@@ -31,5 +31,3 @@ export class AuthStore {
     return await deleteAuth(id)
   }
 }
-
-export default new AuthStore()

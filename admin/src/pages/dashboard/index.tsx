@@ -1,14 +1,15 @@
 import { useEffect } from 'react'
 import { Row, Col, Card, List, Space } from 'antd'
-import styles from './style.less'
-import { inject, observer } from 'mobx-react'
-import { CommonStore } from '@/store'
+import styles from './style.module.less'
+import { observer } from 'mobx-react'
 import dayjs from 'dayjs'
+import { useStore } from '@/hooks'
 const formatDate = 'YYYY-MM-DD HH:mm'
 
-const Dashboard = ({ commonStore }: { commonStore: CommonStore }) => {
+export default observer(() => {
+  const { commonStore } = useStore()
   useEffect(() => {
-    commonStore.getDashboardInfo()
+    commonStore.getDashboardData()
   }, [])
 
   const { article, comment, user } = commonStore.dashboardInfo
@@ -77,6 +78,4 @@ const Dashboard = ({ commonStore }: { commonStore: CommonStore }) => {
       </Row>
     </div>
   )
-}
-
-export default inject('commonStore')(observer(Dashboard))
+})

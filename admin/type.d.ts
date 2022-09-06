@@ -9,3 +9,9 @@ type ICreateModalProps = {
   type?: 'add' | 'edit'
   record?: Record<string, any>
 }
+
+type IDetailModalProps = {
+  onCancel?: () => void
+  onSuccess?: (args?: any) => void
+  detail?: Record<string, any>
+}

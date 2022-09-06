@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { getDashboardInfo } from '@/actions/common'
+import { getDashboardData } from '@/actions/common'
 
 type IDashboardInfoProps = {
   article?: { count: number }
@@ -18,12 +18,10 @@ export class CommonStore {
     this[key] = value
   }
 
-  async getDashboardInfo(params?: Record<string, any>) {
-    const { data } = await getDashboardInfo(params)
+  async getDashboardData(params?: Record<string, any>) {
+    const { data } = await getDashboardData(params)
     if (data) {
       this.set('dashboardInfo', data)
     }
   }
 }
-
-export default new CommonStore()

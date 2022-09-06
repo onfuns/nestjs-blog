@@ -1,12 +1,14 @@
 import { Menu, Dropdown } from 'antd'
 import { getLocalUser, logoutUser } from '@/actions/user'
-import styles from './style.less'
+import styles from './style.module.less'
 import { LogoutOutlined } from '@ant-design/icons'
 import AvatarImage from '@/assets/images/avatar.png'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
+import { useStore } from '@/hooks'
 
-const Header = ({ headerStore }) => {
+export default observer(() => {
+  const { headerStore } = useStore()
   const { userName } = getLocalUser()
   const MenuIcon = headerStore.menuCollapsed ? MenuUnfoldOutlined : MenuFoldOutlined
   return (
@@ -37,6 +39,4 @@ const Header = ({ headerStore }) => {
       </div>
     </div>
   )
-}
-
-export default inject('headerStore')(observer(Header))
+})

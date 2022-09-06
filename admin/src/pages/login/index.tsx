@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Form, Input, Button, Carousel, message } from 'antd'
-import styles from './style.less'
+import styles from './style.module.less'
 import { history } from 'umi'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { saveLocalUser, loginUser } from '@/actions/user'

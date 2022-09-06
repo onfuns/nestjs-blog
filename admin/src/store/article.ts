@@ -3,7 +3,7 @@ import {
   getArticleList,
   updateArticle,
   addArticle,
-  getArticleInfoById,
+  getArticle,
   deleteArticle,
 } from '@/actions/article'
 
@@ -39,11 +39,9 @@ export class ArticleStore {
   }
 
   async getInfoById(id: number) {
-    const { data } = await getArticleInfoById(id)
+    const { data } = await getArticle(id)
     if (data) {
       this.set('detail', data)
     }
   }
 }
-
-export default new ArticleStore()

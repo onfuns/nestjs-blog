@@ -33,5 +33,3 @@ export class RoleStore {
     return await deleteRole(id)
   }
 }
-
-export default new RoleStore()

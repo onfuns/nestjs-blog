@@ -44,5 +44,3 @@ export class HeaderStore {
     this.menuCollapsed = !this.menuCollapsed
   }
 }
-
-export default new HeaderStore()

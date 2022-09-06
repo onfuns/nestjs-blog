@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
-import { Link, useLocation } from 'umi'
+import { useLocation, history } from 'umi'
 import { Menu } from 'antd'
-import styles from './style.less'
+import styles from './style.module.less'
 import { baseRoutes } from '@/routes'
-import { inject, observer } from 'mobx-react'
-import { HeaderStore } from '@/store'
+import { observer } from 'mobx-react'
 import { HomeOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons'
 import classnames from 'classnames'
 import Logo from '@/public/images/logo.png'
+import { useStore } from '@/hooks'
 
-const SubMenu = Menu.SubMenu
-const MenuComp = ({ headerStore }: { headerStore?: HeaderStore }) => {
+export default observer(() => {
+  const { headerStore } = useStore()
   const { pathname } = useLocation()
   const getOpenKeys = () => {
     const paths = pathname
@@ -23,32 +23,20 @@ const MenuComp = ({ headerStore }: { headerStore?: HeaderStore }) => {
 
   const renderIcon = (icon: string) => {
     const icons = {
-      home: HomeOutlined,
-      portal: AppstoreOutlined,
-      setting: SettingOutlined,
+      '/dashboard': HomeOutlined,
+      '/portal': AppstoreOutlined,
+      '/setting': SettingOutlined,
     }
     return icon ? React.createElement(icons[icon]) : null
   }
 
-  const renderMenu = (list: any[]) => {
-    const renderMenuItem = item => (
-      <Menu.Item key={item.path} icon={renderIcon(item.icon)}>
-        <Link to={item.path}>{item.name}</Link>
-      </Menu.Item>
-    )
-
-    return list.map(item => {
-      if (item?.children?.length) {
-        return (
-          <SubMenu key={item.path} title={item.name} icon={renderIcon(item.icon)}>
-            {item.children.map(renderMenuItem)}
-          </SubMenu>
-        )
-      }
-      return renderMenuItem(item)
-    })
-  }
-
+  const menuItems = baseRoutes.map(({ name, path, children }) => {
+    const subRoute = children?.map(child => ({
+      label: child.name,
+      key: child.path,
+    }))
+    return { label: name, key: path, children: subRoute, icon: renderIcon(path) }
+  })
   const { menuCollapsed } = headerStore
 
   return (
@@ -69,11 +57,10 @@ const MenuComp = ({ headerStore }: { headerStore?: HeaderStore }) => {
           openKeys={openKeys}
           selectedKeys={[pathname]}
           onOpenChange={keys => setOpenKeys([...keys])}
-        >
-          {renderMenu(baseRoutes)}
-        </Menu>
+          items={menuItems}
+          onClick={e => history.push(e.key)}
+        />
       </div>
     </div>
   )
-}
-export default inject('headerStore')(observer(MenuComp))
+})

@@ -1,19 +1,14 @@
 import React, { useEffect } from 'react'
 import { Tabs } from 'antd'
-import { inject, observer } from 'mobx-react'
-import { HeaderStore } from '@/store'
+import { observer } from 'mobx-react'
 import { history } from 'umi'
 import { toJS } from 'mobx'
-import styles from './style.less'
+import styles from './style.module.less'
+import { useStore } from '@/hooks'
 
-interface IProps {
-  headerStore: HeaderStore
-  children?: React.ReactChildren
-  route: { routes: any[] }
-}
-
-const TagPanel = (props: IProps) => {
-  const { headerStore, route } = props
+export default observer((props: { children?: React.ReactChildren; route: { routes: any[] } }) => {
+  const { route } = props
+  const { headerStore } = useStore()
   const { pathname, state, search } = history.location
 
   const onTabChange = ({ path }) => {
@@ -58,6 +53,4 @@ const TagPanel = (props: IProps) => {
       </Tabs>
     </div>
   ) : null
-}
-
-export default inject('headerStore')(observer(TagPanel))
+})
