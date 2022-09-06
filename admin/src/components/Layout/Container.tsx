@@ -7,7 +7,7 @@ import MutilTab from './MutilTab'
 import { useEffect, useState } from 'react'
 import { getLocalUser, logoutUser } from '@/actions/user'
 
-const Container = (props: { children: ReactChildren }) => {
+const Container = (props: { children: ReactChildren; route: { routes: any[] } }) => {
   const [login, setLogin] = useState(false)
 
   useEffect(() => {
@@ -25,8 +25,8 @@ const Container = (props: { children: ReactChildren }) => {
     <div className={styles.container}>
       <Menu />
       <div className={styles.pageContent}>
-        <Header {...props} />
-        <MutilTab {...props} />
+        <Header />
+        <MutilTab routes={props.route?.routes} />
         <div className={styles.contentBody}>
           <div className={styles.content}>{props.children}</div>
         </div>

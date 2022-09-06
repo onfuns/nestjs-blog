@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Tabs } from 'antd'
 import { observer } from 'mobx-react'
 import { history } from 'umi'
@@ -6,8 +6,7 @@ import { toJS } from 'mobx'
 import styles from './style.module.less'
 import { useStore } from '@/hooks'
 
-export default observer((props: { children?: React.ReactChildren; route: { routes: any[] } }) => {
-  const { route } = props
+export default observer((props: { routes: any[] }) => {
   const { headerStore } = useStore()
   const { pathname, state, search } = history.location
 
@@ -22,7 +21,7 @@ export default observer((props: { children?: React.ReactChildren; route: { route
 
   //params 为 state,search 集合，每次更新路由都更新到最新的数组里缓存
   const onChangeRouter = (path, { state, search = '' }) => {
-    const router = route?.routes?.find((item: any) => item.path === path) || {}
+    const router = props.routes?.find((item: any) => item.path === path) || {}
     headerStore?.updateTab({ ...router, state, search })
     headerStore?.setCurrentTabPath(path)
   }
