@@ -6,7 +6,8 @@
     "prebuild": "rimraf dist",
     "start:dev": "cross-env PORT=4002 umi dev",
     "build": "umi build",
-    "format": "prettier --write \"src/**/*.{ts,tsx}\""
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
@@ -34,9 +35,13 @@
     "wangeditor": "^4.7.12"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.36.2",
+    "@typescript-eslint/parser": "^5.36.2",
     "@umijs/preset-react": "^1.8.22",
     "antd-dayjs-webpack-plugin": "^1.0.6",
     "cross-env": "^7.0.3",
+    "eslint": "^8.23.0",
+    "eslint-plugin-react": "^7.31.7",
     "lint-staged": "^11.1.2",
     "rimraf": "^3.0.2",
     "stylelint": "^14.8.2",

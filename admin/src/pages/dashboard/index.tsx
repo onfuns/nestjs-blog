@@ -58,7 +58,7 @@ export default observer(() => {
                         <span style={{ marginRight: 5 }}>{name}</span>
                         <Space>
                           在
-                          <a target="_blank" href={`/article/${article?.id}`}>
+                          <a target="_blank" href={`/article/${article?.id}`} rel="noreferrer">
                             {article?.title}
                           </a>
                           评论

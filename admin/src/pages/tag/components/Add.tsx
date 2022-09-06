@@ -7,7 +7,7 @@ export default ({ onSuccess, onCancel, detail }: IDetailModalProps) => {
   const [form] = Form.useForm()
 
   useEffect(() => {
-    if (!!detail.id) {
+    if (detail.id) {
       form.setFieldsValue({ ...detail })
     }
   }, [])
@@ -17,7 +17,7 @@ export default ({ onSuccess, onCancel, detail }: IDetailModalProps) => {
       const params = {
         ...values,
       }
-      if (!!detail.id) {
+      if (detail.id) {
         await tagStore.update(detail.id, params)
       } else {
         await tagStore.add(params)

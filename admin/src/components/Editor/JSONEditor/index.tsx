@@ -3,7 +3,15 @@ import { default as MonacoEditor, loader } from '@monaco-editor/react'
 import prettier from 'prettier/standalone'
 import parserBabel from 'prettier/parser-babel'
 
-export default ({ height = '500px', value = '', onChange }) => {
+export default function JSONEditor({
+  height = '500px',
+  value = '',
+  onChange,
+}: {
+  height?: string
+  value?: string
+  onChange: (args?: any) => void
+}) {
   useEffect(() => {
     Promise.all([loader.init(), import(`monaco-themes/themes/Solarized-light.json`)]).then(
       ([monaco, themeData]) => {

@@ -20,7 +20,7 @@ export default observer(() => {
     record: ICreateModalProps['record'] = {},
   ) => {
     const { id = '', sort = 0, pass_flag = 0 } = record
-    let params: any = {}
+    const params: any = {}
 
     if (type === 'delete') {
       await articleStore.delete(id)
@@ -32,7 +32,7 @@ export default observer(() => {
       }
       //审核
       else if (type === 'pass_flag') {
-        params.pass_flag = Number(!Boolean(pass_flag))
+        params.pass_flag = pass_flag === 0 ? 1 : 0
       }
       await articleStore.update(id, params)
     }

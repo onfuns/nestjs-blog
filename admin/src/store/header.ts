@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx'
 import React from 'react'
 
 export type ITabProps = {
-  compoent: Function | React.Component
+  compoent: React.Component
   exact: boolean
   name: string
   path: string
@@ -13,8 +13,8 @@ export type ITabProps = {
 
 export class HeaderStore {
   tab: ITabProps[] = []
-  menuCollapsed: boolean = false
-  currentTabPath: string = ''
+  menuCollapsed = false
+  currentTabPath = ''
 
   constructor() {
     makeAutoObservable(this)

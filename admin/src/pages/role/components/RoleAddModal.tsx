@@ -8,7 +8,7 @@ export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => 
   const [form] = Form.useForm()
 
   useEffect(() => {
-    if (!!detail.id) {
+    if (detail.id) {
       form.setFieldsValue({ ...detail })
     }
   }, [])
@@ -18,7 +18,7 @@ export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => 
       const params = {
         ...values,
       }
-      if (!!detail.id) {
+      if (detail.id) {
         await roleStore.update(detail.id, params)
       } else {
         await roleStore.add(params)

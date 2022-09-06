@@ -10,7 +10,7 @@ export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => 
   const categoryType = Form.useWatch('type', form)
 
   useEffect(() => {
-    if (!!detail.id) {
+    if (detail.id) {
       form.setFieldsValue({ ...detail, pid: [detail.pid] })
     }
   }, [])
@@ -20,7 +20,7 @@ export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => 
       const params = {
         ...values,
       }
-      if (!!detail.id) {
+      if (detail.id) {
         await categoryStore.update(detail.id, params)
       } else {
         await categoryStore.add(params)

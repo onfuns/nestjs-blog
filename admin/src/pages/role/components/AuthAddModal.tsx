@@ -10,7 +10,7 @@ export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => 
   const [form] = Form.useForm()
 
   useEffect(() => {
-    if (!!detail.id) {
+    if (detail.id) {
       console.log(findAllPid(detail.id))
       form.setFieldsValue({ ...detail, pid: detail.pid ? findAllPid(detail.id) : undefined })
     }
@@ -32,7 +32,7 @@ export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => 
         ...values,
         pid: values.pid.pop(),
       }
-      if (!!detail.id) {
+      if (detail.id) {
         await authStore.update(detail.id, params)
       } else {
         await authStore.add(params)

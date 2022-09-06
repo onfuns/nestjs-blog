@@ -24,7 +24,7 @@ export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => 
         ...values,
         roles: values.roles.map(id => ({ id })),
       }
-      if (!!detail.id) {
+      if (detail.id) {
         await userStore.update(detail.id, params)
       } else {
         params.password = md5(values.password)

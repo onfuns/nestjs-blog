@@ -3,7 +3,9 @@ export class Cache {
     let value = localStorage.getItem(key)
     try {
       value = JSON.parse(value)
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
     return value
   }
   set(key: string, value: any) {
