@@ -11,7 +11,7 @@ import PageFooter from '@/components/Layout/Footer'
 import '@/styles/global.css'
 import '@/utils/dayjs'
 
-export default function CustomApp({ Component, pageProps = {}, initialMobxState }) {
+export default function CustomApp({ Component, pageProps = {}, initialMobxState }: any) {
   const stores = isServer ? initialMobxState : useStore()
 
   return (

@@ -4,7 +4,7 @@ import { Pagination } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 
-export default function List({ data, count = 0 }) {
+export default function List({ data, count = 0 }: { data: any[]; count: number }) {
   const router = useRouter()
 
   const onPaginationChange = page => {

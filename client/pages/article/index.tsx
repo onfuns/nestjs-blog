@@ -6,7 +6,13 @@ import ArticleMenu from '@/components/Article/Menu'
 import CarouselPanel from '@/components/CarouselPanel'
 import { findByValue } from '@/utils/util'
 
-export default function Article({ categoryList, articleData }) {
+export default function Article({
+  categoryList,
+  articleData,
+}: {
+  categoryList: any[]
+  articleData: { data: any[]; count: number }
+}) {
   return (
     <div className={classnames('page-container', styles.page)}>
       <ArticleMenu data={categoryList} />

@@ -19,7 +19,7 @@ export default function Anchor() {
           //锚点区域如果高度过出现滚动条则自动滚动到可视区域
           const anchor: HTMLElement = document.querySelector('.anchor-list')
           if (anchor.offsetHeight > 600) {
-            const top = (document.querySelectorAll('[anchor-index]')[index] as HTMLElement)
+            const top = (document.querySelectorAll('[data-anchor-index]')[index] as HTMLElement)
               .offsetTop
             //滚动到距离列表顶部 250 位置
             anchor.offsetParent.scrollTo({
@@ -54,7 +54,7 @@ export default function Anchor() {
         {data.map((item, index) => (
           <li
             key={index}
-            anchor-index={item.index}
+            data-anchor-index={item.index}
             className={classnames({
               ['anchor-item']: true,
               [styles.anchorItem]: true,

@@ -2,7 +2,7 @@ import styles from './style.module.less'
 import classnames from 'classnames'
 import { useRouter } from 'next/router'
 
-const MenuPanel = ({ data = [] }) => {
+const MenuPanel = ({ data = [] }: { data: any[] }) => {
   const router = useRouter()
   const url = router.asPath
   const isActive = item => url.replace('/category', '') === item.ename || url === item.url

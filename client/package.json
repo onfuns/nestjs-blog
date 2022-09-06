@@ -8,7 +8,8 @@
     "start:dev": "cross-env NODE_ENV=development next dev -p 4001",
     "start:prod": "NODE_ENV=production next start -p 4001",
     "start:pm2": "pm2 start pm2-app.json",
-    "build": "next build"
+    "build": "next build",
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {
     "@fontsource/jetbrains-mono": "^4.5.0",
@@ -35,8 +36,12 @@
   },
   "devDependencies": {
     "@types/react": "^17.0.38",
+    "@typescript-eslint/eslint-plugin": "^5.36.2",
+    "@typescript-eslint/parser": "^5.36.2",
     "babel-plugin-import": "^1.13.3",
     "cross-env": "^7.0.3",
+    "eslint": "^8.23.0",
+    "eslint-plugin-react": "^7.31.7",
     "rimraf": "^3.0.2",
     "typescript": "^4.5.4"
   }

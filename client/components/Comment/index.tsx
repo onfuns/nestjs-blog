@@ -72,7 +72,7 @@ export default observer(({ articeId }: { articeId: string }) => {
                 <img className={styles.avatar} src="/image/avatar.png" />
                 <div className={styles.listRow}>
                   <div className={styles.listMeta}>
-                    <a href={item.url} target="_blank" className={styles.name}>
+                    <a href={item.url} target="_blank" rel="noreferrer" className={styles.name}>
                       {item.name}
                     </a>
                     <span className={styles.time}>{dayjs(item.created_at).fromNow()}</span>
