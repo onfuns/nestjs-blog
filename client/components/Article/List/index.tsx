@@ -4,13 +4,13 @@ import { Pagination } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 
-const ListItem = ({ data, count = 0 }) => {
+export default function List({ data, count = 0 }) {
   const router = useRouter()
+
   const onPaginationChange = page => {
     const { origin, pathname } = window.location
     window.open(`${origin}${pathname}?page=${page}`, '_self')
   }
-  const currentPage = router?.query?.page || 1
 
   return (
     <div className={styles.list}>
@@ -42,18 +42,18 @@ const ListItem = ({ data, count = 0 }) => {
           </div>
         ),
       )}
-      <div className={styles.pagination}>
-        <Pagination
-          defaultCurrent={currentPage as number}
-          total={count}
-          size="small"
-          pageSize={20}
-          hideOnSinglePage
-          onChange={onPaginationChange}
-        />
-      </div>
+      {count > 20 && (
+        <div className={styles.pagination}>
+          <Pagination
+            defaultCurrent={(router?.query?.page || 1) as number}
+            total={count}
+            size="small"
+            pageSize={20}
+            hideOnSinglePage
+            onChange={onPaginationChange}
+          />
+        </div>
+      )}
     </div>
   )
 }
-
-export default ListItem

@@ -1,6 +1,11 @@
 export const isServer = typeof window === 'undefined'
 
-export const findByValue = (array, key, value, { childKey = 'children' } = {}) => {
+export const findByValue = (
+  array: any[],
+  key: string,
+  value: string | number,
+  { childKey = 'children' } = {},
+) => {
   let obj: any
   array.some(function iter(item) {
     if (item[key] === value) {

@@ -4,17 +4,25 @@ import styles from './style.module.less'
 import classnames from 'classnames'
 import Anchor from '@/components/Article/Anchor'
 import Comment from '@/components/Comment'
-import { parseHtml } from '@/utils/dom'
 import dayjs from 'dayjs'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
 
-const ArticleInfo = ({ info }) => {
-  const { id, title, content, category, tags, created_at, comment_flag } = info || {}
-  const { anchor } = parseHtml(content)
+type IArticle = {
+  id: string
+  title: string
+  content: string
+  category?: { id: number; name: string }
+  tags?: { id: number; name: string }[]
+  created_at: string
+  comment_flag: 0 | 1
+}
+
+export default function ArticleInfo({ article }: { article: IArticle }) {
+  const { id, title, content, category, tags, created_at, comment_flag } = article || {}
 
   return (
-    <div className={classnames('container', styles.infoPage)}>
+    <div className={classnames('page-container', styles.page)}>
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.title}>{title}</div>
@@ -26,21 +34,21 @@ const ArticleInfo = ({ info }) => {
             <span>
               <i className="iconfont icon-leimupinleifenleileibie"></i>分类：{category.name}
             </span>
-            {tags?.length ? (
+            {tags?.length > 0 && (
               <span>
                 <i className="iconfont icon-biaoqian1"></i>标签：
                 {tags.map(({ name }, index) => (
                   <i key={index}>{name}</i>
                 ))}
               </span>
-            ) : null}
+            )}
           </div>
           <div
             className={classnames(styles.htmlContent, 'markdown-body')}
             dangerouslySetInnerHTML={{ __html: content }}
           ></div>
         </div>
-        <Anchor data={anchor} />
+        <Anchor />
       </div>
       {comment_flag === 1 && <Comment articeId={id} />}
     </div>
@@ -49,9 +57,8 @@ const ArticleInfo = ({ info }) => {
 
 export const getServerSideProps = async ({ req, params }) => {
   const { articleStore } = req.mobxStore
-  await articleStore.getInfoById(params?.id)
-  const { info } = articleStore
-  info.content = markdownIt({
+  const article = await articleStore.getInfoById(params?.id)
+  article.content = markdownIt({
     html: true,
     highlight: function (str, lang) {
       if (lang && hljs.getLanguage(lang)) {
@@ -61,16 +68,14 @@ export const getServerSideProps = async ({ req, params }) => {
           console.log(error)
         }
       }
-      return ''
+      return null
     },
   })
     .use(markdownItAnchor)
-    .render(info.content)
+    .render(article.content)
   return {
     props: {
-      info,
+      article,
     },
   }
 }
-
-export default ArticleInfo

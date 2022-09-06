@@ -1,6 +1,7 @@
 import { Carousel } from 'antd'
 import styles from './style.module.less'
-const CarouselPanel = () => {
+
+export default function CarouselPanel() {
   const carouselList = [
     {
       url: 'https://hao.onfuns.com/',
@@ -9,13 +10,11 @@ const CarouselPanel = () => {
   ]
   return (
     <Carousel autoplay className={styles.carouselPanel}>
-      {carouselList.map((c, index) => (
-        <a key={index} className={styles.carouselItem} href={c.url} target="__blank">
-          <img src={c.img} />
+      {carouselList.map((carousel, index) => (
+        <a key={index} className={styles.carouselItem} href={carousel.url} target="__blank">
+          <img src={carousel.img} />
         </a>
       ))}
     </Carousel>
   )
 }
-
-export default CarouselPanel

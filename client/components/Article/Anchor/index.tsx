@@ -2,12 +2,12 @@ import classnames from 'classnames'
 import { useState, useEffect } from 'react'
 import styles from './style.module.less'
 
-export default function Anchor({ data = [] }) {
+export default function Anchor() {
   const [currentHeadingIndex, setCurrentHeadingIndex] = useState(0)
+  const [data, setData] = useState([])
 
   useEffect(() => {
-    const root = document.querySelector('.markdown-body')
-    const headings = root.querySelectorAll('h1,h2,h3,h4,h5,h6')
+    const headings = document.querySelector('.markdown-body').querySelectorAll('h1,h2,h3,h4,h5,h6')
 
     const observer = new IntersectionObserver(
       entries => {
@@ -31,17 +31,21 @@ export default function Anchor({ data = [] }) {
       },
       { threshold: [1] },
     )
-    headings.forEach(node => observer.observe(node))
+    const data = []
+    headings.forEach((node, index) => {
+      observer.observe(node)
+      data.push({ title: node.textContent, tagName: node.tagName, index })
+    })
+    setData(data)
     return () => {
       headings.forEach(node => observer.unobserve(node))
     }
   }, [])
 
   const onChange = ({ index }) => {
-    const root = document.querySelector('.markdown-body')
-    const headings = root.querySelectorAll('h1,h2,h3,h4,h5,h6')
+    const headings = document.querySelector('.markdown-body').querySelectorAll('h1,h2,h3,h4,h5,h6')
     setCurrentHeadingIndex(index)
-    headings[index].scrollIntoView()
+    headings[index].scrollIntoView({ behavior: 'smooth' })
   }
 
   return (

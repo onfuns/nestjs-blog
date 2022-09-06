@@ -17,5 +17,3 @@ export class CategoryStore {
     this.set('result', data || [])
   }
 }
-
-export default new CategoryStore()

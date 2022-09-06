@@ -9,13 +9,16 @@
   width: 100%;
   animation-duration: 0.5s;
   animation-fill-mode: both;
-  &.up {
+
+  &.slideUp {
     animation-name: slideUp;
   }
-  &.down {
+
+  &.slideDown {
     animation-name: slideDown;
     box-shadow: 0 1px 5px rgb(0 0 0 / 10%);
   }
+
   @keyframes slideUp {
     0% {
       transform: translateY(0);

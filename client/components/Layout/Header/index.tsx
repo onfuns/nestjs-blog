@@ -1,20 +1,21 @@
 import { useEffect, useRef } from 'react'
 import styles from './style.module.less'
 import classnames from 'classnames'
+import Head from 'next/head'
 
 export default function Header() {
-  const ref = useRef()
+  const headerRef = useRef()
 
   useEffect(() => {
     let top = window.scrollY
     const onScroll = () => {
-      const classList = (ref.current as HTMLElement).classList
+      const classList = (headerRef.current as HTMLElement).classList
       if (window.scrollY > top) {
-        classList.add(styles.up)
-        classList.remove(styles.down)
+        classList.add(styles.slideUp)
+        classList.remove(styles.slideDown)
       } else {
-        classList.add(styles.down)
-        classList.remove(styles.up)
+        classList.add(styles.slideDown)
+        classList.remove(styles.slideUp)
       }
       top = window.scrollY
     }
@@ -25,8 +26,17 @@ export default function Header() {
   }, [])
 
   return (
-    <div className={styles.header} ref={ref}>
-      <div className={classnames('container', styles.headerContent)}>
+    <div className={styles.header} ref={headerRef}>
+      <Head>
+        <meta content="text/html; charset=utf-8" httpEquiv="Content-Type" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="description" content="node博客系统" />
+        <meta name="keywords" content="node博客,nodejs博客,博客搭建" />
+        <link rel="shortcut icon" href="/image/logo.png" />
+        <script src="/plugin/analysis.js" defer></script>
+        <title>Nest-Blog演示系统</title>
+      </Head>
+      <div className={classnames('page-container', styles.headerContent)}>
         <a href="/" className={styles.logo}>
           Nest-Blog
         </a>

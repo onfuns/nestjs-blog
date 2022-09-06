@@ -1,25 +1,15 @@
+import { createContext } from 'react'
 import { enableStaticRendering } from 'mobx-react'
-import { default as articleStore, ArticleStore } from './article'
-import { default as categoryStore, CategoryStore } from './category'
-import { default as commentStore, CommentStore } from './comment'
+import { ArticleStore } from './article'
+import { CategoryStore } from './category'
+import { CommentStore } from './comment'
 import { isServer } from '@/utils/util'
 enableStaticRendering(isServer)
 
-export { ArticleStore, CategoryStore, CommentStore }
-
-const stories = {
-  articleStore,
-  categoryStore,
-  commentStore,
+export const RootStore = {
+  articleStore: new ArticleStore(),
+  categoryStore: new CategoryStore(),
+  commentStore: new CommentStore(),
 }
 
-let store = null
-export default function initializeStore() {
-  if (isServer) {
-    return stories
-  }
-  if (store === null) {
-    store = stories
-  }
-  return store
-}
+export const storesContext = createContext(RootStore)

@@ -21,5 +21,3 @@ export class CommentStore {
     return await addComment(params)
   }
 }
-
-export default new CommentStore()

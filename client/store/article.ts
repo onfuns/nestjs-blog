@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { getArticleList, getArticleInfoById } from '@/actions/article'
+import { getArticleList, getArticle } from '@/actions/article'
 
 export class ArticleStore {
   result = { data: [], count: 0 }
@@ -20,9 +20,8 @@ export class ArticleStore {
   }
 
   async getInfoById(id) {
-    const { data } = await getArticleInfoById({ id })
+    const { data } = await getArticle({ id })
     this.set('info', data || {})
+    return this.info
   }
 }
-
-export default new ArticleStore()

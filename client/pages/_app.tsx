@@ -1,33 +1,38 @@
+import { Provider } from 'mobx-react'
+import { ConfigProvider } from 'antd'
+import antd_zh_CN from 'antd/lib/locale/zh_CN'
 import '@fontsource/jetbrains-mono'
-import Layout from '@/components/Layout'
-import initializeStore from '@/store'
+import { useStore } from '@/hooks'
 import { isServer } from '@/utils/util'
 import App from 'next/app'
+import { RootStore } from '@/store'
+import PageHeader from '@/components/Layout/Header'
+import PageFooter from '@/components/Layout/Footer'
 import '@/styles/global.css'
 import '@/utils/dayjs'
 
-const CustomApp = ({ Component, pageProps = {}, initialMobxState }) => {
-  const stores = isServer ? initialMobxState : initializeStore()
+export default function CustomApp({ Component, pageProps = {}, initialMobxState }) {
+  const stores = isServer ? initialMobxState : useStore()
 
   return (
-    <Layout store={stores}>
-      <Layout.Header />
-      <div className="main-container">
-        <Component {...pageProps} />
-      </div>
-      <Layout.Footer />
-    </Layout>
+    <Provider {...stores}>
+      <ConfigProvider locale={antd_zh_CN}>
+        <PageHeader />
+        <div className="main-container">
+          <Component {...pageProps} />
+        </div>
+        <PageFooter />
+      </ConfigProvider>
+    </Provider>
   )
 }
 
 CustomApp.getInitialProps = async function (appContext) {
-  const mobxStore = initializeStore()
-  appContext.ctx.req.mobxStore = mobxStore
+  const mobxStore = RootStore
+  appContext.ctx.req.mobxStore = RootStore
   const appProps = await App.getInitialProps(appContext)
   return {
     ...appProps,
     initialMobxState: mobxStore,
   }
 }
-
-export default CustomApp

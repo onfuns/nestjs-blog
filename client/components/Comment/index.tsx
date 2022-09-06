@@ -2,35 +2,26 @@ import { useEffect } from 'react'
 import { Input, Button, Form, Row, Col, message } from 'antd'
 import dayjs from 'dayjs'
 import styles from './style.module.less'
-import { inject, observer } from 'mobx-react'
-import { CommentStore } from '@/store'
+import { observer } from 'mobx-react'
+import { useStore } from '@/hooks'
 
-interface IProps {
-  articeId: string
-  commentStore?: CommentStore
-}
-
-const Comment = ({ articeId, commentStore }: IProps) => {
+export default observer(({ articeId }: { articeId: string }) => {
+  const { commentStore } = useStore()
   const [form] = Form.useForm()
 
-  const onSubmit = () => {
-    form.validateFields().then(async values => {
-      const { success } = await commentStore.add({ ...values, aid: articeId })
-      if (success) {
-        message.success('评论成功，请耐心等待审核哦~')
-        form.resetFields()
-      } else {
-        message.error('失败啦，歇会再试吧~')
-      }
-    })
-  }
-
-  const loadData = () => {
-    if (articeId) commentStore.get({ aid: articeId })
+  const onSubmit = async () => {
+    const values = await form.validateFields()
+    const { success } = await commentStore.add({ ...values, aid: articeId })
+    if (success) {
+      message.success('评论成功，请耐心等待审核哦~')
+      form.resetFields()
+    } else {
+      message.error('失败啦，歇会再试吧~')
+    }
   }
 
   useEffect(() => {
-    loadData()
+    if (articeId) commentStore.get({ aid: articeId })
   }, [])
 
   const { result: { data = [] } = {} } = commentStore
@@ -72,7 +63,7 @@ const Comment = ({ articeId, commentStore }: IProps) => {
         </Form>
       </div>
 
-      {data.length ? (
+      {data?.length > 0 && (
         <div className={styles.listContent}>
           <div className={styles.header}>全部评论</div>
           <div className={styles.list}>
@@ -93,9 +84,7 @@ const Comment = ({ articeId, commentStore }: IProps) => {
             ))}
           </div>
         </div>
-      ) : null}
+      )}
     </div>
   )
-}
-
-export default inject('commentStore')(observer(Comment))
+})
