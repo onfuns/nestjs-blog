@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common'
 import { CommonService } from './common.service'
 import { FilesInterceptor } from '@nestjs/platform-express'
+import { FileType } from './interface'
 
 @Controller('/common')
 export class CommonController {
@@ -23,10 +24,7 @@ export class CommonController {
 
   @Post('upload/multiple')
   @UseInterceptors(FilesInterceptor('files'))
-  uploadMultiple(
-    @UploadedFiles() files: { originalname: string; mimetype: string; buffer: Buffer }[],
-    @Body('group') group,
-  ) {
+  uploadMultiple(@UploadedFiles() files: FileType[], @Body('group') group) {
     if (files.length > 5) {
       return { success: false, message: '一次最多上传5张图片' }
     }

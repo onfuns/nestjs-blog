@@ -9,6 +9,7 @@ import * as dayjs from 'dayjs'
 import { Upload } from './upload.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+import { FileType } from './interface'
 
 @Injectable()
 export class CommonService {
@@ -34,7 +35,7 @@ export class CommonService {
     }
   }
 
-  async upload(files: { originalname: string; mimetype: string; buffer: Buffer }[], group = null) {
+  async upload(files: FileType[], group = null) {
     const date = dayjs().format('YYYYMMDD')
     const filePath = join('uploads', date)
     const dir = join(__dirname, '../../../', filePath)
@@ -45,7 +46,12 @@ export class CommonService {
       const name = `${uuidv4()}.${fileType}`
       const fileUrl = `${dir}/${name}`
       createWriteStream(fileUrl).write(file.buffer)
-      this.uploadRepository.save({ group, url: join(filePath, name) })
+      this.uploadRepository.save({
+        group,
+        url: join(filePath, name),
+        size: file.size,
+        originalname: file.originalname,
+      })
     }
     return true
   }
