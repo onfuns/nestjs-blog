@@ -9,6 +9,7 @@ import { RoleStore } from './role'
 import { AuthStore } from './auth'
 import { CommentStore } from './comment'
 import { CommonStore } from './common'
+import { FileStore } from './file'
 
 export const RootStore = {
   headerStore: new HeaderStore(),
@@ -20,6 +21,7 @@ export const RootStore = {
   authStore: new AuthStore(),
   commentStore: new CommentStore(),
   commonStore: new CommonStore(),
+  fileStore: new FileStore(),
 }
 
 export const storesContext = createContext(RootStore)

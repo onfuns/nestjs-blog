@@ -38,7 +38,6 @@ export default observer((props: { routes: any[] }) => {
   return tab.length ? (
     <div className={styles.mutilTab}>
       <Tabs
-        style={{ background: '#fff' }}
         activeKey={currentTabPath}
         type="editable-card"
         hideAdd

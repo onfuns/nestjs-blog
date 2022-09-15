@@ -8,9 +8,11 @@ import * as cookieParse from 'cookie-parser'
 import Config from '@/config'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { IS_DEV } from '@/util'
+import { join } from 'path'
+import { NestExpressApplication } from '@nestjs/platform-express'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bodyParser: true,
     logger: IS_DEV ? ['log', 'debug', 'warn', 'error'] : ['warn', 'error'],
   })
@@ -20,6 +22,9 @@ async function bootstrap() {
   app.setGlobalPrefix(Config.base)
   app.enableCors()
   app.use(cookieParse())
+  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+    prefix: '/uploads/',
+  })
 
   const config = new DocumentBuilder()
     .setTitle('API')

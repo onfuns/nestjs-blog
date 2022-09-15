@@ -19,6 +19,9 @@ export default defineConfig({
     '/api': {
       target: 'http://localhost:4000',
     },
+    '/uploads/': {
+      target: 'http://localhost:4000',
+    },
   },
   chunks: ['antd', 'vendors', 'umi'],
   chainWebpack(config) {

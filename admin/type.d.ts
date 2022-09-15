@@ -1,5 +1,5 @@
 type NonFunctionPropertyNames<T> = {
-  [K in keyof T]: T[K] extends () => void ? never : K
+  [K in keyof T]: T[K] extends (...args) => any ? never : K
 }[keyof T]
 
 type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>

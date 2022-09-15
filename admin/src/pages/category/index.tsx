@@ -93,7 +93,6 @@ export default observer(() => {
         actionRef={actionRef}
         columns={columns}
         headerTitle="栏目列表"
-        form={{ autoFocusFirstInput: false }}
         search={false}
         expandable={{
           expandedRowKeys: expandKeys,

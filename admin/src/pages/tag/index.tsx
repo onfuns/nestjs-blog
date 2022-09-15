@@ -62,7 +62,6 @@ export default observer(() => {
         actionRef={actionRef}
         columns={columns}
         headerTitle="标签列表"
-        form={{ autoFocusFirstInput: false }}
         search={false}
         rowKey="id"
         request={async (params = {}) => {

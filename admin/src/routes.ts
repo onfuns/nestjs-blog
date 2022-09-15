@@ -5,7 +5,7 @@ export const baseRoutes = [
     component: '@/pages/dashboard',
   },
   {
-    name: '门户管理',
+    name: '内容管理',
     path: '/portal',
     children: [
       {
@@ -28,10 +28,15 @@ export const baseRoutes = [
         path: '/portal/comment',
         component: '@/pages/comment',
       },
+      {
+        name: '附件管理',
+        path: '/portal/file',
+        component: '@/pages/file',
+      },
     ],
   },
   {
-    name: '系统设置',
+    name: '系统管理',
     path: '/setting',
     children: [
       {
