@@ -1,18 +1,5 @@
-import request from '@/utils/request'
+import api from '@/utils/api'
+
 const url = '/website'
-
-export const getWebsiteConfig = async (params = {}) => {
-  return request({
-    url,
-    method: 'GET',
-    params,
-  })
-}
-
-export const updateWebsiteConfig = async (params = {}) => {
-  return request({
-    url,
-    method: 'POST',
-    params,
-  })
-}
+export const getWebsiteConfig = async params => api.get(url, params)
+export const updateWebsiteConfig = async params => api.post(url, params)

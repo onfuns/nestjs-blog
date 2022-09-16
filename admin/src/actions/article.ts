@@ -1,40 +1,8 @@
-import request from '@/utils/request'
+import api from '@/utils/api'
+
 const url = '/article'
-
-export const getArticleList = async (params = {}) => {
-  return request({
-    url,
-    method: 'GET',
-    params,
-  })
-}
-
-export const getArticle = async id => {
-  return request({
-    url: `${url}/${id}`,
-    method: 'GET',
-  })
-}
-
-export const addArticle = async (params = {}) => {
-  return request({
-    url,
-    method: 'POST',
-    params,
-  })
-}
-
-export const updateArticle = async (id, params = {}) => {
-  return request({
-    url: `${url}/${id}`,
-    method: 'PUT',
-    params,
-  })
-}
-
-export const deleteArticle = async id => {
-  return request({
-    url: `${url}/${id}`,
-    method: 'DELETE',
-  })
-}
+export const getArticleList = async params => api.get(url, params)
+export const getArticle = async (id: string, params) => api.get(`${url}/${id}`, params)
+export const addArticle = async params => api.post(url, params)
+export const updateArticle = async (id: string, params) => api.put(`${url}/${id}`, params)
+export const deleteArticle = async (id: string) => api.delete(`${url}/${id}`)

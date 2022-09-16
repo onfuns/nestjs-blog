@@ -1,33 +1,7 @@
-import request from '@/utils/request'
+import api from '@/utils/api'
+
 const url = '/role'
-
-export const getRoleList = async (params = {}) => {
-  return request({
-    url,
-    method: 'GET',
-    params,
-  })
-}
-
-export const addRole = async (params = {}) => {
-  return request({
-    url,
-    method: 'POST',
-    params,
-  })
-}
-
-export const updateRole = async (id, params = {}) => {
-  return request({
-    url: `${url}/${id}`,
-    method: 'PUT',
-    params,
-  })
-}
-
-export const deleteRole = async id => {
-  return request({
-    url: `${url}/${id}`,
-    method: 'DELETE',
-  })
-}
+export const getRoleList = async params => api.get(url, params)
+export const addRole = async params => api.post(url, params)
+export const updateRole = async (id: number, params) => api.get(`${url}/${id}`, params)
+export const deleteRole = async (id: number) => api.delete(`${url}/${id}`)

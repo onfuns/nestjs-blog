@@ -1,18 +1,20 @@
-import { useEffect } from 'react'
 import { Row, Col, Card, List, Space } from 'antd'
 import styles from './style.module.less'
-import { observer } from 'mobx-react'
 import dayjs from 'dayjs'
-import { useStore } from '@/hooks'
-const formatDate = 'YYYY-MM-DD HH:mm'
+import { useFetch } from '@/hooks'
+import { getDashboardData } from '@/actions/common'
+const timeFormat = 'YYYY-MM-DD HH:mm:ss'
 
-export default observer(() => {
-  const { commonStore } = useStore()
-  useEffect(() => {
-    commonStore.getDashboardData()
-  }, [])
+type IDashboardInfoProps = {
+  article?: { count: number }
+  comment?: { count: number; data: any[] }
+  user?: Record<any, string>
+}
 
-  const { article, comment, user } = commonStore.dashboardInfo
+export default () => {
+  const res = useFetch(getDashboardData)
+  const { article, comment, user } = res?.data || ({} as IDashboardInfoProps)
+
   const countData = [
     { title: '文章总数', value: article?.count || 0 },
     { title: '评论总数', value: comment?.count || 0 },
@@ -37,7 +39,7 @@ export default observer(() => {
         <Col span={8}>
           <Card title="用户信息">
             <p>
-              上次登录时间： {user?.last_login_at && dayjs(user?.last_login_at).format(formatDate)}
+              上次登录时间： {user?.last_login_at && dayjs(user?.last_login_at).format(timeFormat)}
             </p>
             <p>上次登录IP： {user?.last_login_ip?.replace('::ffff:', '')}</p>
           </Card>
@@ -49,26 +51,30 @@ export default observer(() => {
             <List
               itemLayout="horizontal"
               dataSource={comment?.data || []}
-              renderItem={({ name, article, created_at, content }) => (
+              renderItem={(record: any) => (
                 <List.Item>
                   <List.Item.Meta
                     style={{ width: '100%' }}
                     title={
                       <>
-                        <span style={{ marginRight: 5 }}>{name}</span>
+                        <span style={{ marginRight: 5 }}>{record.name}</span>
                         <Space>
                           在
-                          <a target="_blank" href={`/article/${article?.id}`} rel="noreferrer">
-                            {article?.title}
+                          <a
+                            target="_blank"
+                            href={`/article/${record?.article?.id}`}
+                            rel="noreferrer"
+                          >
+                            {record?.article?.title}
                           </a>
                           评论
                         </Space>
                         <span style={{ float: 'right' }}>
-                          {created_at && dayjs(created_at).format(formatDate)}
+                          {record.created_at && dayjs(record.created_at).format(timeFormat)}
                         </span>
                       </>
                     }
-                    description={content}
+                    description={record.content}
                   />
                 </List.Item>
               )}
@@ -78,4 +84,4 @@ export default observer(() => {
       </Row>
     </div>
   )
-})
+}

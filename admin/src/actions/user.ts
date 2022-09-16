@@ -1,60 +1,17 @@
-import request from '@/utils/request'
 import Cache from '@/utils/cache'
 import { LOCAL_USER_KEY } from '@/constants'
+import api from '@/utils/api'
+
 const url = '/user'
-
-export const getUserList = async (params = {}) => {
-  return request({
-    url,
-    method: 'GET',
-    params,
-  })
-}
-
-export const addUser = async (params = {}) => {
-  return request({
-    url,
-    method: 'POST',
-    params,
-  })
-}
-
-export const updateUser = async (id, params = {}) => {
-  return request({
-    url: `${url}/${id}`,
-    method: 'PUT',
-    params,
-  })
-}
-
-export const deleteUser = async id => {
-  return request({
-    url: `${url}/${id}`,
-    method: 'POST',
-  })
-}
-
-export const loginUser = async (params = {}) => {
-  return request({
-    url: `${url}/login`,
-    method: 'POST',
-    params,
-  })
-}
-
-export const logoutUser = async () => {
+export const getUserList = async params => api.get(url, params)
+export const addUser = async params => api.post(url, params)
+export const updateUser = async (id: number, params) => api.get(`${url}/${id}`, params)
+export const deleteUser = async (id: number) => api.delete(`${url}/${id}`)
+export const loginUser = async params => api.post(`${url}/login`, params)
+export const logoutUser = () => {
   removeLocalUser()
   window.location.href = '/admin/login'
 }
-
-export const saveLocalUser = data => {
-  Cache.set(LOCAL_USER_KEY, data)
-}
-
-export const getLocalUser = (): any => {
-  return Cache.get(LOCAL_USER_KEY) || {}
-}
-
-export const removeLocalUser = () => {
-  Cache.remove(LOCAL_USER_KEY)
-}
+export const saveLocalUser = data => Cache.set(LOCAL_USER_KEY, data)
+export const getLocalUser = (): any => Cache.get(LOCAL_USER_KEY) || {}
+export const removeLocalUser = () => Cache.remove(LOCAL_USER_KEY)

@@ -1,9 +1,3 @@
-import request from '@/utils/request'
+import api from '@/utils/api'
 
-export const getDashboardData = (params = {}) => {
-  return request({
-    url: '/common/dashboard',
-    method: 'GET',
-    params,
-  })
-}
+export const getDashboardData = () => api.get('/common/dashboard')

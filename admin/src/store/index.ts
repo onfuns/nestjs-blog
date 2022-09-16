@@ -8,7 +8,6 @@ import { UserStore } from './user'
 import { RoleStore } from './role'
 import { AuthStore } from './auth'
 import { CommentStore } from './comment'
-import { CommonStore } from './common'
 import { FileStore } from './file'
 import { WebsiteStore } from './website'
 
@@ -21,7 +20,6 @@ export const RootStore = {
   roleStore: new RoleStore(),
   authStore: new AuthStore(),
   commentStore: new CommentStore(),
-  commonStore: new CommonStore(),
   fileStore: new FileStore(),
   websiteStore: new WebsiteStore(),
 }
