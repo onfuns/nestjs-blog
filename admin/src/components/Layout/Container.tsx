@@ -5,33 +5,40 @@ import Menu from './Menu'
 import MutilTab from './MutilTab'
 import { useEffect, useState } from 'react'
 import { getLocalUser, logoutUser } from '@/actions/user'
+import { history } from 'umi'
+import { observer } from 'mobx-react'
+import { useStore } from '@/hooks'
 
-const Container = (props: { children: ReactChildren; route: { routes: any[] } }) => {
+export default observer((props: { children: ReactChildren; route: { routes: any[] } }) => {
   const [login, setLogin] = useState(false)
+  const { headerStore } = useStore()
 
   useEffect(() => {
-    ;(async () => {
+    const load = async () => {
       const { token } = await getLocalUser()
-      if (!token) {
-        logoutUser()
-      } else {
-        setLogin(true)
-      }
-    })()
+      if (!token) logoutUser()
+      setLogin(true)
+    }
+    load()
   }, [])
+
+  const { pathname, state, search } = history.location
+  useEffect(() => {
+    const router = props.route.routes?.find((item: any) => item.path === pathname) || {}
+    headerStore?.updateTab({ ...router, state, search })
+    headerStore?.setCurrentTabPath(pathname)
+  }, [pathname])
 
   return login ? (
     <div className={styles.container}>
       <Menu />
       <div className={styles.pageContent}>
         <Header />
-        <MutilTab routes={props.route?.routes} />
+        <MutilTab />
         <div className={styles.contentBody}>
           <div className={styles.content}>{props.children}</div>
         </div>
       </div>
     </div>
   ) : null
-}
-
-export default Container
+})

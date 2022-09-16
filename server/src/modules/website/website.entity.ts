@@ -8,7 +8,7 @@ export class Website {
   @Column({ comment: '名称', unique: true })
   name: string
 
-  @Column({ comment: '值', nullable: true })
+  @Column({ comment: '值', nullable: true, type: 'text' })
   value: string
 
   @CreateDateColumn()

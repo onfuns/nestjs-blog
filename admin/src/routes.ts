@@ -49,6 +49,11 @@ export const baseRoutes = [
         path: '/setting/role',
         component: '@/pages/role',
       },
+      {
+        name: '站点设置',
+        path: '/setting/website',
+        component: '@/pages/website',
+      },
     ],
   },
 ]

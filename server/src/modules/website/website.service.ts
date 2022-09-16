@@ -11,4 +11,8 @@ export class WebsiteService {
   async findAll() {
     return this.repository.find()
   }
+
+  async update(data) {
+    return this.repository.save(data)
+  }
 }

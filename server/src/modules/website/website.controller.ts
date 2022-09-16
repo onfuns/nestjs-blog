@@ -11,9 +11,14 @@ export class WebsiteController {
     return this.service.findAll()
   }
 
-  @Get('list')
+  @Get('info')
   @NoPermission()
   async getClientList(): Promise<any> {
     return this.findAll()
+  }
+
+  @Post()
+  async update(@Body() body): Promise<any> {
+    return this.service.update(body)
   }
 }
