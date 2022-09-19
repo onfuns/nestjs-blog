@@ -1,23 +1,17 @@
 import { useRef } from 'react'
 import AddModal from './components/Add'
-import { observer } from 'mobx-react'
 import { Popconfirm, Switch, message, Space } from 'antd'
 import dayjs from 'dayjs'
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
-import { useSetState } from 'ahooks'
-import { useStore } from '@/hooks'
+import { useMergeState } from '@/hooks'
+import { getCommentList, deleteComment, updateComment } from '@/actions/comment'
 
-export default observer(() => {
-  const { commentStore } = useStore()
+export default () => {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({
+  const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({
     visible: false,
     record: undefined,
   })
-
-  const onLoadData = () => {
-    actionRef?.current.reload()
-  }
 
   const onAction = async (
     type: 'add' | 'reply' | 'delete' | 'pass',
@@ -27,13 +21,13 @@ export default observer(() => {
       setModalProps({ visible: true, record })
     } else if (type === 'delete' || type === 'pass') {
       if (type === 'delete') {
-        await commentStore.delete(record.id)
+        await deleteComment(record.id)
       }
       if (type === 'pass') {
-        await commentStore.update(record.id, { status: Number(!record.status) })
+        await updateComment(record.id, { status: Number(!record.status) })
       }
       message.success('操作成功')
-      onLoadData()
+      actionRef?.current.reload()
     }
   }
 
@@ -117,8 +111,8 @@ export default observer(() => {
         form={{ autoFocusFirstInput: false }}
         rowKey="id"
         request={async (params = {}) => {
-          await commentStore.get({ ...params })
-          return { success: true, data: commentStore.result.data }
+          const { data, success } = await getCommentList({ ...params })
+          return { success, data: data?.data || [], total: data.count }
         }}
         defaultSize="small"
       />
@@ -128,11 +122,11 @@ export default observer(() => {
           onCancel={() => setModalProps({ visible: false })}
           onSuccess={() => {
             setModalProps({ visible: false })
-            onLoadData()
+            actionRef?.current.reload()
           }}
           detail={modalProps.record || {}}
         />
       )}
     </>
   )
-})
+}

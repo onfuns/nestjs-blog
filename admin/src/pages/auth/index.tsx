@@ -1,13 +1,16 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import AddModal from './components/Add'
 import { Button, Popconfirm, message, Space } from 'antd'
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
+import { getAuthList, deleteAuth } from '@/actions/auth'
+import { toTree } from '@/utils'
+import { cloneDeep } from 'lodash'
 import { useMergeState } from '@/hooks'
-import { getTagList, deleteTag } from '@/actions/tag'
 
 export default () => {
   const actionRef = useRef<ActionType>()
   const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({ visible: false })
+  const [expandKeys, setExpandKeys] = useState([])
 
   const onAction = async (
     type: 'add' | 'edit' | 'delete',
@@ -16,7 +19,11 @@ export default () => {
     if (type === 'add' || type === 'edit') {
       setModalProps({ visible: true, record })
     } else if (type === 'delete') {
-      await deleteTag(record.id)
+      if (record?.children?.length > 0) {
+        message.warn('请先删除子节点')
+        return Promise.resolve()
+      }
+      await deleteAuth(record.id)
       message.success('操作成功')
       actionRef?.current.reload()
     }
@@ -26,17 +33,17 @@ export default () => {
     {
       title: '名称',
       dataIndex: 'name',
-      width: 250,
-    },
-    {
-      title: '描述',
-      dataIndex: 'description',
+      render: (_, record) => (
+        <span style={{ fontFamily: '"Source Sans Pro",Calibri,Candara,Arial,sans-serif' }}>
+          {record.pid !== 0 ? `   ├─   ${record.name}` : record.name}
+        </span>
+      ),
     },
     {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
-      width: 120,
+      width: 150,
       render: (_, record) => {
         return (
           <Space>
@@ -50,16 +57,35 @@ export default () => {
     },
   ]
 
+  console.log(`expandKeys`, expandKeys)
+
   return (
     <>
       <ProTable<any>
         actionRef={actionRef}
         columns={columns}
-        headerTitle="标签列表"
+        headerTitle="权限列表"
         search={false}
+        expandable={{
+          expandedRowKeys: expandKeys,
+          onExpand: (expand, record) => {
+            let newKeys = [...expandKeys]
+            if (expand) {
+              newKeys.push(record.id)
+            } else {
+              newKeys = newKeys.filter(id => id !== record.id)
+            }
+            setExpandKeys([...newKeys])
+          },
+        }}
         rowKey="id"
+        onDataSourceChange={data => {
+          console.log(data)
+          setExpandKeys(data.map(({ id }) => id))
+        }}
         request={async (params = {}) => {
-          return getTagList({ ...params })
+          const { success, data } = await getAuthList(params)
+          return { success, data: toTree(cloneDeep(data)) }
         }}
         pagination={false}
         toolBarRender={() => [

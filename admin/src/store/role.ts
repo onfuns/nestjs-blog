@@ -6,7 +6,7 @@ export class RoleStore {
   detail: any = {}
 
   constructor() {
-    makeAutoObservable(this)
+    makeAutoObservable(this, {}, { autoBind: true })
   }
 
   set(key: keyof NonFunctionProperties<RoleStore>, value: any) {

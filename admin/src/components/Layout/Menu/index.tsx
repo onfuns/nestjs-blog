@@ -4,13 +4,11 @@ import { Menu } from 'antd'
 import styles from './style.module.less'
 import { baseRoutes } from '@/routes'
 import { observer } from 'mobx-react'
-import { HomeOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons'
+import { HomeOutlined, AppstoreOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons'
 import classnames from 'classnames'
 import Logo from '@/public/images/logo.png'
-import { useStore } from '@/hooks'
 
-export default observer(() => {
-  const { headerStore } = useStore()
+export default observer(({ store }) => {
   const { pathname } = useLocation()
   const getOpenKeys = () => {
     const paths = pathname
@@ -25,6 +23,7 @@ export default observer(() => {
     const icons = {
       '/dashboard': HomeOutlined,
       '/portal': AppstoreOutlined,
+      '/user': UserOutlined,
       '/setting': SettingOutlined,
     }
     return icon ? React.createElement(icons[icon]) : null
@@ -37,7 +36,8 @@ export default observer(() => {
     }))
     return { label: name, key: path, children: subRoute, icon: renderIcon(path) }
   })
-  const { menuCollapsed } = headerStore
+
+  const { menuCollapsed } = store
 
   return (
     <div

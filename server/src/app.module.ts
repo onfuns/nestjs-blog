@@ -13,6 +13,8 @@ import { RoleModule } from '@/modules/role/role.module'
 import { AuthModule } from '@/modules/auth/auth.module'
 import { CommentModule } from '@/modules/comment/comment.module'
 import { CommonModule } from '@/modules/common/common.module'
+import { FileModule } from '@/modules/file/file.module'
+import { WebsiteModule } from '@/modules/website/website.module'
 
 @Module({
   imports: [
@@ -29,11 +31,13 @@ import { CommonModule } from '@/modules/common/common.module'
     AuthModule,
     CommentModule,
     CommonModule,
+    FileModule,
+    WebsiteModule,
   ],
   controllers: [],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },
-    { provide: APP_GUARD, useClass: UserGuard },
+    // { provide: APP_GUARD, useClass: UserGuard },
   ].filter(provider => !!provider),
 })
 export class AppModule {}

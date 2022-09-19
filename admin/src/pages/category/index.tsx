@@ -1,21 +1,15 @@
 import { useState, useRef } from 'react'
-import { observer } from 'mobx-react'
 import AddModal from './components/Add'
 import { Button, Popconfirm, message, Switch, Space, Tag } from 'antd'
 import { CATEGORT_TYPE } from '@/constants'
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
-import { useSetState } from 'ahooks'
-import { useStore } from '@/hooks'
+import { useMergeState } from '@/hooks'
+import { getCategoryList, updateCategory, deleteCategory } from '@/actions/category'
 
-export default observer(() => {
-  const { categoryStore } = useStore()
+export default () => {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({ visible: false })
   const [expandKeys, setExpandKeys] = useState([])
-
-  const onLoadData = () => {
-    actionRef?.current.reload()
-  }
 
   const onAction = async (
     type: 'add' | 'edit' | 'delete' | 'status',
@@ -25,15 +19,15 @@ export default observer(() => {
       setModalProps({ visible: true, type, record })
     } else if (type === 'delete' || type === 'status') {
       if (type === 'delete') {
-        await categoryStore.delete(record.id)
+        await deleteCategory(record.id)
       }
       if (type === 'status') {
-        await categoryStore.update(record.id, {
+        await updateCategory(record.id, {
           status: Number(!record.status),
         })
       }
       message.success('操作成功')
-      onLoadData()
+      actionRef?.current.reload()
     }
   }
 
@@ -108,9 +102,8 @@ export default observer(() => {
         }}
         rowKey="id"
         onDataSourceChange={data => setExpandKeys(data.map(({ id }) => id))}
-        request={async (params = {}) => {
-          await categoryStore.get({ ...params })
-          return { success: true, data: categoryStore.result }
+        request={async () => {
+          return await getCategoryList()
         }}
         pagination={false}
         toolBarRender={() => [
@@ -126,11 +119,11 @@ export default observer(() => {
           detail={modalProps.record || {}}
           onSuccess={() => {
             setModalProps({ visible: false })
-            onLoadData()
+            actionRef?.current.reload()
           }}
           onCancel={() => setModalProps({ visible: false })}
         />
       )}
     </>
   )
-})
+}

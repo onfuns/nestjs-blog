@@ -1,21 +1,19 @@
 import { useEffect } from 'react'
 import { Form, Input, message, Modal, Radio, Select } from 'antd'
 import * as md5 from 'md5'
-import { observer } from 'mobx-react'
-import { useStore } from '@/hooks'
+import { useFetch } from '@/hooks'
+import { addUser, updateUser } from '@/actions/user'
+import { getRoleList } from '@/actions/role'
 
-export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => {
-  const { userStore, roleStore } = useStore()
+export default ({ onSuccess, onCancel, detail }: IDetailModalProps) => {
+  const [{ data: roleList = [] }] = useFetch(getRoleList)
   const [form] = Form.useForm()
   const isEdit = !!detail.id
 
   useEffect(() => {
-    ;(async () => {
-      await roleStore.get()
-      if (isEdit) {
-        form.setFieldsValue({ ...detail, roles: detail.roles?.map(r => r.id) })
-      }
-    })()
+    if (isEdit) {
+      form.setFieldsValue({ ...detail, roles: detail.roles?.map(r => r.id) })
+    }
   }, [])
 
   const onFinish = () => {
@@ -25,10 +23,10 @@ export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => 
         roles: values.roles.map(id => ({ id })),
       }
       if (detail.id) {
-        await userStore.update(detail.id, params)
+        await updateUser(detail.id, params)
       } else {
         params.password = md5(values.password)
-        await userStore.add(params)
+        await addUser(params)
       }
       message.success('操作成功')
       onSuccess()
@@ -64,7 +62,7 @@ export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => 
 
         <Form.Item label="所属角色" name="roles" rules={[{ required: true }]}>
           <Select mode="multiple" placeholder="请选择">
-            {roleStore.result?.map((r: any) => (
+            {roleList?.map((r: any) => (
               <Select.Option key={r.id} value={r.id}>
                 {r.name}
               </Select.Option>
@@ -81,4 +79,4 @@ export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => 
       </Form>
     </Modal>
   )
-})
+}

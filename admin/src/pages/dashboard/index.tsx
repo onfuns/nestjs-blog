@@ -12,8 +12,8 @@ type IDashboardInfoProps = {
 }
 
 export default () => {
-  const res = useFetch(getDashboardData)
-  const { article, comment, user } = res?.data || ({} as IDashboardInfoProps)
+  const [data] = useFetch(getDashboardData)
+  const { article, comment, user } = data?.data || ({} as IDashboardInfoProps)
 
   const countData = [
     { title: '文章总数', value: article?.count || 0 },

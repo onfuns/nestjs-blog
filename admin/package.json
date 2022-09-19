@@ -16,7 +16,6 @@
     "@bytemd/plugin-highlight": "^1.10.13",
     "@bytemd/react": "^1.10.13",
     "@monaco-editor/react": "^4.3.1",
-    "ahooks": "^3.3.10",
     "antd": "^4.20.4",
     "axios": "^0.21.1",
     "dayjs": "^1.10.6",

@@ -36,19 +36,30 @@ export const baseRoutes = [
     ],
   },
   {
-    name: '系统管理',
-    path: '/setting',
+    name: '用户管理',
+    path: '/user',
     children: [
       {
         name: '用户管理',
-        path: '/setting/user',
+        path: '/user/manage',
         component: '@/pages/user',
       },
       {
         name: '角色管理',
-        path: '/setting/role',
+        path: '/user/role',
         component: '@/pages/role',
       },
+      {
+        name: '权限管理',
+        path: '/user/auth',
+        component: '@/pages/auth',
+      },
+    ],
+  },
+  {
+    name: '系统管理',
+    path: '/setting',
+    children: [
       {
         name: '站点设置',
         path: '/setting/website',

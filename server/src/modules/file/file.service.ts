@@ -59,9 +59,9 @@ export class FileService {
       const name = `${uuidv4()}.${fileExt}`
       const fileUrl = `${dir}/${name}`
       createWriteStream(fileUrl).write(file.buffer)
-      this.fileRepository.save({
+      await this.fileRepository.save({
         ext: fileExt,
-        file_type_id: fileTypeId,
+        file_type_id: fileTypeId || undefined,
         url: join(filePath, name),
         size: file.size,
         originalname: file.originalname,

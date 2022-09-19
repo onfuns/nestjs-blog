@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Cascader } from 'antd'
-import { observer } from 'mobx-react'
-import { useStore } from '@/hooks'
+import { useFetch } from '@/hooks'
+import { getCategoryList } from '@/actions/category'
 
 interface IProps {
   onChange?: (...args) => void
@@ -10,13 +10,9 @@ interface IProps {
   disabled?: boolean
 }
 
-export default observer(({ onChange, root = true, value = [], disabled = false }: IProps) => {
-  const { categoryStore } = useStore()
+export default ({ onChange, root = true, value = [], disabled = false }: IProps) => {
+  const [{ data: categoryList = [] }] = useFetch(getCategoryList)
   const [val, setVal] = useState([])
-
-  useEffect(() => {
-    categoryStore.get()
-  }, [])
 
   useEffect(() => {
     setVal(value)
@@ -27,13 +23,12 @@ export default observer(({ onChange, root = true, value = [], disabled = false }
     onChange?.(value)
   }
 
-  const { result = [] } = categoryStore
   return (
     <Cascader
       disabled={disabled}
       placeholder="请选择分类"
       allowClear={false}
-      options={root ? [{ id: 0, name: '一级分类' }].concat(result) : result}
+      options={root ? [{ id: 0, name: '一级分类' }].concat(categoryList) : categoryList}
       defaultValue={root ? [0] : []}
       value={val}
       fieldNames={{ label: 'name', value: 'id', children: 'children' }}
@@ -42,4 +37,4 @@ export default observer(({ onChange, root = true, value = [], disabled = false }
       changeOnSelect
     />
   )
-})
+}

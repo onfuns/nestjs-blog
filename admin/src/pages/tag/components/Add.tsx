@@ -1,9 +1,8 @@
 import { useEffect } from 'react'
 import { Form, Input, message, Modal } from 'antd'
-import { useStore } from '@/hooks'
+import { addTag, updateTag } from '@/actions/tag'
 
 export default ({ onSuccess, onCancel, detail }: IDetailModalProps) => {
-  const { tagStore } = useStore()
   const [form] = Form.useForm()
 
   useEffect(() => {
@@ -18,9 +17,9 @@ export default ({ onSuccess, onCancel, detail }: IDetailModalProps) => {
         ...values,
       }
       if (detail.id) {
-        await tagStore.update(detail.id, params)
+        await updateTag(detail.id, params)
       } else {
-        await tagStore.add(params)
+        await addTag(params)
       }
       message.success('操作成功')
       onSuccess()

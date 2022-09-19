@@ -1,13 +1,24 @@
 import { useState, useEffect } from 'react'
 
-export const useFetch = (fn: Function, deps: any[] = []) => {
-  const [data, setData] = useState(null)
+export const useFetch = (fn: Function, params?: any, deps: any[] = []) => {
+  const [data, setData] = useState(undefined)
+  const [loading, setLoading] = useState(false)
+
+  const loadData = async (newParams = {}) => {
+    setLoading(true)
+    const payload = newParams ? { ...params, ...newParams } : params
+    const data = await fn(payload)
+    setLoading(false)
+    setData(data)
+  }
+
   useEffect(() => {
-    const loadData = async () => {
-      const data = await fn()
-      setData(data)
-    }
     loadData()
   }, deps)
-  return data
+
+  const reload = (newParams = {}) => {
+    loadData(newParams)
+  }
+
+  return [data ?? {}, reload, loading]
 }

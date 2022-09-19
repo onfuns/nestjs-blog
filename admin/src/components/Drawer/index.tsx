@@ -11,7 +11,7 @@ export default function CustomDrawer(
     <Drawer
       placement="right"
       headerStyle={{ padding: '8px 20px' }}
-      width="80%"
+      width="50%"
       extra={
         <Space>
           <Button onClick={props.onClose}>取消</Button>

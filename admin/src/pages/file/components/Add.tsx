@@ -1,19 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Form, Input, message, Select, Upload, UploadProps, Divider, Space, Button } from 'antd'
-import { useStore } from '@/hooks'
+import { useFetch } from '@/hooks'
 import Drawer from '@/components/Drawer'
-import { observer } from 'mobx-react'
 import { InboxOutlined, CloseCircleFilled, PlusOutlined } from '@ant-design/icons'
+import { getFileTypeList, addFile, addFileType } from '@/actions/file'
 
-export default observer(({ onSuccess, onCancel }: IDetailModalProps) => {
-  const { fileStore } = useStore()
+export default ({ onSuccess, onCancel }: IDetailModalProps) => {
   const [form] = Form.useForm()
   const [fileList, setFileList] = useState([])
   const [typeName, setTypeName] = useState(null)
-
-  useEffect(() => {
-    fileStore.getFileType()
-  }, [])
+  const [{ data: fileTypeList = [] }, reoloadFileTypeList] = useFetch(getFileTypeList)
 
   const onFinish = async () => {
     if (!fileList.length) return message.warn('请选择图片')
@@ -24,7 +20,7 @@ export default observer(({ onSuccess, onCancel }: IDetailModalProps) => {
       formData.append('files', file)
     })
     formData.append('fileTypeId', values.fileTypeId || '')
-    await fileStore.add(formData)
+    await addFile(formData)
     message.success('上传成功')
     onSuccess()
   }
@@ -68,9 +64,9 @@ export default observer(({ onSuccess, onCancel }: IDetailModalProps) => {
 
   const addItem = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
-    await fileStore.addFileType({ name: typeName })
+    await addFileType({ name: typeName })
     setTypeName(null)
-    fileStore.getFileType()
+    reoloadFileTypeList()
   }
 
   return (
@@ -96,7 +92,7 @@ export default observer(({ onSuccess, onCancel }: IDetailModalProps) => {
               </>
             )}
           >
-            {fileStore.filetypes?.map(({ id, name }) => (
+            {fileTypeList?.map(({ id, name }) => (
               <Select.Option key={id}>{name}</Select.Option>
             ))}
           </Select>
@@ -156,4 +152,4 @@ export default observer(({ onSuccess, onCancel }: IDetailModalProps) => {
       </Form>
     </Drawer>
   )
-})
+}

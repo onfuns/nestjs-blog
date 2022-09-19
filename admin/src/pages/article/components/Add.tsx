@@ -1,23 +1,21 @@
 import { useEffect, useState } from 'react'
 import { Form, Input, message, Radio, DatePicker, Select } from 'antd'
-import { observer } from 'mobx-react'
 import MDEditor from '@/components/Editor/MDEditor'
 import dayjs from 'dayjs'
 import CategoryCascader from '@/components/CategoryCascader'
 import Drawer from '@/components/Drawer'
-import { useStore } from '@/hooks'
+import { useFetch } from '@/hooks'
+import { getTagList } from '@/actions/tag'
+import { getArticle, updateArticle, addArticle } from '@/actions/article'
+const timeFormat = 'YYYY-MM-DD HH:mm:ss'
 
-const formatDate = 'YYYY-MM-DD HH:mm:ss'
-
-export default observer(({ onCancel, onSuccess, detail = {} }: IDetailModalProps) => {
-  const { articleStore, tagStore } = useStore()
+export default ({ onCancel, onSuccess, detail = {} }: IDetailModalProps) => {
+  const [{ data: tagList = [] }] = useFetch(getTagList)
   const [content, setContent] = useState('')
   const [form] = Form.useForm()
 
   const loadData = async () => {
-    await articleStore.getInfoById(detail.id)
-    //表单赋值
-    const { detail: acticleDetail } = articleStore
+    const { data: acticleDetail } = await getArticle(detail.id)
     const { publish_time, category, tags, content } = acticleDetail
     setContent(content)
     form.setFieldsValue({
@@ -29,7 +27,6 @@ export default observer(({ onCancel, onSuccess, detail = {} }: IDetailModalProps
   }
 
   useEffect(() => {
-    tagStore.get()
     if (detail.id) loadData()
   }, [])
 
@@ -38,23 +35,21 @@ export default observer(({ onCancel, onSuccess, detail = {} }: IDetailModalProps
       const { publish_time, category_id, tags = [] } = values
       const params = {
         ...values,
-        publish_time: dayjs(publish_time).format(formatDate),
+        publish_time: dayjs(publish_time).format(timeFormat),
         category_id: category_id.pop(),
         tags: tags.map(id => ({ id })),
         content,
       }
       if (!content) return message.warn('请输入内容')
       if (detail.id) {
-        await articleStore.update(detail.id, params)
+        await updateArticle(detail.id, params)
       } else {
-        await articleStore.add(params)
+        await addArticle(params)
       }
       message.success('操作成功')
       onSuccess()
     })
   }
-
-  const { result: tagList } = tagStore
 
   return (
     <Drawer title="文章信息" onClose={onCancel} onSubmit={onSubmit} visible={true}>
@@ -106,7 +101,7 @@ export default observer(({ onCancel, onSuccess, detail = {} }: IDetailModalProps
         </Form.Item>
 
         <Form.Item label="发布时间" name="publish_time" rules={[{ required: true }]}>
-          <DatePicker showTime allowClear={false} format={formatDate} style={{ width: '100%' }} />
+          <DatePicker showTime allowClear={false} format={timeFormat} style={{ width: '100%' }} />
         </Form.Item>
 
         <Form.Item label="发布人" name="author" rules={[{ required: true }]}>
@@ -119,4 +114,4 @@ export default observer(({ onCancel, onSuccess, detail = {} }: IDetailModalProps
       </Form>
     </Drawer>
   )
-})
+}

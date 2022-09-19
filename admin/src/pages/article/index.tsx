@@ -1,16 +1,14 @@
 import { useRef } from 'react'
-import { observer } from 'mobx-react'
 import dayjs from 'dayjs'
 import { Button, Popconfirm, Switch, message, Space } from 'antd'
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
 import ArticleAdd from './components/Add'
-import { useSetState } from 'ahooks'
-import { useStore } from '@/hooks'
+import { useMergeState } from '@/hooks'
+import { getArticleList, updateArticle, deleteArticle } from '@/actions/article'
 
-export default observer(() => {
-  const { articleStore } = useStore()
+export default () => {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({
+  const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({
     visible: false,
     record: undefined,
   })
@@ -23,7 +21,7 @@ export default observer(() => {
     const params: any = {}
 
     if (type === 'delete') {
-      await articleStore.delete(id)
+      await deleteArticle(id)
     } else {
       //置顶
       if (type === 'sort') {
@@ -34,7 +32,7 @@ export default observer(() => {
       else if (type === 'pass_flag') {
         params.pass_flag = pass_flag === 0 ? 1 : 0
       }
-      await articleStore.update(id, params)
+      await updateArticle(id, params)
     }
     message.success('操作成功')
     actionRef?.current.reload()
@@ -127,8 +125,8 @@ export default observer(() => {
         form={{ autoFocusFirstInput: false }}
         rowKey="id"
         request={async (params = {}) => {
-          await articleStore.get({ ...params })
-          return { success: true, data: articleStore.result.data }
+          const { success, data } = await getArticleList({ ...params })
+          return { success, data: data.data, total: data.count }
         }}
         toolBarRender={() => [
           <Button
@@ -154,4 +152,4 @@ export default observer(() => {
       )}
     </>
   )
-})
+}

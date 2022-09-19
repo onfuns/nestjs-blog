@@ -1,11 +1,9 @@
 import { useEffect } from 'react'
 import { Form, Input, message, Radio, Modal } from 'antd'
 import CategoryCascader from '@/components/CategoryCascader'
-import { observer } from 'mobx-react'
-import { useStore } from '@/hooks'
+import { updateCategory, addCategory } from '@/actions/category'
 
-export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => {
-  const { categoryStore } = useStore()
+export default ({ onSuccess, onCancel, detail }: IDetailModalProps) => {
   const [form] = Form.useForm()
   const categoryType = Form.useWatch('type', form)
 
@@ -21,9 +19,9 @@ export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => 
         ...values,
       }
       if (detail.id) {
-        await categoryStore.update(detail.id, params)
+        await updateCategory(detail.id, params)
       } else {
-        await categoryStore.add(params)
+        await addCategory(params)
       }
       message.success('操作成功')
       onSuccess()
@@ -92,4 +90,4 @@ export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => 
       </Form>
     </Modal>
   )
-})
+}

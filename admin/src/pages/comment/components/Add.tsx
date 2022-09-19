@@ -1,16 +1,14 @@
 import { Form, Input, message, Modal } from 'antd'
-import { useStore } from '@/hooks'
+import { updateComment } from '@/actions/comment'
 
 export default ({ onSuccess, onCancel, detail }: IDetailModalProps) => {
-  const { commentStore } = useStore()
   const [form] = Form.useForm()
 
-  const onFinish = () => {
-    form.validateFields().then(async values => {
-      await commentStore.update(detail.id, values)
-      message.success('操作成功')
-      onSuccess()
-    })
+  const onFinish = async () => {
+    const values = await form.validateFields()
+    await updateComment(detail.id, values)
+    message.success('操作成功')
+    onSuccess()
   }
 
   return (

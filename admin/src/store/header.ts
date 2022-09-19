@@ -12,28 +12,27 @@ export type ITabProps = {
 }
 
 export class HeaderStore {
-  tab: ITabProps[] = []
+  tabs: ITabProps[] = []
   menuCollapsed = false
   currentTabPath = ''
 
   constructor() {
-    makeAutoObservable(this)
+    makeAutoObservable(this, {}, { autoBind: true })
   }
 
   updateTab(router: any = {}) {
     if (router.tag === false) return
     //如果有则更新，否则新增
-    const index = this.tab.findIndex(t => t.path === router.path)
+    const index = this.tabs.findIndex(t => t.path === router.path)
     if (index > -1) {
-      this.tab[index] = { ...this.tab[index], ...router }
+      this.tabs[index] = { ...this.tabs[index], ...router }
     } else {
-      this.tab.push(router)
+      this.tabs.push(router)
     }
   }
 
   removeTab(path) {
-    const list = this.tab.filter(item => item.path !== path)
-    this.tab = [...list]
+    this.tabs = [...this.tabs.filter(item => item.path !== path)]
   }
 
   setCurrentTabPath(path) {

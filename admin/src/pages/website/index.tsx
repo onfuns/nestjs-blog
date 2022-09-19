@@ -1,31 +1,27 @@
-import { useEffect } from 'react'
-import { observer } from 'mobx-react'
 import { message, Tabs, FormInstance } from 'antd'
 import Site from './components/Site'
 import Seo from './components/Seo'
-import { useStore } from '@/hooks'
+import { useFetch } from '@/hooks'
+import { getWebsiteConfig, updateWebsiteConfig } from '@/actions/website'
 
-export default observer(() => {
-  const { websiteStore } = useStore()
-
-  useEffect(() => {
-    websiteStore.get()
-  }, [])
+export default () => {
+  const [{ data = [] } = {}, reloadData] = useFetch(getWebsiteConfig)
 
   const onSumit = async (form: FormInstance) => {
     const values = await form.validateFields()
-    const params = websiteStore.result.map(({ id, name }) => {
+    const params = data.map(({ id, name }) => {
       return {
         id,
         name,
         value: values[name],
       }
     })
-    await websiteStore.update(params)
+    await updateWebsiteConfig(params)
     message.success('设置成功')
+    reloadData?.()
   }
 
-  const detail = websiteStore.result.reduce((obj, current) => {
+  const detail = data.reduce((obj, current) => {
     obj[current.name] = current.value
     return obj
   }, {})
@@ -43,4 +39,4 @@ export default observer(() => {
       </Tabs>
     </div>
   )
-})
+}

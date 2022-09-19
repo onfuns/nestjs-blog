@@ -1,15 +1,13 @@
 import { useRef } from 'react'
 import AddModal from './components/Add'
-import { observer } from 'mobx-react'
 import { Button, Popconfirm, message, Space, Popover } from 'antd'
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
-import { useSetState } from 'ahooks'
-import { useStore } from '@/hooks'
+import { useMergeState } from '@/hooks'
+import { getFileList, getFileTypeList, deleteFile } from '@/actions/file'
 
-export default observer(() => {
-  const { fileStore } = useStore()
+export default () => {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({ visible: false })
 
   const onAction = async (
     type: 'add' | 'edit' | 'delete',
@@ -18,7 +16,7 @@ export default observer(() => {
     if (type === 'add' || type === 'edit') {
       setModalProps({ visible: true, record })
     } else if (type === 'delete') {
-      await fileStore.delete(record.id)
+      await deleteFile(record.id)
       message.success('操作成功')
       actionRef?.current.reload()
     }
@@ -35,7 +33,7 @@ export default observer(() => {
       title: '分组',
       dataIndex: 'fileTypeId',
       request: async () => {
-        const types = await fileStore.getFileType()
+        const types = await getFileTypeList()
         return types.map(d => ({
           label: d.name,
           value: d.id,
@@ -102,15 +100,14 @@ export default observer(() => {
         headerTitle="附件列表"
         rowKey="id"
         request={async (params = {}) => {
-          const data = await fileStore.get({ ...params })
-          return { success: true, data: data.data }
+          const { success, data } = await getFileList({ ...params })
+          return { success, data: data.data, total: data.count }
         }}
         toolBarRender={() => [
           <Button key="add" type="primary" onClick={() => onAction('add', undefined)}>
             上传
           </Button>,
         ]}
-        pagination={{ pageSize: 20, total: fileStore.result.count }}
         defaultSize="small"
       />
 
@@ -126,4 +123,4 @@ export default observer(() => {
       )}
     </>
   )
-})
+}

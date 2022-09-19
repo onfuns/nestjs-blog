@@ -1,13 +1,13 @@
 import { useEffect } from 'react'
 import { Form, Input, message, Modal, Radio, Cascader } from 'antd'
-import { observer } from 'mobx-react'
 import { cloneDeep } from 'lodash'
 import { toTree } from '@/utils'
-import { useStore } from '@/hooks'
+import { useFetch } from '@/hooks'
+import { getAuthList, updateAuth, addAuth } from '@/actions/auth'
 
-export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => {
-  const { authStore } = useStore()
+export default ({ onSuccess, onCancel, detail }: IDetailModalProps) => {
   const [form] = Form.useForm()
+  const [{ data: authList = [] }] = useFetch(getAuthList)
 
   useEffect(() => {
     if (detail.id) {
@@ -17,7 +17,7 @@ export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => 
   }, [])
 
   const findAllPid = (id, result: any[] = []) => {
-    const current = authStore.result.find(s => s.id === id) || {}
+    const current = authList?.find(s => s.id === id) || {}
     result.push(id)
     if (current.pid !== 0) return findAllPid(current.pid, result)
     //只查出父级ID，不包含自己
@@ -33,9 +33,9 @@ export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => 
         pid: values.pid.pop(),
       }
       if (detail.id) {
-        await authStore.update(detail.id, params)
+        await updateAuth(detail.id, params)
       } else {
-        await authStore.add(params)
+        await addAuth(params)
       }
       message.success('操作成功')
       onSuccess()
@@ -43,7 +43,7 @@ export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => 
   }
 
   //只过滤菜单
-  const dataList = toTree(cloneDeep(authStore.result.filter(a => a.type === 1)))
+  const dataList = toTree(cloneDeep(authList.filter(a => a.type === 1)))
 
   return (
     <Modal
@@ -93,4 +93,4 @@ export default observer(({ onSuccess, onCancel, detail }: IDetailModalProps) => 
       </Form>
     </Modal>
   )
-})
+}
