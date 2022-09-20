@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Form, Input, Button, Carousel, message } from 'antd'
 import styles from './style.module.less'
-import { history } from 'umi'
+import { useNavigate } from 'react-router-dom'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { saveLocalUser, loginUser } from '@/actions/user'
 import LoginImage from '@/assets/images/login-bg.png'
@@ -11,6 +11,7 @@ import { baseRoutes } from '@/routes'
 export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [form] = Form.useForm()
+  const navigate = useNavigate()
 
   const onSubmit = async () => {
     const values = await form.validateFields()
@@ -20,7 +21,7 @@ export default function LoginPage() {
       const { data } = await loginUser({ name, password: md5(password) })
       setLoading(false)
       saveLocalUser(data)
-      message.success('登录成功', 1, () => history.push(baseRoutes[0].path))
+      message.success('登录成功', 1, () => navigate(baseRoutes[0].path))
     } catch (error) {
       setLoading(false)
     }

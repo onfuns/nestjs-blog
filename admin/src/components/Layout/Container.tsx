@@ -1,19 +1,19 @@
-import { useEffect, ReactChildren } from 'react'
+import { useEffect } from 'react'
 import styles from './style.module.less'
 import LayoutMenu from './Menu'
 import { getLocalUser, logoutUser } from '@/actions/user'
-import { history } from 'umi'
+import { useNavigate, useLocation, createSearchParams } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { useStore } from '@/hooks'
 import { Tabs, Menu, Dropdown } from 'antd'
-import { toJS } from 'mobx'
 import { LogoutOutlined } from '@ant-design/icons'
 import AvatarImage from '@/assets/images/avatar.png'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import { AliveScope } from 'react-activation'
 import Auth from './Auth'
+import { flatRoutes } from '@/routes'
 
-function Container(props: { children: ReactChildren; route: { routes: any[] } }) {
+function Container(props) {
   const { headerStore } = useStore()
   const {
     removeTab,
@@ -25,17 +25,19 @@ function Container(props: { children: ReactChildren; route: { routes: any[] } })
     setMenuCollaps,
   } = headerStore
   const { userName } = getLocalUser()
+  const navigate = useNavigate()
+  const location = useLocation()
 
-  const { pathname, state, search } = history.location
+  const { pathname, search } = location
   useEffect(() => {
-    const router = props.route.routes?.find((item: any) => item.path === pathname) || {}
-    updateTab({ ...router, state, search })
+    const router = flatRoutes?.find((item: any) => item.path === pathname) || {}
+    updateTab({ ...router, search })
     setCurrentTabPath(pathname)
   }, [pathname])
 
   const onTabChange = ({ path }) => {
-    const { state, search } = tabs.find(t => t.path === path) || {}
-    history.push({ pathname: path, state: state ? toJS(state) : undefined, search })
+    const { search } = tabs.find(t => t.path === path) || {}
+    navigate({ pathname: path, search: createSearchParams(search).toString() })
   }
 
   const onTabClose = path => {

@@ -1,5 +1,5 @@
 import { Result, Button } from 'antd'
-import { Link } from 'umi'
+import { Link } from 'react-router-dom'
 
 export default function NotFountPage() {
   return (

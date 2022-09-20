@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useLocation, history } from 'umi'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Menu } from 'antd'
 import styles from './style.module.less'
 import { baseRoutes } from '@/routes'
@@ -10,6 +10,7 @@ import Logo from '@/public/images/logo.png'
 
 function LayoutMenu({ store }) {
   const { pathname } = useLocation()
+  const navigate = useNavigate()
   const getOpenKeys = () => {
     const paths = pathname
       .slice(1)
@@ -58,7 +59,7 @@ function LayoutMenu({ store }) {
           selectedKeys={[pathname]}
           onOpenChange={keys => setOpenKeys([...keys])}
           items={menuItems}
-          onClick={e => history.push(e.key)}
+          onClick={e => navigate(e.key)}
         />
       </div>
     </div>

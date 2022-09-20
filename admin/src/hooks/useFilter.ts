@@ -1,4 +1,4 @@
-import { useLocation } from 'umi'
+import { useLocation } from 'react-router-dom'
 import qs from 'qs'
 
 export const useFilter = (defaultFilter = {}) => {

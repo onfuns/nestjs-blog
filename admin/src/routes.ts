@@ -1,8 +1,10 @@
+import { lazy } from 'react'
+
 export const baseRoutes = [
   {
     name: '工作台',
     path: '/dashboard',
-    component: '@/pages/dashboard',
+    component: lazy(() => import('@/pages/dashboard')),
   },
   {
     name: '内容管理',
@@ -11,27 +13,27 @@ export const baseRoutes = [
       {
         name: '栏目管理',
         path: '/portal/category',
-        component: '@/pages/category',
+        component: lazy(() => import('@/pages/category')),
       },
       {
         name: '文章管理',
         path: '/portal/article',
-        component: '@/pages/article',
+        component: lazy(() => import('@/pages/article')),
       },
       {
         name: '标签管理',
         path: '/portal/tag',
-        component: '@/pages/tag',
+        component: lazy(() => import('@/pages/tag')),
       },
       {
         name: '评论管理',
         path: '/portal/comment',
-        component: '@/pages/comment',
+        component: lazy(() => import('@/pages/comment')),
       },
       {
         name: '附件管理',
         path: '/portal/file',
-        component: '@/pages/file',
+        component: lazy(() => import('@/pages/file')),
       },
     ],
   },
@@ -42,17 +44,17 @@ export const baseRoutes = [
       {
         name: '用户管理',
         path: '/user/manage',
-        component: '@/pages/user',
+        component: lazy(() => import('@/pages/user')),
       },
       {
         name: '角色管理',
         path: '/user/role',
-        component: '@/pages/role',
+        component: lazy(() => import('@/pages/role')),
       },
       {
         name: '权限管理',
         path: '/user/auth',
-        component: '@/pages/auth',
+        component: lazy(() => import('@/pages/auth')),
       },
     ],
   },
@@ -63,43 +65,42 @@ export const baseRoutes = [
       {
         name: '站点设置',
         path: '/setting/website',
-        component: '@/pages/website',
+        component: lazy(() => import('@/pages/website')),
       },
     ],
   },
 ]
 
-const getRoutes = (data, flatRoutes = []) => {
+const getFlatRoutes = (data, flatRoutes = []) => {
   data.map(({ name, path, component, children, ...other }) => {
     component &&
       flatRoutes.push({
         name,
         path,
         component,
-        wrappers: ['@/components/KeepAlive'],
+        // wrappers: ['@/components/KeepAlive'],
         ...other,
       })
-    if (children) getRoutes(children, flatRoutes)
+    if (children) getFlatRoutes(children, flatRoutes)
   })
   return flatRoutes
 }
 
+export const flatRoutes = getFlatRoutes(baseRoutes)
+
 export const routes = [
   {
     path: '/login',
-    component: '@/pages/login',
+    component: lazy(() => import('@/pages/login')),
   },
   {
-    component: '@/components/Layout/Container',
-    routes: [
-      {
-        path: '/',
-        redirect: '/dashboard',
-      },
-      ...getRoutes(baseRoutes),
+    path: '/',
+    component: lazy(() => import('@/components/Layout/Container')),
+    children: [
+      ...flatRoutes,
       {
         path: '*',
-        component: '@/pages/404',
+        component: lazy(() => import('@/pages/404')),
       },
     ],
   },
