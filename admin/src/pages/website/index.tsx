@@ -4,7 +4,7 @@ import Seo from './components/Seo'
 import { useFetch } from '@/hooks'
 import { getWebsiteConfig, updateWebsiteConfig } from '@/actions/website'
 
-export default () => {
+export default function WebsitePage() {
   const [{ data = [] } = {}, reloadData] = useFetch(getWebsiteConfig)
 
   const onSumit = async (form: FormInstance) => {

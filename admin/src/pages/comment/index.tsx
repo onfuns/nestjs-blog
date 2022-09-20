@@ -6,7 +6,7 @@ import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
 import { useMergeState } from '@/hooks'
 import { getCommentList, deleteComment, updateComment } from '@/actions/comment'
 
-export default () => {
+export default function CommentPage() {
   const actionRef = useRef<ActionType>()
   const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({
     visible: false,

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Form, Input, Button } from 'antd'
 
-export default ({ onSumit, detail }) => {
+export default function SeoPage({ onSumit, detail }) {
   const [form] = Form.useForm()
 
   useEffect(() => {

@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Form, Input, message, Modal } from 'antd'
 import { addTag, updateTag } from '@/actions/tag'
 
-export default ({ onSuccess, onCancel, detail }: IDetailModalProps) => {
+export default function TagAdd({ onSuccess, onCancel, detail }: IDetailModalProps) {
   const [form] = Form.useForm()
 
   useEffect(() => {

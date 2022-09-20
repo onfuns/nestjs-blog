@@ -6,7 +6,7 @@ import ArticleAdd from './components/Add'
 import { useMergeState } from '@/hooks'
 import { getArticleList, updateArticle, deleteArticle } from '@/actions/article'
 
-export default () => {
+export default function ArticlePage() {
   const actionRef = useRef<ActionType>()
   const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({
     visible: false,

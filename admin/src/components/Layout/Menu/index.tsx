@@ -8,7 +8,7 @@ import { HomeOutlined, AppstoreOutlined, SettingOutlined, UserOutlined } from '@
 import classnames from 'classnames'
 import Logo from '@/public/images/logo.png'
 
-export default observer(({ store }) => {
+function LayoutMenu({ store }) {
   const { pathname } = useLocation()
   const getOpenKeys = () => {
     const paths = pathname
@@ -63,4 +63,6 @@ export default observer(({ store }) => {
       </div>
     </div>
   )
-})
+}
+
+export default observer(LayoutMenu)

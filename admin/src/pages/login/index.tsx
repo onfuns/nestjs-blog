@@ -8,7 +8,7 @@ import LoginImage from '@/assets/images/login-bg.png'
 import * as md5 from 'md5'
 import { baseRoutes } from '@/routes'
 
-export default () => {
+export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [form] = Form.useForm()
 

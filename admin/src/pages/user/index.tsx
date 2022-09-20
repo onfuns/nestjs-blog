@@ -8,7 +8,7 @@ import { getUserList, deleteUser } from '@/actions/user'
 
 const fromatDate = date => date && dayjs(date).format('YYYY-MM-DD HH:mm')
 
-export default () => {
+export default function UserPage() {
   const actionRef = useRef<ActionType>()
   const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({ visible: false })
 

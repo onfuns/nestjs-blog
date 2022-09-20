@@ -9,7 +9,7 @@ import { getTagList } from '@/actions/tag'
 import { getArticle, updateArticle, addArticle } from '@/actions/article'
 const timeFormat = 'YYYY-MM-DD HH:mm:ss'
 
-export default ({ onCancel, onSuccess, detail = {} }: IDetailModalProps) => {
+export default function ArticleAdd({ onCancel, onSuccess, detail = {} }: IDetailModalProps) {
   const [{ data: tagList = [] }] = useFetch(getTagList)
   const [content, setContent] = useState('')
   const [form] = Form.useForm()

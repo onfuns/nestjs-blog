@@ -6,7 +6,7 @@ import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
 import { useMergeState } from '@/hooks'
 import { getCategoryList, updateCategory, deleteCategory } from '@/actions/category'
 
-export default () => {
+export default function CategoryPage() {
   const actionRef = useRef<ActionType>()
   const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({ visible: false })
   const [expandKeys, setExpandKeys] = useState([])

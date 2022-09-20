@@ -5,7 +5,13 @@ import gfm from '@bytemd/plugin-gfm'
 import highlight from '@bytemd/plugin-highlight'
 import styles from './style.module.less'
 
-export default ({ value, onChange }: { value: string; onChange: (args?: any) => void }) => {
+export default function MDEditor({
+  value,
+  onChange,
+}: {
+  value: string
+  onChange: (args?: any) => void
+}) {
   const modifyViewContent = () => {
     return {
       viewerEffect() {

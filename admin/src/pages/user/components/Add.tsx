@@ -5,7 +5,7 @@ import { useFetch } from '@/hooks'
 import { addUser, updateUser } from '@/actions/user'
 import { getRoleList } from '@/actions/role'
 
-export default ({ onSuccess, onCancel, detail }: IDetailModalProps) => {
+export default function UserAdd({ onSuccess, onCancel, detail }: IDetailModalProps) {
   const [{ data: roleList = [] }] = useFetch(getRoleList)
   const [form] = Form.useForm()
   const isEdit = !!detail.id

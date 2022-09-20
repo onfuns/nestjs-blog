@@ -3,7 +3,7 @@ import { Form, Input, message, Radio, Modal } from 'antd'
 import CategoryCascader from '@/components/CategoryCascader'
 import { updateCategory, addCategory } from '@/actions/category'
 
-export default ({ onSuccess, onCancel, detail }: IDetailModalProps) => {
+export default function CategoryAdd({ onSuccess, onCancel, detail }: IDetailModalProps) {
   const [form] = Form.useForm()
   const categoryType = Form.useWatch('type', form)
 

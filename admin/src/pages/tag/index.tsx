@@ -5,7 +5,7 @@ import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
 import { useMergeState } from '@/hooks'
 import { getTagList, deleteTag } from '@/actions/tag'
 
-export default () => {
+export default function TagPage() {
   const actionRef = useRef<ActionType>()
   const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({ visible: false })
 

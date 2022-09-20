@@ -5,7 +5,7 @@ import Drawer from '@/components/Drawer'
 import { InboxOutlined, CloseCircleFilled, PlusOutlined } from '@ant-design/icons'
 import { getFileTypeList, addFile, addFileType } from '@/actions/file'
 
-export default ({ onSuccess, onCancel }: IDetailModalProps) => {
+export default function FileAdd({ onSuccess, onCancel }: IDetailModalProps) {
   const [form] = Form.useForm()
   const [fileList, setFileList] = useState([])
   const [typeName, setTypeName] = useState(null)

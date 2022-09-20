@@ -1,7 +1,7 @@
 import { Form, Input, message, Modal } from 'antd'
 import { updateComment } from '@/actions/comment'
 
-export default ({ onSuccess, onCancel, detail }: IDetailModalProps) => {
+export default function CommentAdd({ onSuccess, onCancel, detail }: IDetailModalProps) {
   const [form] = Form.useForm()
 
   const onFinish = async () => {

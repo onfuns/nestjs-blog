@@ -5,7 +5,7 @@ import { toTree } from '@/utils'
 import { useFetch } from '@/hooks'
 import { getAuthList, updateAuth, addAuth } from '@/actions/auth'
 
-export default ({ onSuccess, onCancel, detail }: IDetailModalProps) => {
+export default function AuthAdd({ onSuccess, onCancel, detail }: IDetailModalProps) {
   const [form] = Form.useForm()
   const [{ data: authList = [] }] = useFetch(getAuthList)
 

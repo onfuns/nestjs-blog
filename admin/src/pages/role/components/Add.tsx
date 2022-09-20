@@ -7,7 +7,7 @@ import { useFetch } from '@/hooks'
 import { toTree } from '@/utils'
 import { cloneDeep } from 'lodash'
 
-export default ({ onSuccess, onCancel, detail }: IDetailModalProps) => {
+export default function RoleAdd({ onSuccess, onCancel, detail }: IDetailModalProps) {
   const [form] = Form.useForm()
   const roleId = detail.id
   const [{ data: authList = [] }] = useFetch(getAuthList, { roleId }, [roleId])

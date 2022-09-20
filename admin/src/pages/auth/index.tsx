@@ -7,7 +7,7 @@ import { toTree } from '@/utils'
 import { cloneDeep } from 'lodash'
 import { useMergeState } from '@/hooks'
 
-export default () => {
+export default function AuthPage() {
   const actionRef = useRef<ActionType>()
   const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({ visible: false })
   const [expandKeys, setExpandKeys] = useState([])

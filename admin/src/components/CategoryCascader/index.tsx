@@ -10,7 +10,12 @@ interface IProps {
   disabled?: boolean
 }
 
-export default ({ onChange, root = true, value = [], disabled = false }: IProps) => {
+export default function CategoryCascader({
+  onChange,
+  root = true,
+  value = [],
+  disabled = false,
+}: IProps) {
   const [{ data: categoryList = [] }] = useFetch(getCategoryList)
   const [val, setVal] = useState([])
 
