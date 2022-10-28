@@ -14,11 +14,11 @@
 
 - 首页
 
-  ![](./images/前台-首页.png)
+  ![](./screenshot/前台-首页.png)
 
 - 评论页
 
-  ![](./images/前台-评论.png)
+  ![](./screenshot/前台-评论.png)
 
 #### 后台
 
@@ -26,15 +26,15 @@
 
 - 登录页
 
-  ![](./images/后台-登录页.png)
+  ![](./screenshot/后台-登录页.png)
 
 - 首页
 
-  ![](./images/后台-首页.png)
+  ![](./screenshot/后台-首页.png)
 
 - 文章页
 
-  ![](./images/后台-文章页.png)
+  ![](./screenshot/后台-文章页.png)
 
 ## 启动
 
