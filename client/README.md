@@ -7,7 +7,7 @@ npm install
 ## 开发
 
 ```bash
-npm run start:dev
+npm run dev
 ```
 
 ## 构建
