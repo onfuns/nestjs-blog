@@ -1,3 +1,4 @@
+import AntdDayjsWebpackPlugin from 'antd-dayjs-webpack-plugin'
 import { defineConfig } from 'umi'
 import { routes } from './src/routes'
 import { default as theme } from './theme'
@@ -25,37 +26,42 @@ export default defineConfig({
   },
   chunks: ['antd', 'vendors', 'umi'],
   chainWebpack(config) {
-    config.output
-      .set('chunkFilename', 'static/[id].[contenthash:8].chunk.js')
+    config.output.set('chunkFilename', 'static/[id].[contenthash:8].chunk.js')
+    config.plugin('antd-dayjs-webpack-plugin').use(AntdDayjsWebpackPlugin)
+    config.plugin('extract-css').tap(args => [
+      {
+        ...args[0],
+        chunkFilename: `static/[id].[contenthash:8].chunk.css`,
+      },
+    ])
+    config.module
+      .rule('mjs$')
+      .test(/\.mjs$/)
+      .include.add(/node_modules/)
       .end()
-      .plugin('antd-dayjs-webpack-plugin')
-      .use('antd-dayjs-webpack-plugin')
-      .end()
-      .plugin('extract-css')
-      .tap(args => [
-        {
-          ...args[0],
-          chunkFilename: `static/[id].[contenthash:8].chunk.css`,
-        },
-      ])
-      .end()
-      .optimization.splitChunks({
-        ...config.optimization.get('splitChunks'),
-        cacheGroups: {
-          default: false,
-          antd: {
-            test: /[\\/]node_modules[\\/](antd|@ant-design|rc-[\w]+)[\\/]/,
-            name: 'antd',
-            chunks: 'all',
-            priority: 20,
+      .type('javascript/auto')
+
+    config.merge({
+      optimization: {
+        splitChunks: {
+          cacheGroups: {
+            default: false,
+            antd: {
+              test: /[\\/]node_modules[\\/](antd|@ant-design|rc-[\w]+)[\\/]/,
+              name: 'antd',
+              chunks: 'all',
+              priority: 20,
+            },
+            vendor: {
+              chunks: 'all',
+              name: 'vendors',
+              test: /[\\/]node_modules[\\/]/,
+              priority: 10,
+            },
           },
-          vendors: {
-            chunks: 'all',
-            name: 'vendors',
-            test: /[\\/]node_modules[\\/]/,
-            priority: 10,
-          },
         },
-      })
+      },
+    })
+    return config
   },
 })

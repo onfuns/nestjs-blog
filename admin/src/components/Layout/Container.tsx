@@ -2,13 +2,13 @@ import { useEffect, ReactChildren } from 'react'
 import styles from './style.module.less'
 import LayoutMenu from './Menu'
 import { getLocalUser, logoutUser } from '@/actions/user'
-import { history } from 'umi'
+import { useHistory } from 'umi'
 import { observer } from 'mobx-react'
 import { useStore } from '@/hooks'
 import { Tabs, Menu, Dropdown } from 'antd'
 import { toJS } from 'mobx'
 import { LogoutOutlined } from '@ant-design/icons'
-import AvatarImage from '@/assets/images/avatar.png'
+import AvatarImage from '@/public/images/avatar.png'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import { AliveScope } from 'react-activation'
 import Auth from './Auth'
@@ -25,6 +25,8 @@ function Container(props: { children: ReactChildren; route: { routes: any[] } })
     setMenuCollaps,
   } = headerStore
   const { userName } = getLocalUser()
+
+  const history = useHistory()
 
   const { pathname, state, search } = history.location
   useEffect(() => {
@@ -70,10 +72,10 @@ function Container(props: { children: ReactChildren; route: { routes: any[] } })
                 }
                 trigger={['click']}
               >
-                <div className={styles.username}>
+                <a className={styles.username}>
                   <img src={AvatarImage} className={styles.avatar} />
                   {userName}
-                </div>
+                </a>
               </Dropdown>
             </div>
           </div>

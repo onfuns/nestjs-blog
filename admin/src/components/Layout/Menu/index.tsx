@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useLocation, history } from 'umi'
+import { useLocation, useHistory } from 'umi'
 import { Menu } from 'antd'
 import styles from './style.module.less'
 import { baseRoutes } from '@/routes'
@@ -10,6 +10,8 @@ import Logo from '@/public/images/logo.png'
 
 function LayoutMenu({ store }) {
   const { pathname } = useLocation()
+  const history = useHistory()
+
   const getOpenKeys = () => {
     const paths = pathname
       .slice(1)

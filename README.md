@@ -42,7 +42,7 @@
 
 ```bash
 # 开发
-$ npm run start:dev
+$ npm run dev
 # 生产
 $ npm run start:prod
 ```

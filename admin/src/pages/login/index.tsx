@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import { Form, Input, Button, Carousel, message } from 'antd'
 import styles from './style.module.less'
-import { history } from 'umi'
+import { useHistory } from 'umi'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { saveLocalUser, loginUser } from '@/actions/user'
-import LoginImage from '@/assets/images/login-bg.png'
+import LoginImage from '@/public/images/login-bg.png'
 import * as md5 from 'md5'
 import { baseRoutes } from '@/routes'
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [form] = Form.useForm()
+  const history = useHistory()
 
   const onSubmit = async () => {
     const values = await form.validateFields()
