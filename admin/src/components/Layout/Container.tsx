@@ -7,7 +7,7 @@ import { observer } from 'mobx-react'
 import { useStore } from '@/hooks'
 import { Tabs, Menu, Dropdown } from 'antd'
 import { LogoutOutlined } from '@ant-design/icons'
-import AvatarImage from '@/assets/images/avatar.png'
+import AvatarImage from '@/public/images/avatar.png'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import { AliveScope } from 'react-activation'
 import Auth from './Auth'
@@ -72,10 +72,10 @@ function Container(props) {
                 }
                 trigger={['click']}
               >
-                <div className={styles.username}>
+                <a className={styles.username}>
                   <img src={AvatarImage} className={styles.avatar} />
                   {userName}
-                </div>
+                </a>
               </Dropdown>
             </div>
           </div>

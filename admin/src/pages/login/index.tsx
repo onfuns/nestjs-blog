@@ -4,7 +4,7 @@ import styles from './style.module.less'
 import { useNavigate } from 'react-router-dom'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { saveLocalUser, loginUser } from '@/actions/user'
-import LoginImage from '@/assets/images/login-bg.png'
+import LoginImage from '@/public/images/login-bg.png'
 import * as md5 from 'md5'
 import { baseRoutes } from '@/routes'
 

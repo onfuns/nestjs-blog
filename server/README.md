@@ -11,7 +11,7 @@ $ npm install
 $ npm run start
 
 # 开发监听
-$ npm run start:dev
+$ npm run dev
 
 # 生产
 $ npm run start:prod
