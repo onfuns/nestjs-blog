@@ -4,13 +4,8 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
-<<<<<<< HEAD
-    "start:dev": "cross-env PORT=4002 umi dev",
     "dev": "vite dev",
-=======
-    "dev": "cross-env PORT=4002 umi dev",
->>>>>>> feature/v2.0.0
-    "build": "umi build",
+    "build": "vite build",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "lint": "eslint . --ext .ts,.tsx"
   },

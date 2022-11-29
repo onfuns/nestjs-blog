@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import config from '@/config'
-import { unset } from 'lodash'
 import { getLocalUser, logoutUser } from '@/actions/user'
 import { message } from 'antd'
 
@@ -11,11 +10,11 @@ const onError = (data: { success: boolean; message: string; data: any }) => {
 
 const request = async (
   url: string,
-  data,
+  data: any,
   options: AxiosRequestConfig & { notification?: boolean } = { notification: true },
 ) => {
   const { token = '' } = getLocalUser()
-  axios.defaults.baseURL = config.base
+  axios.defaults.baseURL = config.apiBasename
   axios.defaults.headers.common['X-AUTH-ID-TOKEN'] = token
   if (options.method === 'GET') {
     options.params = data

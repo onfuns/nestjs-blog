@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react'
 import { getLocalUser, logoutUser } from '@/actions/user'
 
 export default function Auth(props) {
-  const [login, setLogin] = useState(false)
+  const [isLogin, setIsLogin] = useState(false)
   const { token = 'admin' } = getLocalUser()
 
   useEffect(() => {
     if (token) {
-      setLogin(true)
+      setIsLogin(true)
     } else {
       logoutUser()
     }
   }, [])
-  return login && props.children
+  return isLogin && props.children
 }

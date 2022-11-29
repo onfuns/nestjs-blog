@@ -78,7 +78,6 @@ const getFlatRoutes = (data, flatRoutes = []) => {
         name,
         path,
         component,
-        // wrappers: ['@/components/KeepAlive'],
         ...other,
       })
     if (children) getFlatRoutes(children, flatRoutes)
@@ -91,11 +90,11 @@ export const flatRoutes = getFlatRoutes(baseRoutes)
 export const routes = [
   {
     path: '/login',
+    layout: false,
     component: lazy(() => import('@/pages/login')),
   },
   {
     path: '/',
-    component: lazy(() => import('@/components/Layout/Container')),
     children: [
       ...flatRoutes,
       {
