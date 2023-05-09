@@ -1,16 +1,16 @@
 import { useRef } from 'react'
 import { Button, Popconfirm, Space, message, Tag } from 'antd'
 import AddModal from './components/Add'
-import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
+import ProTable, { type ProColumns, type ActionType } from '@ant-design/pro-components'
 import dayjs from 'dayjs'
-import { useMergeState } from '@/hooks'
+import { useSetState } from 'ahooks'
 import { getUserList, deleteUser } from '@/actions/user'
 
 const fromatDate = date => date && dayjs(date).format('YYYY-MM-DD HH:mm')
 
 export default function UserPage() {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({ visible: false })
 
   const onAction = async (
     type: 'add' | 'edit' | 'delete',

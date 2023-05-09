@@ -1,14 +1,14 @@
 import { useRef } from 'react'
 import dayjs from 'dayjs'
 import { Button, Popconfirm, Switch, message, Space } from 'antd'
-import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
+import ProTable, { ProColumns, ActionType } from '@ant-design/pro-components'
 import ArticleAdd from './components/Add'
-import { useMergeState } from '@/hooks'
+import { useSetState } from 'ahooks'
 import { getArticleList, updateArticle, deleteArticle } from '@/actions/article'
 
 export default function ArticlePage() {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({
+  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({
     visible: false,
     record: undefined,
   })

@@ -1,13 +1,13 @@
 import { useRef } from 'react'
 import AddModal from './components/Add'
 import { Button, Popconfirm, message, Space, Popover } from 'antd'
-import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
-import { useMergeState } from '@/hooks'
+import ProTable, { ProColumns, ActionType } from '@ant-design/pro-components'
+import { useSetState } from 'ahooks'
 import { getFileList, getFileTypeList, deleteFile } from '@/actions/file'
 
 export default function FilePage() {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({ visible: false })
 
   const onAction = async (
     type: 'add' | 'edit' | 'delete',

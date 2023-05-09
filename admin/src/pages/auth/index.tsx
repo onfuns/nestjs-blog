@@ -1,15 +1,15 @@
 import { useRef, useState } from 'react'
 import AddModal from './components/Add'
 import { Button, Popconfirm, message, Space } from 'antd'
-import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
+import ProTable, { ProColumns, ActionType } from '@ant-design/pro-components'
 import { getAuthList, deleteAuth } from '@/actions/auth'
 import { toTree } from '@/utils'
 import { cloneDeep } from 'lodash'
-import { useMergeState } from '@/hooks'
+import { useSetState } from 'ahooks'
 
 export default function AuthPage() {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({ visible: false })
   const [expandKeys, setExpandKeys] = useState([])
 
   const onAction = async (

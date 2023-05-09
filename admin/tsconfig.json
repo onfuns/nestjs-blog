@@ -13,8 +13,7 @@
     "baseUrl": "./",
     "incremental": true,
     "paths": {
-      "@/*": ["./src/*"],
-      "@@/*": ["./src/.umi/*"]
+      "@/*": ["./src/*"]
     },
     "allowJs": true,
     "jsx": "react-jsx"

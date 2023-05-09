@@ -2,13 +2,13 @@ import { useRef } from 'react'
 import AddModal from './components/Add'
 import { Popconfirm, Switch, message, Space } from 'antd'
 import dayjs from 'dayjs'
-import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
-import { useMergeState } from '@/hooks'
+import ProTable, { ProColumns, ActionType } from '@ant-design/pro-components'
+import { useSetState } from 'ahooks'
 import { getCommentList, deleteComment, updateComment } from '@/actions/comment'
 
 export default function CommentPage() {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({
+  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({
     visible: false,
     record: undefined,
   })

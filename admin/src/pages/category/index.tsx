@@ -2,13 +2,13 @@ import { useState, useRef } from 'react'
 import AddModal from './components/Add'
 import { Button, Popconfirm, message, Switch, Space, Tag } from 'antd'
 import { CATEGORT_TYPE } from '@/constants'
-import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
-import { useMergeState } from '@/hooks'
+import ProTable, { ProColumns, ActionType } from '@ant-design/pro-components'
+import { useSetState } from 'ahooks'
 import { getCategoryList, updateCategory, deleteCategory } from '@/actions/category'
 
 export default function CategoryPage() {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({ visible: false })
   const [expandKeys, setExpandKeys] = useState([])
 
   const onAction = async (

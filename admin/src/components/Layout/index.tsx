@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { ConfigProvider, message } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN'
 import '@/styles/global.less'
+import 'uno.css'
 import styles from './style.module.less'
 
 import { useLocation, useNavigate, Outlet } from 'react-router-dom'

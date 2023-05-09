@@ -1,13 +1,13 @@
 import { useRef } from 'react'
 import AddModal from './components/Add'
 import { Button, Popconfirm, message, Space } from 'antd'
-import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table'
-import { useMergeState } from '@/hooks'
+import ProTable, { ProColumns, ActionType } from '@ant-design/pro-components'
+import { useSetState } from 'ahooks'
 import { getTagList, deleteTag } from '@/actions/tag'
 
 export default function TagPage() {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useMergeState<ICreateModalProps>({ visible: false })
+  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({ visible: false })
 
   const onAction = async (
     type: 'add' | 'edit' | 'delete',

@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import vitePluginImportus from 'vite-plugin-importus'
+import unocss from 'unocss/vite'
 import theme from './theme'
 import { join } from 'path'
 
@@ -51,6 +52,7 @@ export default defineConfig({
         style: 'less',
       },
     ]),
+    unocss(),
   ],
   optimizeDeps: {
     esbuildOptions: {
