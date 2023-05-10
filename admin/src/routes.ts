@@ -1,6 +1,13 @@
 import { lazy } from 'react'
 
-export const baseRoutes = [
+export type IRouter = {
+  name?: string
+  path: string
+  component?: any
+  children?: IRouter[]
+}
+
+export const baseRoutes: IRouter[] = [
   {
     name: '工作台',
     path: '/dashboard',

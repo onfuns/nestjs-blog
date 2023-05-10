@@ -1,38 +1,38 @@
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 
+import '@/styles/global.less'
 import { ConfigProvider, message } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN'
-import '@/styles/global.less'
 import 'uno.css'
 import styles from './style.module.less'
 
-import { useLocation, useNavigate, Outlet } from 'react-router-dom'
-import { Provider, observer } from 'mobx-react'
 import { useStore } from '@/hooks'
+import { observer, Provider } from 'mobx-react'
 import { AliveScope } from 'react-activation'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-import Auth from './Auth'
-import PageMenu from './PageMenu'
-import PageHeader from './PageHeader'
-import TagPanel from './TagPanel'
 import { flatRoutes } from '@/routes'
+import PageHeader from './PageHeader'
+import PageMenu from './PageMenu'
+import TagPanel from './TagPanel'
+import ValidateLogin from './ValidateLogin'
 
 message.config({ maxCount: 1 })
 
 function Container(props) {
   const { headerStore } = useStore()
-  const { updateTab, setCurrentTabPath } = headerStore
   const location = useLocation()
   const { pathname, search } = location
 
   useEffect(() => {
-    const router = flatRoutes?.find((item: any) => item.path === pathname) || {}
-    updateTab({ ...router, search })
-    setCurrentTabPath(pathname)
+    const router = flatRoutes?.find((item) => item.path === pathname)
+    headerStore.updateTab({ ...router, search })
+    headerStore.setCurrentTabPath(pathname)
   }, [pathname])
+
   return (
-    <Auth>
-      <div className={styles.container}>
+    <ValidateLogin>
+      <div className="flex">
         <PageMenu store={headerStore} />
         <div className={styles.pageContent}>
           <PageHeader />
@@ -45,7 +45,7 @@ function Container(props) {
           </div>
         </div>
       </div>
-    </Auth>
+    </ValidateLogin>
   )
 }
 
@@ -58,12 +58,12 @@ function Layout(props) {
     return null
   }
 
-  console.log(props)
-
   return (
     <Provider>
       <ConfigProvider locale={zhCN}>
-        {current?.layout === false ? props.children : <Container {...props} />}
+        <Suspense fallback={<div>loading..</div>}>
+          {current?.layout === false ? props.children : <Container {...props} />}
+        </Suspense>
       </ConfigProvider>
     </Provider>
   )
