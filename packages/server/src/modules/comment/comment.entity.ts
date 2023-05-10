@@ -26,7 +26,7 @@ export class Comment {
   @Column({ comment: '网址', nullable: true })
   url: string
 
-  @Column({ comment: '文章ID' })
+  @Column({ comment: '文章ID', length: 36 })
   aid: string
 
   @ManyToOne(() => Article, {

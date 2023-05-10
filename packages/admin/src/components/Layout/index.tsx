@@ -1,10 +1,9 @@
-import { Suspense, useEffect } from 'react'
+import { PropsWithChildren, Suspense, useEffect } from 'react'
 
 import '@/styles/global.less'
 import { ConfigProvider, message } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN'
 import 'uno.css'
-import styles from './style.module.less'
 
 import { useStore } from '@/hooks'
 import { observer, Provider } from 'mobx-react'
@@ -19,10 +18,9 @@ import ValidateLogin from './ValidateLogin'
 
 message.config({ maxCount: 1 })
 
-function Container(props) {
+const Container = observer((props: PropsWithChildren) => {
   const { headerStore } = useStore()
-  const location = useLocation()
-  const { pathname, search } = location
+  const { pathname, search } = useLocation()
 
   useEffect(() => {
     const router = flatRoutes?.find((item) => item.path === pathname)
@@ -32,14 +30,14 @@ function Container(props) {
 
   return (
     <ValidateLogin>
-      <div className="flex">
+      <div className="flex overflow-hidden h-100vh">
         <PageMenu store={headerStore} />
-        <div className={styles.pageContent}>
+        <div className="w-100%">
           <PageHeader />
           <TagPanel />
 
-          <div className={styles.contentBody}>
-            <div className={styles.content}>
+          <div className="flex-1">
+            <div className="overflow-auto h-[calc(100vh-90px)] border-10 border-solid border-#f0f2f5;">
               <AliveScope>{props.children}</AliveScope>
             </div>
           </div>
@@ -47,12 +45,14 @@ function Container(props) {
       </div>
     </ValidateLogin>
   )
-}
+})
 
-function Layout(props) {
-  const location = useLocation()
+const Loading = () => <div>loading...</div>
+
+function Layout(props: PropsWithChildren) {
+  const { pathname } = useLocation()
   const navigate = useNavigate()
-  const current = flatRoutes.find((r: { path: any }) => r.path === location.pathname)
+  const current = flatRoutes.find((router) => router.path === pathname)
   if (current?.redirect) {
     navigate({ pathname: current?.redirect })
     return null
@@ -61,7 +61,7 @@ function Layout(props) {
   return (
     <Provider>
       <ConfigProvider locale={zhCN}>
-        <Suspense fallback={<div>loading..</div>}>
+        <Suspense fallback={<Loading />}>
           {current?.layout === false ? props.children : <Container {...props} />}
         </Suspense>
       </ConfigProvider>
@@ -69,4 +69,4 @@ function Layout(props) {
   )
 }
 
-export default observer(Layout)
+export default Layout

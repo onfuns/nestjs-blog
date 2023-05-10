@@ -8,13 +8,13 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm'
 
 @Entity()
 export class Article {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({ generated: 'uuid', length: 36 })
   id: string
 
   @ManyToOne(() => Category, {

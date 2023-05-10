@@ -1,5 +1,5 @@
 import { ArgumentMetadata, HttpException, HttpStatus, PipeTransform } from '@nestjs/common'
-import { plainToClass } from 'class-transformer'
+import { plainToInstance } from 'class-transformer'
 import { validate } from 'class-validator'
 
 export class ValidationPipe implements PipeTransform {
@@ -10,7 +10,7 @@ export class ValidationPipe implements PipeTransform {
       return value
     }
     const objectValue = type === 'param' ? { [data]: value } : value
-    const valueInstance = plainToClass(metatype, objectValue)
+    const valueInstance = plainToInstance(metatype, objectValue)
     const errors = await validate(valueInstance)
     if (errors?.length > 0) {
       const message = Object.values(errors[0].constraints)[0]

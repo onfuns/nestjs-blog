@@ -3,6 +3,8 @@ import { lazy } from 'react'
 export type IRouter = {
   name?: string
   path: string
+  redirect?: string
+  layout?: boolean
   component?: any
   children?: IRouter[]
 }
@@ -78,7 +80,7 @@ export const baseRoutes: IRouter[] = [
   },
 ]
 
-const getFlatRoutes = (data, flatRoutes = []) => {
+const getFlatRoutes = (data: IRouter[], flatRoutes = []): IRouter[] => {
   data.map(({ name, path, component, children, ...other }) => {
     component &&
       flatRoutes.push({
