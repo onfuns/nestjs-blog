@@ -1,5 +1,5 @@
 import { deleteUser, getUserList } from '@/actions/user'
-import ProTable, { type ActionType, type ProColumns } from '@ant-design/pro-components'
+import { ProTable, type ActionType, type ProColumns } from '@ant-design/pro-components'
 import { useSetState } from 'ahooks'
 import { Button, message, Popconfirm, Space, Tag } from 'antd'
 import dayjs from 'dayjs'

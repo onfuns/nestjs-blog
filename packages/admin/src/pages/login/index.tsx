@@ -6,7 +6,7 @@ import { Button, Carousel, Form, Input, message } from 'antd'
 import * as md5 from 'md5'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import styles from './style.module.less'
+import './style.less'
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false)
@@ -27,15 +27,15 @@ export default function LoginPage() {
     }
   }
   return (
-    <div className={styles.loginPage}>
-      <div className={styles.content}>
-        <div className={styles.carousel}>
+    <div className="absolute top-0 right-0 bottom-0 left-0 flex-center flex-col login-page">
+      <div className="flex items-center overflow-hidden w-1080 h-600 flex-shrink-0 bg-white border-rd-10">
+        <div className="flex items-center w-500 h-100% bg-#fafbfc login-carousel">
           <Carousel>
             <img src={LoginImage} />
           </Carousel>
         </div>
-        <Form form={form} className={styles.form}>
-          <h1 className={styles.title}>Nest-Blog</h1>
+        <Form form={form} className="w-350 ml-100">
+          <h1 className="mb-40 text-size-30">Nest-Blog</h1>
           <Form.Item name="name" rules={[{ required: true, message: '请输入用户名' }]}>
             <Input size="large" prefix={<UserOutlined />} placeholder="用户名" />
           </Form.Item>
@@ -55,7 +55,7 @@ export default function LoginPage() {
               type="primary"
               size="large"
               onClick={onSubmit}
-              className={styles.button}
+              className="w-100% h-50 border-rd-6"
               loading={loading}
             >
               登录

@@ -1,6 +1,6 @@
 import { deleteCategory, getCategoryList, updateCategory } from '@/actions/category'
 import { CATEGORT_TYPE } from '@/constants'
-import ProTable, { ActionType, ProColumns } from '@ant-design/pro-components'
+import { ProTable, type ActionType, type ProColumns } from '@ant-design/pro-components'
 import { useSetState } from 'ahooks'
 import { Button, message, Popconfirm, Space, Switch, Tag } from 'antd'
 import { useRef, useState } from 'react'

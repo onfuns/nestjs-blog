@@ -1,5 +1,5 @@
 import { deleteComment, getCommentList, updateComment } from '@/actions/comment'
-import ProTable, { ActionType, ProColumns } from '@ant-design/pro-components'
+import { ProTable, type ActionType, type ProColumns } from '@ant-design/pro-components'
 import { useSetState } from 'ahooks'
 import { message, Popconfirm, Space, Switch } from 'antd'
 import dayjs from 'dayjs'

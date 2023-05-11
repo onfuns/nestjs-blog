@@ -1,6 +1,6 @@
 import { deleteAuth, getAuthList } from '@/actions/auth'
 import { toTree } from '@/utils'
-import ProTable, { ActionType, ProColumns } from '@ant-design/pro-components'
+import { ProTable, type ActionType, type ProColumns } from '@ant-design/pro-components'
 import { useSetState } from 'ahooks'
 import { Button, message, Popconfirm, Space } from 'antd'
 import { cloneDeep } from 'lodash'

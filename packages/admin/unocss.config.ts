@@ -12,13 +12,10 @@ export default defineConfig({
   ],
   shortcuts: [
     ['wh-full', 'w-full h-full'],
-    ['flex-center-center', 'flex justify-center items-center'],
+    ['flex-center', 'flex justify-center items-center'],
     ['flex-col', 'flex flex-col'],
     ['text-ellipsis', 'truncate'],
-    [
-      'icon-btn',
-      'text-16 inline-block cursor-pointer select-none opacity-75 transition duration-200 ease-in-out hover:opacity-100 hover:text-primary !outline-none',
-    ],
+    ['absolute-center', 'absolute left-0 right-0 top-0 bottom-0'],
   ],
   rules: [
     [

@@ -96,20 +96,15 @@ const getFlatRoutes = (data: IRouter[], flatRoutes = []): IRouter[] => {
 
 export const flatRoutes = getFlatRoutes(baseRoutes)
 
-export const routes = [
+export const routes: IRouter[] = [
   {
     path: '/login',
     layout: false,
     component: lazy(() => import('@/pages/login')),
   },
+  ...flatRoutes,
   {
-    path: '/',
-    children: [
-      ...flatRoutes,
-      {
-        path: '*',
-        component: lazy(() => import('@/pages/404')),
-      },
-    ],
+    path: '*',
+    component: lazy(() => import('@/pages/404')),
   },
 ]
