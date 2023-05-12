@@ -1,15 +1,15 @@
 import { getWebsiteConfig, updateWebsiteConfig } from '@/actions/website'
-import { useFetch } from '@/hooks'
+import { useRequest } from 'ahooks'
 import { FormInstance, message, Tabs } from 'antd'
 import Seo from './components/Seo'
 import Site from './components/Site'
 
 export default function WebsitePage() {
-  const [{ data = [] } = {}, reloadData] = useFetch(getWebsiteConfig)
+  const { data: { data: websiteConfig = {} } = {}, refresh } = useRequest(getWebsiteConfig)
 
-  const onSumit = async (form: FormInstance) => {
+  const onSubmit = async (form: FormInstance) => {
     const values = await form.validateFields()
-    const params = data.map(({ id, name }) => {
+    const params = websiteConfig.map(({ id, name }) => {
       return {
         id,
         name,
@@ -18,23 +18,23 @@ export default function WebsitePage() {
     })
     await updateWebsiteConfig(params)
     message.success('设置成功')
-    reloadData?.()
+    refresh?.()
   }
 
-  const detail = data.reduce((obj, current) => {
+  const detail = websiteConfig.reduce((obj, current) => {
     obj[current.name] = current.value
     return obj
   }, {})
 
   return (
-    <div style={{ padding: 10 }}>
+    <div className="p-10">
       <Tabs defaultActiveKey="site" hideAdd animated={false}>
         <Tabs.TabPane tab="网站信息" key="site">
-          <Site onSumit={onSumit} detail={detail} />
+          <Site onSubmit={onSubmit} detail={detail} />
         </Tabs.TabPane>
 
         <Tabs.TabPane tab="SEO设置" key="seo">
-          <Seo onSumit={onSumit} detail={detail} />
+          <Seo onSubmit={onSubmit} detail={detail} />
         </Tabs.TabPane>
       </Tabs>
     </div>

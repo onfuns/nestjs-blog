@@ -1,4 +1,4 @@
-import api from '@/utils/api'
+import { api } from '@/utils'
 
 const url = '/file'
 export const getFileList = async (params) => api.get(url, params)

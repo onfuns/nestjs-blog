@@ -1,18 +1,15 @@
-import { useStore } from '@/hooks'
 import { flatRoutes } from '@/routes'
+import { HeaderStore } from '@/store'
 import { Tabs } from 'antd'
-import { observer } from 'mobx-react'
 import { useEffect } from 'react'
 import { createSearchParams, useLocation, useNavigate } from 'react-router-dom'
-import styles from './style.module.less'
+import './style.less'
 
-function TagPanel() {
-  const { headerStore } = useStore()
-  const { removeTab, updateTab, setCurrentTabPath, tabs, currentTabPath } = headerStore
+export default function TagPanel({ store }: { store: HeaderStore }) {
+  const { removeTab, updateTab, setCurrentTabPath, tabs, currentTabPath } = store
   const navigate = useNavigate()
-  const location = useLocation()
+  const { pathname, search } = useLocation()
 
-  const { pathname, search } = location
   useEffect(() => {
     const router = flatRoutes?.find((item: any) => item.path === pathname) || {}
     updateTab({ ...router, search })
@@ -33,7 +30,7 @@ function TagPanel() {
   }
 
   return (
-    <div className={styles.mutilTab}>
+    <div className="tag-panel-component relative">
       <Tabs
         activeKey={currentTabPath}
         type="editable-card"
@@ -49,5 +46,3 @@ function TagPanel() {
     </div>
   )
 }
-
-export default observer(TagPanel)

@@ -1,7 +1,6 @@
 import config from '@/config'
 import { LOCAL_USER_KEY } from '@/constants'
-import api from '@/utils/api'
-import Cache from '@/utils/cache'
+import { api, cache } from '@/utils'
 
 const url = '/user'
 export const getUserList = async (params) => api.get(url, params)
@@ -13,6 +12,6 @@ export const logoutUser = () => {
   removeLocalUser()
   window.location.href = `${config.routeBasename}/login`
 }
-export const saveLocalUser = (data) => Cache.set(LOCAL_USER_KEY, data)
-export const getLocalUser = (): any => Cache.get(LOCAL_USER_KEY) || {}
-export const removeLocalUser = () => Cache.remove(LOCAL_USER_KEY)
+export const saveLocalUser = (data) => cache.set(LOCAL_USER_KEY, data)
+export const getLocalUser = (): any => cache.get(LOCAL_USER_KEY) || {}
+export const removeLocalUser = () => cache.remove(LOCAL_USER_KEY)

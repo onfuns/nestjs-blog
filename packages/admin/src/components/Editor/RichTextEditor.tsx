@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import E from 'wangeditor'
 
 let editor = null
-export default function HTMLEditor({
+export default function RichTextEditor({
   id = 'default_wangeditor',
   value = '',
   onChange,

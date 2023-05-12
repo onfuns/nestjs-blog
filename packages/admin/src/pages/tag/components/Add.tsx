@@ -1,49 +1,40 @@
 import { addTag, updateTag } from '@/actions/tag'
-import { Form, Input, message, Modal } from 'antd'
-import { useEffect } from 'react'
+import { ModalForm, ProForm, ProFormText, ProFormTextArea } from '@ant-design/pro-components'
+import { message } from 'antd'
 
-export default function TagAdd({ onSuccess, onCancel, detail }: IDetailModalProps) {
-  const [form] = Form.useForm()
+export const TagAdd = ({ element, onSuccess, onClose, detail = {} }: IDetailModalProps) => {
+  const [form] = ProForm.useForm()
 
-  useEffect(() => {
+  const onFinish = async () => {
+    const values = await form.validateFields()
     if (detail.id) {
-      form.setFieldsValue({ ...detail })
+      await updateTag(detail.id, values)
+    } else {
+      await addTag(values)
     }
-  }, [])
-
-  const onFinish = () => {
-    form.validateFields().then(async (values) => {
-      const params = {
-        ...values,
-      }
-      if (detail.id) {
-        await updateTag(detail.id, params)
-      } else {
-        await addTag(params)
-      }
-      message.success('操作成功')
-      onSuccess()
-    })
+    message.success('操作成功')
+    onSuccess?.()
   }
 
   return (
-    <Modal
+    <ModalForm
       title="标签信息"
-      visible={true}
-      width={600}
-      onOk={onFinish}
-      onCancel={onCancel}
-      destroyOnClose
+      width={800}
+      trigger={element}
+      modalProps={{ onOk: onFinish, onCancel: onClose, destroyOnClose: true }}
+      labelCol={{ span: 4 }}
+      wrapperCol={{ span: 20 }}
+      initialValues={detail}
     >
-      <Form labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} form={form}>
-        <Form.Item label="名称" name="name" rules={[{ required: true }]}>
-          <Input placeholder="请输入名称" />
-        </Form.Item>
+      <ProFormText label="名称" name="name" rules={[{ required: true }]} placeholder="请输入名称" />
 
-        <Form.Item label="描述" name="description">
-          <Input.TextArea />
-        </Form.Item>
-      </Form>
-    </Modal>
+      <ProFormTextArea
+        label="描述"
+        name="description"
+        rules={[{ required: true }]}
+        placeholder="请输入描述"
+        fieldProps={{ showCount: true, maxLength: 200 }}
+      />
+    </ModalForm>
   )
 }

@@ -1,35 +1,24 @@
 import { deleteComment, getCommentList, updateComment } from '@/actions/comment'
 import { ProTable, type ActionType, type ProColumns } from '@ant-design/pro-components'
-import { useSetState } from 'ahooks'
 import { message, Popconfirm, Space, Switch } from 'antd'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
-import AddModal from './components/Add'
+import { CommentAdd } from './components/Add'
 
 export default function CommentPage() {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({
-    visible: false,
-    record: undefined,
-  })
 
-  const onAction = async (
-    type: 'add' | 'reply' | 'delete' | 'pass',
-    record: ICreateModalProps['record'] = {},
-  ) => {
-    if (type === 'add' || type === 'reply') {
-      setModalProps({ visible: true, record })
-    } else if (type === 'delete' || type === 'pass') {
-      if (type === 'delete') {
-        await deleteComment(record.id)
-      }
-      if (type === 'pass') {
-        await updateComment(record.id, { status: Number(!record.status) })
-      }
-      message.success('操作成功')
-      actionRef?.current.reload()
+  const onAction = async (type: 'delete' | 'pass', record) => {
+    if (type === 'delete') {
+      await deleteComment(record.id)
+    } else if (type === 'pass') {
+      await updateComment(record.id, { status: Number(!record.status) })
     }
+    message.success('操作成功')
+    onReload()
   }
+
+  const onReload = () => actionRef?.current.reload()
 
   const columns: ProColumns<any>[] = [
     {
@@ -86,13 +75,12 @@ export default function CommentPage() {
     },
     {
       title: '操作',
-      dataIndex: 'option',
       valueType: 'option',
       width: 120,
       render: (_, record) => {
         return (
           <Space>
-            <a onClick={() => onAction('reply', record)}>回复</a>
+            <CommentAdd detail={record} element={<a>回复</a>} />
             <Popconfirm title="确定删除？" onConfirm={() => onAction('delete', record)}>
               <a className="danger">删除</a>
             </Popconfirm>
@@ -103,30 +91,17 @@ export default function CommentPage() {
   ]
 
   return (
-    <>
-      <ProTable<any>
-        actionRef={actionRef}
-        columns={columns}
-        headerTitle="评论列表"
-        form={{ autoFocusFirstInput: false }}
-        rowKey="id"
-        request={async (params = {}) => {
-          const { data, success } = await getCommentList({ ...params })
-          return { success, data: data?.data || [], total: data.count }
-        }}
-        defaultSize="small"
-      />
-
-      {modalProps.visible && (
-        <AddModal
-          onCancel={() => setModalProps({ visible: false })}
-          onSuccess={() => {
-            setModalProps({ visible: false })
-            actionRef?.current.reload()
-          }}
-          detail={modalProps.record || {}}
-        />
-      )}
-    </>
+    <ProTable<any>
+      actionRef={actionRef}
+      columns={columns}
+      headerTitle="评论列表"
+      form={{ autoFocusFirstInput: false }}
+      rowKey="id"
+      request={async (params) => {
+        const { data, success } = await getCommentList(params)
+        return { success, data: data?.data || [], total: data.count }
+      }}
+      defaultSize="small"
+    />
   )
 }

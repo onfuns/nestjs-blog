@@ -11,7 +11,8 @@ type ICreateModalProps = {
 }
 
 type IDetailModalProps = {
-  onCancel?: () => void
+  element?: any
+  onClose?: () => void
   onSuccess?: (args?: any) => void
   detail?: Record<string, any>
 }

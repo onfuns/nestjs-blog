@@ -3,7 +3,7 @@ import parserBabel from 'prettier/parser-babel'
 import prettier from 'prettier/standalone'
 import { useEffect } from 'react'
 
-export default function JSONEditor({
+export default function JsonEditor({
   height = '500px',
   value = '',
   onChange,

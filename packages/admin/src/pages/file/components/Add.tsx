@@ -1,32 +1,40 @@
 import { addFile, addFileType, getFileTypeList } from '@/actions/file'
-import Drawer from '@/components/Drawer'
-import { useFetch } from '@/hooks'
 import { CloseCircleFilled, InboxOutlined, PlusOutlined } from '@ant-design/icons'
-import { Button, Divider, Form, Input, message, Select, Space, Upload, UploadProps } from 'antd'
+import {
+  DrawerForm,
+  ProForm,
+  ProFormSelect,
+  ProFormUploadDragger,
+} from '@ant-design/pro-components'
+import { useRequest } from 'ahooks'
+import { Button, Divider, Input, message, Space, UploadProps } from 'antd'
 import { useState } from 'react'
 
-export default function FileAdd({ onSuccess, onCancel }: IDetailModalProps) {
-  const [form] = Form.useForm()
+export const FileAdd = ({ element, onSuccess, onClose }: IDetailModalProps) => {
+  const [form] = ProForm.useForm()
   const [fileList, setFileList] = useState([])
   const [typeName, setTypeName] = useState(null)
-  const [{ data: fileTypeList = [] }, reoloadFileTypeList] = useFetch(getFileTypeList)
+  const { data: { data: fileTypeList = [] } = {}, refresh: refreshFileTypeList } =
+    useRequest(getFileTypeList)
 
   const onFinish = async () => {
-    if (!fileList.length) return message.warn('请选择图片')
+    if (!fileList.length) {
+      return message.warning('请选择图片')
+    }
 
     const values = await form.validateFields()
     const formData = new FormData()
     fileList.forEach((file) => {
       formData.append('files', file)
     })
-    formData.append('fileTypeId', values.fileTypeId || '')
+    formData.append('fileTypeId', values.fileTypeId)
     await addFile(formData)
     message.success('上传成功')
     onSuccess()
   }
 
-  const uploadFile = async (file): Promise<any> => {
-    return new Promise((resolve) => {
+  const uploadFile = async (file): Promise<any> =>
+    new Promise((resolve) => {
       const reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = () => {
@@ -34,18 +42,17 @@ export default function FileAdd({ onSuccess, onCancel }: IDetailModalProps) {
         resolve(file)
       }
     })
-  }
 
   const checkFile = (file) => {
-    const onError = () => {
-      message.warn('只能上传图片，不超过10M')
+    const error = () => {
+      message.error('只能上传图片，不超过10M')
       return false
     }
     if (!file?.type?.includes('image/')) {
-      return onError()
+      return error()
     }
     if (file.size > 10 * 1024 * 1024) {
-      return onError()
+      return error()
     }
     return true
   }
@@ -54,7 +61,7 @@ export default function FileAdd({ onSuccess, onCancel }: IDetailModalProps) {
     name: 'file',
     multiple: true,
     beforeUpload: async (file) => {
-      if (!checkFile(file)) return
+      if (!checkFile(file)) return false
       const newFile = await uploadFile(file)
       fileList.push(newFile)
       setFileList([...fileList])
@@ -62,94 +69,79 @@ export default function FileAdd({ onSuccess, onCancel }: IDetailModalProps) {
     showUploadList: false,
   }
 
-  const addItem = async (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault()
+  const addItem = async () => {
     await addFileType({ name: typeName })
     setTypeName(null)
-    reoloadFileTypeList()
+    refreshFileTypeList()
   }
 
   return (
-    <Drawer title="上传附件" visible={true} width={600} onSubmit={onFinish} onClose={onCancel}>
-      <Form labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} form={form}>
-        <Form.Item label="分组" name="fileTypeId">
-          <Select
-            placeholder="未分组"
-            dropdownRender={(menu) => (
-              <>
-                {menu}
-                <Divider style={{ margin: '8px 0' }} />
-                <Space style={{ padding: '0 8px 4px' }}>
-                  <Input
-                    placeholder="请输入分组名称"
-                    value={typeName}
-                    onChange={(e) => setTypeName(e.target.value)}
-                  />
-                  <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
-                    新增分组
-                  </Button>
-                </Space>
-              </>
-            )}
-          >
-            {fileTypeList?.map(({ id, name }) => (
-              <Select.Option key={id}>{name}</Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+    <DrawerForm
+      title="上传附件"
+      trigger={element}
+      drawerProps={{ onClose: onClose, destroyOnClose: true }}
+      onFinish={onFinish}
+      labelCol={{ span: 4 }}
+      wrapperCol={{ span: 20 }}
+      form={form}
+    >
+      <ProFormSelect
+        label="分组"
+        name="fileTypeId"
+        placeholder="未分组"
+        options={fileTypeList}
+        fieldProps={{
+          dropdownRender: (menu) => (
+            <>
+              {menu}
+              <Divider className="my-8" />
+              <Space className="px-8 pb-8">
+                <Input
+                  placeholder="请输入分组名称"
+                  value={typeName}
+                  onChange={(e) => setTypeName(e.target.value)}
+                />
+                <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
+                  新增分组
+                </Button>
+              </Space>
+            </>
+          ),
+        }}
+      />
 
-        <Form.Item label="附件" extra="仅支持图片类文件上传">
-          <Upload.Dragger {...uploadProps}>
-            <div
-              style={{
-                height: 200,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <p className="ant-upload-drag-icon">
-                <InboxOutlined />
-              </p>
-              <p className="ant-upload-text">点击或拖拽图片上传</p>
-            </div>
-          </Upload.Dragger>
-        </Form.Item>
-        {fileList.length ? (
-          <Form.Item label=" " colon={false}>
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-              {fileList
-                .filter((file) => file.url)
-                .map((file, index) => (
-                  <div
-                    key={file.uid}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      position: 'relative',
-                      width: 100,
-                      height: 100,
-                      border: '1px solid #ccc',
-                      marginRight: 10,
-                      marginBottom: 10,
-                      verticalAlign: 'center',
+      <ProFormUploadDragger label="附件" extra="仅支持图片类文件上传" {...uploadProps}>
+        <div className="flex-center flex-col w-200">
+          <p className="ant-upload-drag-icon">
+            <InboxOutlined />
+          </p>
+          <p className="ant-upload-text">点击或拖拽图片上传</p>
+        </div>
+      </ProFormUploadDragger>
+
+      {fileList.length ? (
+        <ProForm.Item label=" " colon={false}>
+          <div className="flex flex-wrap">
+            {fileList
+              .filter((file) => file.url)
+              .map((file, index) => (
+                <div
+                  key={file.uid}
+                  className="flex items-center relative w-100 h-100 border border-solid border-#ccc mr-10 mb-10 v-mid"
+                >
+                  <img src={file.url} style={{ width: '100%' }} />
+                  <CloseCircleFilled
+                    className="absolute z-5 right-[-5] top-[-5] text-size-16 "
+                    onClick={() => {
+                      fileList.splice(index, 1)
+                      setFileList([...fileList])
                     }}
-                  >
-                    <img src={file.url} style={{ width: '100%' }} />
-                    <CloseCircleFilled
-                      style={{ position: 'absolute', right: -5, top: -5, fontSize: 16, zIndex: 5 }}
-                      onClick={() => {
-                        fileList.splice(index, 1)
-                        setFileList([...fileList])
-                      }}
-                    />
-                  </div>
-                ))}
-            </div>
-          </Form.Item>
-        ) : null}
-      </Form>
-    </Drawer>
+                  />
+                </div>
+              ))}
+          </div>
+        </ProForm.Item>
+      ) : null}
+    </DrawerForm>
   )
 }

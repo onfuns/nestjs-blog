@@ -1,4 +1,4 @@
-import api from '@/utils/api'
+import { api } from '@/utils'
 
 const url = '/category'
 export const getCategoryList = async () => api.get(url)

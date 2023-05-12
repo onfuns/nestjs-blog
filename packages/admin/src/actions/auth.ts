@@ -1,4 +1,4 @@
-import api from '@/utils/api'
+import { api } from '@/utils'
 
 const url = '/auth'
 export const getAuthList = async (params = {}) => api.get(url, params)

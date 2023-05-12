@@ -1,17 +1,12 @@
 import { deleteArticle, getArticleList, updateArticle } from '@/actions/article'
 import { ProTable, type ActionType, type ProColumns } from '@ant-design/pro-components'
-import { useSetState } from 'ahooks'
 import { Button, message, Popconfirm, Space, Switch } from 'antd'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
-import ArticleAdd from './components/Add'
+import { ArticleAdd } from './components/Add'
 
 export default function ArticlePage() {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({
-    visible: false,
-    record: undefined,
-  })
 
   const onAction = async (
     type: 'sort' | 'pass_flag' | 'delete' | 'pass',
@@ -35,8 +30,10 @@ export default function ArticlePage() {
       await updateArticle(id, params)
     }
     message.success('操作成功')
-    actionRef?.current.reload()
+    onReload()
   }
+
+  const onReload = () => actionRef?.current.reload()
 
   const columns: ProColumns<any>[] = [
     {
@@ -106,7 +103,8 @@ export default function ArticlePage() {
       render: (_, record) => {
         return (
           <Space>
-            <a onClick={() => setModalProps({ visible: true, record })}>编辑</a>
+            <ArticleAdd detail={record} onSuccess={onReload} element={<a>编辑</a>} />
+
             <Popconfirm title="确定删除？" onConfirm={() => onAction('delete', record)}>
               <a className="danger">删除</a>
             </Popconfirm>
@@ -117,39 +115,29 @@ export default function ArticlePage() {
   ]
 
   return (
-    <>
-      <ProTable<any>
-        actionRef={actionRef}
-        columns={columns}
-        headerTitle="文章列表"
-        form={{ autoFocusFirstInput: false }}
-        rowKey="id"
-        request={async (params = {}) => {
-          const { success, data } = await getArticleList({ ...params })
-          return { success, data: data.data, total: data.count }
-        }}
-        toolBarRender={() => [
-          <Button
-            key="add"
-            type="primary"
-            onClick={() => setModalProps({ visible: true, record: {} })}
-          >
-            新增
-          </Button>,
-        ]}
-        scroll={{ x: '100%' }}
-        defaultSize="small"
-      />
-      {modalProps.visible && (
+    <ProTable<any>
+      actionRef={actionRef}
+      columns={columns}
+      headerTitle="文章列表"
+      form={{ autoFocusFirstInput: false }}
+      rowKey="id"
+      request={async (params = {}) => {
+        const { success, data } = await getArticleList({ ...params })
+        return { success, data: data.data, total: data.count }
+      }}
+      toolBarRender={() => [
         <ArticleAdd
-          detail={modalProps.record || {}}
-          onSuccess={() => {
-            setModalProps({ visible: false })
-            actionRef?.current.reload()
-          }}
-          onCancel={() => setModalProps({ visible: false })}
-        />
-      )}
-    </>
+          key="add"
+          onSuccess={onReload}
+          element={
+            <Button key="add" type="primary">
+              新增
+            </Button>
+          }
+        />,
+      ]}
+      scroll={{ x: '100%' }}
+      defaultSize="small"
+    />
   )
 }

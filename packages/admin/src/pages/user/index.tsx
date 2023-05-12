@@ -1,29 +1,21 @@
 import { deleteUser, getUserList } from '@/actions/user'
+import { MINUTE_STRING } from '@/constants'
 import { ProTable, type ActionType, type ProColumns } from '@ant-design/pro-components'
-import { useSetState } from 'ahooks'
 import { Button, message, Popconfirm, Space, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
-import AddModal from './components/Add'
-
-const fromatDate = (date) => date && dayjs(date).format('YYYY-MM-DD HH:mm')
+import { UserAdd } from './components/Add'
 
 export default function UserPage() {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({ visible: false })
 
-  const onAction = async (
-    type: 'add' | 'edit' | 'delete',
-    record: ICreateModalProps['record'] = {},
-  ) => {
-    if (type === 'add' || type === 'edit') {
-      setModalProps({ visible: true, record })
-    } else if (type === 'delete') {
-      await deleteUser(record.id)
-      message.success('操作成功')
-      actionRef?.current.reload()
-    }
+  const onDelete = async (id) => {
+    await deleteUser(id)
+    message.success('操作成功')
+    onReload()
   }
+
+  const onReload = () => actionRef?.current.reload()
 
   const columns: ProColumns<any>[] = [
     {
@@ -51,32 +43,32 @@ export default function UserPage() {
     {
       title: '创建时间',
       dataIndex: 'created_at',
-      render: (_, { created_at }) => fromatDate(created_at),
+      render: (_, { created_at }) => created_at && dayjs(created_at).format(MINUTE_STRING),
     },
     {
       title: '最后登录时间',
       dataIndex: 'last_login_at',
-      render: (_, { last_login_at }) => fromatDate(last_login_at),
+      render: (_, { last_login_at }) => last_login_at && dayjs(last_login_at).format(MINUTE_STRING),
     },
     {
       title: '状态',
       dataIndex: 'enable',
       hideInSearch: true,
-      render: (value) => (
-        <Tag color={value === 1 ? 'success' : 'error'}>{value === 1 ? '正常' : '停用'}</Tag>
-      ),
       width: 80,
+      render: (value) => {
+        const isSuccess = value === 1
+        return <Tag color={isSuccess ? 'success' : 'error'}>{isSuccess ? '正常' : '停用'}</Tag>
+      },
     },
     {
       title: '操作',
-      dataIndex: 'option',
       valueType: 'option',
       width: 120,
       render: (_, record) => {
         return record.super !== 1 ? (
           <Space>
-            <a onClick={() => onAction('edit', record)}>编辑</a>
-            <Popconfirm title="确定删除？" onConfirm={() => onAction('delete', record)}>
+            <UserAdd detail={record} onSuccess={onReload} element={<a>编辑</a>} />,
+            <Popconfirm title="确定删除？" onConfirm={() => onDelete(record.id)}>
               <a className="danger">删除</a>
             </Popconfirm>
           </Space>
@@ -86,35 +78,18 @@ export default function UserPage() {
   ]
 
   return (
-    <>
-      <ProTable<any>
-        actionRef={actionRef}
-        columns={columns}
-        headerTitle="用户列表"
-        search={false}
-        rowKey="id"
-        request={async (params = {}) => {
-          return getUserList({ ...params })
-        }}
-        pagination={false}
-        toolBarRender={() => [
-          <Button key="add" type="primary" onClick={() => onAction('add', {})}>
-            新增
-          </Button>,
-        ]}
-        defaultSize="small"
-      />
-
-      {modalProps.visible && (
-        <AddModal
-          detail={modalProps.record}
-          onSuccess={() => {
-            setModalProps({ visible: false })
-            actionRef?.current.reload()
-          }}
-          onCancel={() => setModalProps({ visible: false })}
-        />
-      )}
-    </>
+    <ProTable<any>
+      actionRef={actionRef}
+      columns={columns}
+      headerTitle="用户列表"
+      search={false}
+      rowKey="id"
+      request={getUserList}
+      pagination={false}
+      toolBarRender={() => [
+        <UserAdd key="add" onSuccess={onReload} element={<Button type="primary">新增</Button>} />,
+      ]}
+      defaultSize="small"
+    />
   )
 }

@@ -3,12 +3,10 @@ import { baseRoutes } from '@/routes'
 import { AppstoreOutlined, HomeOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons'
 import { Menu } from 'antd'
 import classnames from 'classnames'
-import { observer } from 'mobx-react'
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import styles from './style.module.less'
 
-function LayoutMenu({ store }) {
+export default function LayoutMenu({ menuCollapsed }: { menuCollapsed: boolean }) {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const getOpenKeys = () => {
@@ -38,19 +36,17 @@ function LayoutMenu({ store }) {
     return { label: name, key: path, children: subRoute, icon: renderIcon(path) }
   })
 
-  const { menuCollapsed } = store
-
   return (
     <div
-      className={classnames(styles.menu, {
-        [styles.collapsedMenu]: menuCollapsed,
+      className={classnames('relative w-200 flex-shrink-0 bg-#fff', {
+        'w-auto collapsed-menu': menuCollapsed,
       })}
     >
-      <div className={styles.logoText}>
-        <img src={Logo} />
-        {!menuCollapsed && <h1>管理后台</h1>}
+      <div className="flex text-size-16 py-16 pl-20 color-#001529 border-right-1-solid-#f0f0f0">
+        <img src={Logo} className="w-24 h-24" />
+        {!menuCollapsed && <h1 className="ml-10 text-size-18 fw-600">管理后台</h1>}
       </div>
-      <div className={styles.menuTree}>
+      <div className="h-[calc(100vh-80px)] overflow-y-auto">
         <Menu
           mode="inline"
           theme="light"
@@ -65,5 +61,3 @@ function LayoutMenu({ store }) {
     </div>
   )
 }
-
-export default observer(LayoutMenu)

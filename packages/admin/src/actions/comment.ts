@@ -1,4 +1,4 @@
-import api from '@/utils/api'
+import { api } from '@/utils'
 
 const url = '/comment'
 export const getCommentList = async (params) => api.get(url, params)

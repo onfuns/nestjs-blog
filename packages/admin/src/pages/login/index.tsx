@@ -2,7 +2,8 @@ import { loginUser, saveLocalUser } from '@/actions/user'
 import LoginImage from '@/public/images/login-bg.png'
 import { baseRoutes } from '@/routes'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Carousel, Form, Input, message } from 'antd'
+import { ProForm, ProFormText } from '@ant-design/pro-components'
+import { Button, Carousel, message } from 'antd'
 import * as md5 from 'md5'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -10,14 +11,14 @@ import './style.less'
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false)
-  const [form] = Form.useForm()
+  const [form] = ProForm.useForm()
   const navigate = useNavigate()
 
   const onSubmit = async () => {
     const values = await form.validateFields()
-    setLoading(true)
-    const { name, password } = values
     try {
+      setLoading(true)
+      const { name, password } = values
       const { data } = await loginUser({ name, password: md5(password) })
       setLoading(false)
       saveLocalUser(data)
@@ -34,23 +35,23 @@ export default function LoginPage() {
             <img src={LoginImage} />
           </Carousel>
         </div>
-        <Form form={form} className="w-350 ml-100">
+        <ProForm form={form} className="w-350 ml-100">
           <h1 className="mb-40 text-size-30">Nest-Blog</h1>
-          <Form.Item name="name" rules={[{ required: true, message: '请输入用户名' }]}>
-            <Input size="large" prefix={<UserOutlined />} placeholder="用户名" />
-          </Form.Item>
+          <ProFormText
+            name="name"
+            rules={[{ required: true, message: '请输入用户名' }]}
+            fieldProps={{ size: 'large', prefix: <UserOutlined /> }}
+            placeholder="用户名"
+          />
 
-          <Form.Item name="password" rules={[{ required: true, message: '请输入密码' }]}>
-            <Input
-              size="large"
-              prefix={<LockOutlined />}
-              type="password"
-              placeholder="密码"
-              onPressEnter={onSubmit}
-            />
-          </Form.Item>
+          <ProFormText.Password
+            name="password"
+            rules={[{ required: true, message: 'LockOutlined' }]}
+            fieldProps={{ size: 'large', prefix: <LockOutlined />, onPressEnter: onSubmit }}
+            placeholder="密码"
+          />
 
-          <Form.Item noStyle>
+          <ProForm.Item noStyle>
             <Button
               type="primary"
               size="large"
@@ -60,8 +61,8 @@ export default function LoginPage() {
             >
               登录
             </Button>
-          </Form.Item>
-        </Form>
+          </ProForm.Item>
+        </ProForm>
       </div>
     </div>
   )

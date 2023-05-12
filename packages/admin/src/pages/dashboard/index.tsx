@@ -1,9 +1,8 @@
 import { getDashboardData } from '@/actions/common'
-import { useFetch } from '@/hooks'
+import { TIME_STRING } from '@/constants'
+import { useRequest } from 'ahooks'
 import { Card, Col, List, Row, Space } from 'antd'
 import dayjs from 'dayjs'
-import styles from './style.module.less'
-const timeFormat = 'YYYY-MM-DD HH:mm:ss'
 
 type IDashboardInfoProps = {
   article?: { count: number }
@@ -12,24 +11,26 @@ type IDashboardInfoProps = {
 }
 
 export default function DashboardPage() {
-  const [{ data = {} }] = useFetch(getDashboardData)
-  const { article, comment, user } = data as IDashboardInfoProps
+  const {
+    data: { data: dashboardData },
+  } = useRequest(getDashboardData)
+  const { article, comment, user } = dashboardData as IDashboardInfoProps
 
   const countData = [
     { title: '文章总数', value: article?.count || 0 },
     { title: '评论总数', value: comment?.count || 0 },
   ]
   return (
-    <div className={styles.page}>
+    <>
       <Row gutter={16}>
         <Col span={16}>
           <Card title="数据统计">
             <Row gutter={16}>
               {countData.map(({ title, value }) => (
                 <Col key={title} span={8}>
-                  <div className={styles.pannel}>
-                    <div className={styles.title}>{title}</div>
-                    <div className={styles.count}>{value}</div>
+                  <div className="py-15 pl-20 border-1 border-solid border-#e6ebf5 border-rd-2 shadow-[0_2px_12px_0_rgba(0,0,0,0.1)]">
+                    <div className="color-#a3aed0">{title}</div>
+                    <div className="text-size-26">{value}</div>
                   </div>
                 </Col>
               ))}
@@ -39,7 +40,7 @@ export default function DashboardPage() {
         <Col span={8}>
           <Card title="用户信息">
             <p>
-              上次登录时间： {user?.last_login_at && dayjs(user?.last_login_at).format(timeFormat)}
+              上次登录时间： {user?.last_login_at && dayjs(user.last_login_at).format(TIME_STRING)}
             </p>
             <p>上次登录IP： {user?.last_login_ip?.replace('::ffff:', '')}</p>
           </Card>
@@ -70,7 +71,7 @@ export default function DashboardPage() {
                           评论
                         </Space>
                         <span style={{ float: 'right' }}>
-                          {record.created_at && dayjs(record.created_at).format(timeFormat)}
+                          {record.created_at && dayjs(record.created_at).format(TIME_STRING)}
                         </span>
                       </>
                     }
@@ -82,6 +83,6 @@ export default function DashboardPage() {
           </Card>
         </Col>
       </Row>
-    </div>
+    </>
   )
 }

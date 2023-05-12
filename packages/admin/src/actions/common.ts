@@ -1,3 +1,3 @@
-import api from '@/utils/api'
+import { api } from '@/utils'
 
 export const getDashboardData = () => api.get('/common/dashboard')

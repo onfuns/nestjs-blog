@@ -1,35 +1,30 @@
 import { deleteCategory, getCategoryList, updateCategory } from '@/actions/category'
-import { CATEGORT_TYPE } from '@/constants'
 import { ProTable, type ActionType, type ProColumns } from '@ant-design/pro-components'
-import { useSetState } from 'ahooks'
 import { Button, message, Popconfirm, Space, Switch, Tag } from 'antd'
 import { useRef, useState } from 'react'
-import AddModal from './components/Add'
+import { CategoryAdd } from './components/Add'
+
+export const CATEGORT_TYPE = {
+  1: '文章列表',
+  2: '单页',
+  3: '外链',
+}
 
 export default function CategoryPage() {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({ visible: false })
   const [expandKeys, setExpandKeys] = useState([])
 
-  const onAction = async (
-    type: 'add' | 'edit' | 'delete' | 'status',
-    record: ICreateModalProps['record'] = {},
-  ) => {
-    if (type === 'add' || type === 'edit') {
-      setModalProps({ visible: true, type, record })
-    } else if (type === 'delete' || type === 'status') {
-      if (type === 'delete') {
-        await deleteCategory(record.id)
-      }
-      if (type === 'status') {
-        await updateCategory(record.id, {
-          status: Number(!record.status),
-        })
-      }
-      message.success('操作成功')
-      actionRef?.current.reload()
+  const onAction = async (type: 'delete' | 'status', record) => {
+    if (type === 'delete') {
+      await deleteCategory(record.id)
+    } else if (type === 'status') {
+      await updateCategory(record.id, { status: Number(!record.status) })
     }
+    message.success('操作成功')
+    onReload()
   }
+
+  const onReload = () => actionRef?.current.reload()
 
   const columns: ProColumns<any>[] = [
     {
@@ -47,7 +42,7 @@ export default function CategoryPage() {
       render: (_, { type, url }) => (
         <Tag color="green">
           {CATEGORT_TYPE[type]}
-          {type === 3 ? `（${url}）` : ''}
+          {type === 3 && `（${url}）`}
         </Tag>
       ),
     },
@@ -69,7 +64,7 @@ export default function CategoryPage() {
       render: (_, record) => {
         return (
           <Space>
-            <a onClick={() => onAction('edit', record)}>编辑</a>
+            <CategoryAdd detail={record} onSuccess={onReload} element={<a>编辑</a>} />
             {record.pid === 0 && record?.children?.length ? null : (
               <Popconfirm title="确定删除？" onConfirm={() => onAction('delete', record)}>
                 <a className="danger">删除</a>
@@ -82,48 +77,35 @@ export default function CategoryPage() {
   ]
 
   return (
-    <>
-      <ProTable<any>
-        actionRef={actionRef}
-        columns={columns}
-        headerTitle="栏目列表"
-        search={false}
-        expandable={{
-          expandedRowKeys: expandKeys,
-          onExpand: (expand, record) => {
-            let newKeys = [...expandKeys]
-            if (expand) {
-              newKeys.push(record.id)
-            } else {
-              newKeys = newKeys.filter((key) => key !== record.id)
-            }
-            setExpandKeys([...newKeys])
-          },
-        }}
-        rowKey="id"
-        onDataSourceChange={(data) => setExpandKeys(data.map(({ id }) => id))}
-        request={async () => {
-          return await getCategoryList()
-        }}
-        pagination={false}
-        toolBarRender={() => [
-          <Button key="add" type="primary" onClick={() => onAction('add', {})}>
-            新增
-          </Button>,
-        ]}
-        defaultSize="small"
-      />
-
-      {modalProps.visible && (
-        <AddModal
-          detail={modalProps.record || {}}
-          onSuccess={() => {
-            setModalProps({ visible: false })
-            actionRef?.current.reload()
-          }}
-          onCancel={() => setModalProps({ visible: false })}
-        />
-      )}
-    </>
+    <ProTable<any>
+      actionRef={actionRef}
+      columns={columns}
+      headerTitle="栏目列表"
+      search={false}
+      expandable={{
+        expandedRowKeys: expandKeys,
+        onExpand: (expand, { id }) => {
+          let newKeys = [...expandKeys]
+          if (expand) {
+            newKeys.push(id)
+          } else {
+            newKeys = newKeys.filter((key) => key !== id)
+          }
+          setExpandKeys([...newKeys])
+        },
+      }}
+      rowKey="id"
+      onDataSourceChange={(data) => setExpandKeys(data.map(({ id }) => id))}
+      request={getCategoryList}
+      pagination={false}
+      toolBarRender={() => [
+        <CategoryAdd
+          key="add"
+          onSuccess={onReload}
+          element={<Button type="primary">新增</Button>}
+        />,
+      ]}
+      defaultSize="small"
+    />
   )
 }

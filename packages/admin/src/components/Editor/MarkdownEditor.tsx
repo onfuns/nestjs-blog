@@ -3,9 +3,9 @@ import highlight from '@bytemd/plugin-highlight'
 import { Editor } from '@bytemd/react'
 import 'bytemd/dist/index.min.css'
 import zh_Hans from 'bytemd/locales/zh_Hans.json'
-import styles from './style.module.less'
+import './style/index.less'
 
-export default function MDEditor({
+export default function MarkdownEditor({
   value,
   onChange,
 }: {
@@ -20,7 +20,7 @@ export default function MDEditor({
     }
   }
   return (
-    <div className={styles.editor}>
+    <div className="editor-component">
       <Editor
         mode="split"
         locale={zh_Hans}

@@ -1,11 +1,12 @@
 import { addCategory, updateCategory } from '@/actions/category'
-import CategoryCascader from '@/components/CategoryCascader'
-import { Form, Input, message, Modal, Radio } from 'antd'
+import CategoryCascader from '@/components/Category/Cascader'
+import { ModalForm, ProForm, ProFormRadio, ProFormText } from '@ant-design/pro-components'
+import { message } from 'antd'
 import { useEffect } from 'react'
 
-export default function CategoryAdd({ onSuccess, onCancel, detail }: IDetailModalProps) {
-  const [form] = Form.useForm()
-  const categoryType = Form.useWatch('type', form)
+export const CategoryAdd = ({ element, onSuccess, onClose, detail }: IDetailModalProps) => {
+  const [form] = ProForm.useForm()
+  const categoryType = ProForm.useWatch('type', form)
 
   useEffect(() => {
     if (detail.id) {
@@ -13,81 +14,77 @@ export default function CategoryAdd({ onSuccess, onCancel, detail }: IDetailModa
     }
   }, [])
 
-  const onFinish = () => {
-    form.validateFields().then(async (values) => {
-      const params = {
-        ...values,
-      }
-      if (detail.id) {
-        await updateCategory(detail.id, params)
-      } else {
-        await addCategory(params)
-      }
-      message.success('操作成功')
-      onSuccess()
-    })
+  const onFinish = async () => {
+    const values = await form.validateFields()
+    if (detail.id) {
+      await updateCategory(detail.id, values)
+    } else {
+      await addCategory(values)
+    }
+    message.success('操作成功')
+    onSuccess?.()
   }
 
   return (
-    <Modal
+    <ModalForm
       title="分类信息"
-      visible={true}
       width={800}
-      onOk={onFinish}
-      onCancel={onCancel}
-      destroyOnClose
+      trigger={element}
+      modalProps={{ onOk: onFinish, onCancel: onClose, destroyOnClose: true }}
+      labelCol={{ span: 4 }}
+      wrapperCol={{ span: 20 }}
+      form={form}
+      initialValues={{
+        pid: [0],
+        type: 1,
+        status: 1,
+      }}
     >
-      <Form
-        labelCol={{ span: 4 }}
-        wrapperCol={{ span: 20 }}
-        form={form}
-        initialValues={{
-          pid: [0],
-          type: 1,
-          status: 1,
-        }}
-      >
-        <Form.Item label="所属分类" name="pid" rules={[{ required: true }]}>
-          <CategoryCascader disabled={!!detail.id} />
-        </Form.Item>
+      <ProForm.Item label="所属分类" name="pid" rules={[{ required: true }]}>
+        <CategoryCascader disabled={!!detail.id} />
+      </ProForm.Item>
+      <ProFormText label="名称" name="name" rules={[{ required: true }]} placeholder="请输入名称" />
 
-        <Form.Item label="名称" name="name" rules={[{ required: true }]}>
-          <Input placeholder="请输入名称" />
-        </Form.Item>
+      <ProFormText
+        label="链接"
+        name="ename"
+        rules={[{ required: true }]}
+        placeholder="请输入链接，如 /front"
+      />
 
-        <Form.Item label="链接" name="ename" rules={[{ required: true }]}>
-          <Input placeholder="请输入链接，如 /front " />
-        </Form.Item>
+      <ProFormRadio.Group
+        label="类别"
+        name="type"
+        rules={[{ required: true }]}
+        options={[
+          { label: '文章列表', value: 1 },
+          { label: '单页', value: 2 },
+          { label: '外链', value: 3 },
+        ]}
+      />
 
-        <Form.Item label="类别" name="type" shouldUpdate rules={[{ required: true }]}>
-          <Radio.Group>
-            <Radio value={1}>文章列表</Radio>
-            {/* <Radio value={2}>单页</Radio> */}
-            <Radio value={3}>外链</Radio>
-          </Radio.Group>
-        </Form.Item>
+      {categoryType === 3 && (
+        <ProFormText
+          label="外链地址"
+          name="url"
+          rules={[{ required: true }]}
+          placeholder="请输入外链地址"
+        />
+      )}
 
-        {categoryType === 3 && (
-          <Form.Item shouldUpdate label="外链地址" name="url" rules={[{ required: true }]}>
-            <Input placeholder="请输入外链地址" />
-          </Form.Item>
-        )}
+      <ProFormText label="图标" name="icon" placeholder="iconfont 或 url" />
 
-        <Form.Item label="图标" name="icon">
-          <Input placeholder="iconfont 或 url" />
-        </Form.Item>
+      <ProFormText label="图标颜色" name="icon_color" placeholder="只对iconfont 有效" />
 
-        <Form.Item label="图标颜色" name="icon_color">
-          <Input placeholder="只对iconfont 有效" />
-        </Form.Item>
-
-        <Form.Item label="展示" name="status">
-          <Radio.Group>
-            <Radio value={1}>是</Radio>
-            <Radio value={0}>否</Radio>
-          </Radio.Group>
-        </Form.Item>
-      </Form>
-    </Modal>
+      <ProFormRadio.Group
+        label="显示"
+        name="status"
+        rules={[{ required: true }]}
+        options={[
+          { label: '是', value: 1 },
+          { label: '否', value: 0 },
+        ]}
+      />
+    </ModalForm>
   )
 }

@@ -1,5 +1,5 @@
 import { getCategoryList } from '@/actions/category'
-import { useFetch } from '@/hooks'
+import { useRequest } from 'ahooks'
 import { Cascader } from 'antd'
 import { useEffect, useState } from 'react'
 
@@ -16,7 +16,9 @@ export default function CategoryCascader({
   value = [],
   disabled = false,
 }: IProps) {
-  const [{ data: categoryList = [] }] = useFetch(getCategoryList)
+  const {
+    data: { data: categoryList = [] },
+  } = useRequest(getCategoryList)
   const [val, setVal] = useState([])
 
   useEffect(() => {

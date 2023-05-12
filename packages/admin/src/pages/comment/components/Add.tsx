@@ -1,35 +1,33 @@
 import { updateComment } from '@/actions/comment'
-import { Form, Input, message, Modal } from 'antd'
+import { ModalForm, ProForm, ProFormTextArea } from '@ant-design/pro-components'
+import { message } from 'antd'
 
-export default function CommentAdd({ onSuccess, onCancel, detail }: IDetailModalProps) {
-  const [form] = Form.useForm()
+export const CommentAdd = ({ element, onSuccess, onClose, detail }: IDetailModalProps) => {
+  const [form] = ProForm.useForm()
 
   const onFinish = async () => {
     const values = await form.validateFields()
     await updateComment(detail.id, values)
     message.success('操作成功')
-    onSuccess()
+    onSuccess?.()
   }
 
   return (
-    <Modal
+    <ModalForm
       title="评论信息"
-      visible={true}
+      trigger={element}
+      modalProps={{
+        destroyOnClose: true,
+        onOk: onFinish,
+        onCancel: onClose,
+      }}
       width={800}
-      onOk={onFinish}
-      onCancel={onCancel}
-      destroyOnClose
+      labelCol={{ span: 4 }}
+      wrapperCol={{ span: 20 }}
+      form={form}
+      initialValues={{ reply: detail?.reply }}
     >
-      <Form
-        labelCol={{ span: 4 }}
-        wrapperCol={{ span: 20 }}
-        form={form}
-        initialValues={{ reply: detail.reply || '' }}
-      >
-        <Form.Item label="回复内容" name="reply">
-          <Input.TextArea placeholder="请输入回复内容" />
-        </Form.Item>
-      </Form>
-    </Modal>
+      <ProFormTextArea label="回复内容" name="reply" placeholder="请输入回复内容" />
+    </ModalForm>
   )
 }

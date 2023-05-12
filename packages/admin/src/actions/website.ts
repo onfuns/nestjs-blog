@@ -1,4 +1,4 @@
-import api from '@/utils/api'
+import { api } from '@/utils'
 
 const url = '/website'
 export const getWebsiteConfig = async (params) => api.get(url, params)
