@@ -41,10 +41,7 @@ export const UserAdd = ({ element, onSuccess, onClose, detail }: IDetailModalPro
     <ModalForm
       title="用户信息"
       trigger={element}
-      width={800}
       modalProps={{ onOk: onFinish, onCancel: onClose, destroyOnClose: true }}
-      labelCol={{ span: 4 }}
-      wrapperCol={{ span: 20 }}
       initialValues={{ enable: 1, ...detail }}
     >
       <ProFormText

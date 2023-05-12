@@ -16,14 +16,9 @@ export default defineConfig({
     ['flex-col', 'flex flex-col'],
     ['text-ellipsis', 'truncate'],
     ['absolute-center', 'absolute left-0 right-0 top-0 bottom-0'],
-    // [/^border-(.*)-(.*)-(.*)$/, ([, c, d, e]) => `border-${c} w-${d} color-${e}`],
   ],
   rules: [
     [/^border-(.*)-(.*)-(.*)-(.*)$/, ([, c, d, e, f]) => ({ [`border-${c}`]: `${d}px ${e} ${f}` })],
-    [
-      'card-shadow',
-      { 'box-shadow': '0 1px 2px -2px #00000029, 0 3px 6px #0000001f, 0 5px 12px 4px #00000017' },
-    ],
   ],
   theme: {
     colors: {

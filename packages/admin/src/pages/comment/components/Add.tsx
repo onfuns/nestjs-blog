@@ -21,9 +21,6 @@ export const CommentAdd = ({ element, onSuccess, onClose, detail }: IDetailModal
         onOk: onFinish,
         onCancel: onClose,
       }}
-      width={800}
-      labelCol={{ span: 4 }}
-      wrapperCol={{ span: 20 }}
       form={form}
       initialValues={{ reply: detail?.reply }}
     >

@@ -52,11 +52,8 @@ export const AuthAdd = ({ element, onSuccess, onClose, detail }: IDetailModalPro
   return (
     <ModalForm
       title="权限信息"
-      width={800}
       trigger={element}
       modalProps={{ onOk: onFinish, onCancel: onClose, destroyOnClose: true }}
-      labelCol={{ span: 4 }}
-      wrapperCol={{ span: 20 }}
       form={form}
       initialValues={{ type: 1 }}
     >

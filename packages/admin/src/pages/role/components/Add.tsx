@@ -67,8 +67,6 @@ export const RoleAdd = ({ element, onSuccess, onClose, detail }: IDetailModalPro
       trigger={element}
       drawerProps={{ onClose: onClose, destroyOnClose: true }}
       onFinish={onFinish}
-      labelCol={{ span: 4 }}
-      wrapperCol={{ span: 20 }}
       form={form}
       initialValues={{ enable: 1 }}
     >

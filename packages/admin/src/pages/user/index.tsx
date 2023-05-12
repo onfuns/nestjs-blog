@@ -69,7 +69,7 @@ export default function UserPage() {
           <Space>
             <UserAdd detail={record} onSuccess={onReload} element={<a>编辑</a>} />,
             <Popconfirm title="确定删除？" onConfirm={() => onDelete(record.id)}>
-              <a className="danger">删除</a>
+              <a className="color-red">删除</a>
             </Popconfirm>
           </Space>
         ) : null

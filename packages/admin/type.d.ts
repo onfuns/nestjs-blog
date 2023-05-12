@@ -4,12 +4,6 @@ type NonFunctionPropertyNames<T> = {
 
 type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>
 
-type ICreateModalProps = {
-  visible?: boolean
-  type?: 'add' | 'edit'
-  record?: Record<string, any>
-}
-
 type IDetailModalProps = {
   element?: any
   onClose?: () => void

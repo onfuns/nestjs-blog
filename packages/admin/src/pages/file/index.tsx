@@ -1,26 +1,19 @@
 import { deleteFile, getFileList, getFileTypeList } from '@/actions/file'
 import { ProTable, type ActionType, type ProColumns } from '@ant-design/pro-components'
-import { useSetState } from 'ahooks'
 import { Button, message, Popconfirm, Popover, Space } from 'antd'
 import { useRef } from 'react'
-import AddModal from './components/Add'
+import { FileAdd } from './components/Add'
 
 export default function FilePage() {
   const actionRef = useRef<ActionType>()
-  const [modalProps, setModalProps] = useSetState<ICreateModalProps>({ visible: false })
 
-  const onAction = async (
-    type: 'add' | 'edit' | 'delete',
-    record: ICreateModalProps['record'] = {},
-  ) => {
-    if (type === 'add' || type === 'edit') {
-      setModalProps({ visible: true, record })
-    } else if (type === 'delete') {
-      await deleteFile(record.id)
-      message.success('操作成功')
-      actionRef?.current.reload()
-    }
+  const onDelete = async (id) => {
+    await deleteFile(id)
+    message.success('操作成功')
+    onReload()
   }
+
+  const onReload = () => actionRef?.current.reload()
 
   const columns: ProColumns<any>[] = [
     {
@@ -80,11 +73,11 @@ export default function FilePage() {
       render: (_, record) => {
         return (
           <Space>
-            <a target="_blank" href={`/${record.url}`}>
+            <a target="_blank" rel="noreferrer" href={`/${record.url}`}>
               下载
             </a>
-            <Popconfirm title="确定删除？" onConfirm={() => onAction('delete', record)}>
-              <a className="danger">删除</a>
+            <Popconfirm title="确定删除？" onConfirm={() => onDelete(record.id)}>
+              <a className="color-red">删除</a>
             </Popconfirm>
           </Space>
         )
@@ -93,34 +86,19 @@ export default function FilePage() {
   ]
 
   return (
-    <>
-      <ProTable<any>
-        actionRef={actionRef}
-        columns={columns}
-        headerTitle="附件列表"
-        rowKey="id"
-        request={async (params = {}) => {
-          const { success, data } = await getFileList({ ...params })
-          return { success, data: data.data, total: data.count }
-        }}
-        toolBarRender={() => [
-          <Button key="add" type="primary" onClick={() => onAction('add', undefined)}>
-            上传
-          </Button>,
-        ]}
-        defaultSize="small"
-      />
-
-      {modalProps.visible && (
-        <AddModal
-          detail={modalProps.record || {}}
-          onSuccess={() => {
-            setModalProps({ visible: false })
-            actionRef?.current.reload()
-          }}
-          onCancel={() => setModalProps({ visible: false })}
-        />
-      )}
-    </>
+    <ProTable<any>
+      actionRef={actionRef}
+      columns={columns}
+      headerTitle="附件列表"
+      rowKey="id"
+      request={async (params = {}) => {
+        const { success, data } = await getFileList({ ...params })
+        return { success, data: data.data, total: data.count }
+      }}
+      toolBarRender={() => [
+        <FileAdd key="add" onSuccess={onReload} element={<Button type="primary">上传</Button>} />,
+      ]}
+      defaultSize="small"
+    />
   )
 }

@@ -81,8 +81,6 @@ export const FileAdd = ({ element, onSuccess, onClose }: IDetailModalProps) => {
       trigger={element}
       drawerProps={{ onClose: onClose, destroyOnClose: true }}
       onFinish={onFinish}
-      labelCol={{ span: 4 }}
-      wrapperCol={{ span: 20 }}
       form={form}
     >
       <ProFormSelect

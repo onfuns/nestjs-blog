@@ -1,11 +1,12 @@
 import { addArticle, getArticle, updateArticle } from '@/actions/article'
+import { getCategoryList } from '@/actions/category'
 import { getTagList } from '@/actions/tag'
-import CategoryCascader from '@/components/Category/Cascader'
 import MDEditor from '@/components/Editor/MarkdownEditor'
 import { TIME_STRING } from '@/constants'
 import {
   DrawerForm,
   ProForm,
+  ProFormCascader,
   ProFormDatePicker,
   ProFormRadio,
   ProFormSelect,
@@ -62,8 +63,6 @@ export const ArticleAdd = ({ element, onClose, onSuccess, detail = {} }: IDetail
       drawerProps={{ onClose: onClose, destroyOnClose: true }}
       onFinish={onFinish}
       width="50%"
-      labelCol={{ span: 4 }}
-      wrapperCol={{ span: 20 }}
       form={form}
       initialValues={{
         pass_flag: 1,
@@ -86,9 +85,17 @@ export const ArticleAdd = ({ element, onClose, onSuccess, detail = {} }: IDetail
         fieldProps={{ showCount: true, maxLength: 200 }}
       />
 
-      <ProForm.Item label="分类" name="category_id" rules={[{ required: true }]}>
-        <CategoryCascader root={false} />
-      </ProForm.Item>
+      <ProFormCascader
+        label="分类"
+        name="category_id"
+        rules={[{ required: true }]}
+        placeholder="请选择分类"
+        request={getCategoryList}
+        fieldProps={{
+          fieldNames: { label: 'name', value: 'id', children: 'children' },
+          changeOnSelect: true,
+        }}
+      />
 
       <ProFormSelect
         label="标签"

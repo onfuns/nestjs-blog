@@ -1,6 +1,11 @@
-import { addCategory, updateCategory } from '@/actions/category'
-import CategoryCascader from '@/components/Category/Cascader'
-import { ModalForm, ProForm, ProFormRadio, ProFormText } from '@ant-design/pro-components'
+import { addCategory, getCategoryList, updateCategory } from '@/actions/category'
+import {
+  ModalForm,
+  ProForm,
+  ProFormCascader,
+  ProFormRadio,
+  ProFormText,
+} from '@ant-design/pro-components'
 import { message } from 'antd'
 import { useEffect } from 'react'
 
@@ -28,11 +33,8 @@ export const CategoryAdd = ({ element, onSuccess, onClose, detail }: IDetailModa
   return (
     <ModalForm
       title="分类信息"
-      width={800}
       trigger={element}
       modalProps={{ onOk: onFinish, onCancel: onClose, destroyOnClose: true }}
-      labelCol={{ span: 4 }}
-      wrapperCol={{ span: 20 }}
       form={form}
       initialValues={{
         pid: [0],
@@ -40,9 +42,22 @@ export const CategoryAdd = ({ element, onSuccess, onClose, detail }: IDetailModa
         status: 1,
       }}
     >
-      <ProForm.Item label="所属分类" name="pid" rules={[{ required: true }]}>
-        <CategoryCascader disabled={!!detail.id} />
-      </ProForm.Item>
+      <ProFormCascader
+        label="所属分类"
+        name="pid"
+        rules={[{ required: true }]}
+        placeholder="请选择分类"
+        request={async () => {
+          const { data } = await getCategoryList()
+          return [{ id: 0, name: '一级分类' }].concat(data)
+        }}
+        disabled={!!detail.id}
+        fieldProps={{
+          fieldNames: { label: 'name', value: 'id', children: 'children' },
+          changeOnSelect: true,
+        }}
+      />
+
       <ProFormText label="名称" name="name" rules={[{ required: true }]} placeholder="请输入名称" />
 
       <ProFormText

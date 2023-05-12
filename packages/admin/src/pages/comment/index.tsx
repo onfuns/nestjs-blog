@@ -82,7 +82,7 @@ export default function CommentPage() {
           <Space>
             <CommentAdd detail={record} element={<a>回复</a>} />
             <Popconfirm title="确定删除？" onConfirm={() => onAction('delete', record)}>
-              <a className="danger">删除</a>
+              <a className="color-red">删除</a>
             </Popconfirm>
           </Space>
         )

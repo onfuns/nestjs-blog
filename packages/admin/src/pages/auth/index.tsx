@@ -41,7 +41,7 @@ export default function AuthPage() {
           <Space>
             <AuthAdd detail={record} onSuccess={onRoload} element={<a>编辑</a>} />
             <Popconfirm title="确定删除？" onConfirm={() => onDelete(record)}>
-              <a className="danger">删除</a>
+              <a className="color-red">删除</a>
             </Popconfirm>
           </Space>
         )

@@ -1,4 +1,5 @@
 import { deleteArticle, getArticleList, updateArticle } from '@/actions/article'
+import { TIME_STRING } from '@/constants'
 import { ProTable, type ActionType, type ProColumns } from '@ant-design/pro-components'
 import { Button, message, Popconfirm, Space, Switch } from 'antd'
 import dayjs from 'dayjs'
@@ -8,26 +9,16 @@ import { ArticleAdd } from './components/Add'
 export default function ArticlePage() {
   const actionRef = useRef<ActionType>()
 
-  const onAction = async (
-    type: 'sort' | 'pass_flag' | 'delete' | 'pass',
-    record: ICreateModalProps['record'] = {},
-  ) => {
-    const { id = '', sort = 0, pass_flag = 0 } = record
-    const params: any = {}
-
+  const onAction = async (type: 'sort' | 'pass_flag' | 'delete' | 'pass', record: any = {}) => {
+    const { id, sort = 0, pass_flag = 0 } = record
     if (type === 'delete') {
       await deleteArticle(id)
-    } else {
-      //置顶
-      if (type === 'sort') {
-        // > 0 说明取消置顶
-        params.sort = Number(sort) > 0 ? 0 : dayjs().valueOf()
-      }
+    } else if (type === 'sort') {
+      // > 0 说明取消置顶
+      await updateArticle(id, { sort: Number(sort) > 0 ? 0 : dayjs().valueOf() })
+    } else if (type === 'pass_flag') {
       //审核
-      else if (type === 'pass_flag') {
-        params.pass_flag = pass_flag === 0 ? 1 : 0
-      }
-      await updateArticle(id, params)
+      await updateArticle(id, { pass_flag: Number(!pass_flag) })
     }
     message.success('操作成功')
     onReload()
@@ -40,13 +31,11 @@ export default function ArticlePage() {
       title: '标题',
       dataIndex: 'title',
       width: 250,
-      render: (_, { id, title }) => {
-        return (
-          <a target="__blank" href={`/article/${id}`}>
-            {title}
-          </a>
-        )
-      },
+      render: (_, { id, title }) => (
+        <a target="_blank" rel="noreferrer" href={`/article/${id}`}>
+          {title}
+        </a>
+      ),
     },
     {
       title: '类别',
@@ -64,8 +53,7 @@ export default function ArticlePage() {
       title: '发布时间',
       hideInSearch: true,
       dataIndex: 'publish_time',
-      render: (_, { publish_time }) =>
-        publish_time && dayjs(publish_time).format('YYYY-MM-DD HH:mm:ss'),
+      render: (_, { publish_time }) => publish_time && dayjs(publish_time).format(TIME_STRING),
     },
     {
       title: '置顶',
@@ -97,16 +85,14 @@ export default function ArticlePage() {
     },
     {
       title: '操作',
-      dataIndex: 'option',
       valueType: 'option',
       width: 120,
       render: (_, record) => {
         return (
           <Space>
             <ArticleAdd detail={record} onSuccess={onReload} element={<a>编辑</a>} />
-
             <Popconfirm title="确定删除？" onConfirm={() => onAction('delete', record)}>
-              <a className="danger">删除</a>
+              <a className="color-red">删除</a>
             </Popconfirm>
           </Space>
         )

@@ -19,11 +19,8 @@ export const TagAdd = ({ element, onSuccess, onClose, detail = {} }: IDetailModa
   return (
     <ModalForm
       title="标签信息"
-      width={800}
       trigger={element}
       modalProps={{ onOk: onFinish, onCancel: onClose, destroyOnClose: true }}
-      labelCol={{ span: 4 }}
-      wrapperCol={{ span: 20 }}
       initialValues={detail}
     >
       <ProFormText label="名称" name="name" rules={[{ required: true }]} placeholder="请输入名称" />
