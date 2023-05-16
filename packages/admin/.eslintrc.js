@@ -4,7 +4,6 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
   ],
   env: {
@@ -24,5 +23,10 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': ['off'],
     'react/display-name': ['off'],
     '@typescript-eslint/no-extra-semi': ['off'],
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
   },
 }

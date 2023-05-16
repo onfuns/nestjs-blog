@@ -1,5 +1,5 @@
 import { useHistory } from '@/hooks'
-import { flatRoutes } from '@/routes'
+import { routes } from '@/routes'
 import { HeaderStore } from '@/store'
 import { Tabs } from 'antd'
 import { useEffect } from 'react'
@@ -12,7 +12,7 @@ export default function PageTabs({ store }: { store: HeaderStore }) {
   const { pathname, search } = history.location
 
   useEffect(() => {
-    const router = flatRoutes?.find((item: any) => item.path === pathname) || {}
+    const router = routes?.find((item: any) => item.path === pathname) || {}
     updateTab({ ...router, search })
     setCurrentTabPath(pathname)
   }, [pathname])

@@ -1,7 +1,4 @@
-**/*.md
-**/*.svg
-**/*.ejs
-**/*.html
 package.json
+package-lock.json
 yarn.lock
 

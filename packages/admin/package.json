@@ -6,8 +6,8 @@
     "prebuild": "rimraf dist",
     "dev": "vite dev",
     "build": "vite build",
-    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
-    "lint": "eslint . --ext .ts,.tsx"
+    "prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "eslint": "eslint \"src/**/*.{ts,tsx}\""
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",

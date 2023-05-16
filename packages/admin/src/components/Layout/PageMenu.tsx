@@ -1,6 +1,6 @@
 import { useHistory } from '@/hooks'
 import LogoImage from '@/public/images/logo.png'
-import { baseRoutes } from '@/routes'
+import { adminRoutes } from '@/routes'
 import { AppstoreOutlined, HomeOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons'
 import { Menu } from 'antd'
 import classnames from 'classnames'
@@ -22,7 +22,7 @@ export default function LayoutMenu({ menuCollapsed }: { menuCollapsed: boolean }
     return icon ? createElement(icons[icon]) : null
   }
 
-  const menuItems = baseRoutes.map(({ name, path, children }) => {
+  const menuItems = adminRoutes.map(({ name, path, children }) => {
     const subRoute = children?.map((child) => ({
       label: child.name,
       key: child.path,
