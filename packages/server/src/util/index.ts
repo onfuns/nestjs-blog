@@ -1,7 +1,7 @@
 import { isNumberString } from 'class-validator'
 import * as LTT from 'list-to-tree'
 
-export const toTree = (data, options = {}) => {
+export const toTree = (data, options) => {
   const ltt = new LTT(data, {
     key_id: 'id',
     key_parent: 'pid',

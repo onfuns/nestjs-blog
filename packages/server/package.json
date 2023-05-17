@@ -15,12 +15,6 @@
     "eslint": "eslint \"{src,test}/**/*.ts\" --fix",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
-  "lint-staged": {
-    "{src,test}/**/*.ts": [
-      "eslint",
-      "prettier --write"
-    ]
-  },
   "dependencies": {
     "@nestjs/common": "^9.4.0",
     "@nestjs/config": "^2.3.1",
