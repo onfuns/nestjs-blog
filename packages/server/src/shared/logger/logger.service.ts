@@ -1,4 +1,4 @@
-import { isObject, IS_DEV } from '@/util'
+import { IS_DEV, isObject } from '@/util'
 import { Injectable } from '@nestjs/common'
 import * as path from 'path'
 import * as winston from 'winston'
@@ -7,14 +7,18 @@ import * as DailyRotateFile from 'winston-daily-rotate-file'
 @Injectable()
 export class LoggerService {
   private logger: winston.Logger
-  constructor(appName) {
-    this.logger = winston.createLogger({
+  constructor(serviceName: string) {
+    this.logger = this.createLogger(serviceName)
+  }
+
+  private createLogger(serviceName: string) {
+    return winston.createLogger({
       level: IS_DEV ? 'silly' : 'info',
       format: winston.format.combine(
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
         winston.format.colorize(),
         winston.format.printf(({ level, timestamp, message }) => {
-          return `[${timestamp}] [${level}] [${appName}]: ${message}`
+          return `[${timestamp}] [${level}] [${serviceName}]: ${message}`
         }),
       ),
       transports: [
@@ -40,35 +44,35 @@ export class LoggerService {
     })
   }
 
-  private stringify(...args: any[]): string {
+  private stringify(args: any[]): string {
     return args.map(arg => (isObject(arg) ? JSON.stringify(arg) : arg)).join('')
   }
 
-  public error(message: any, data?: any): void {
-    this.logger.error(this.stringify(message, data))
+  public error(...args: any[]) {
+    this.logger.error(this.stringify(args))
   }
 
-  public warn(message: any, data?: any): void {
-    this.logger.warn(this.stringify(message, data))
+  public warn(...args: any[]) {
+    this.logger.warn(this.stringify(args))
   }
 
-  public info(message: any, data?: any): void {
-    this.logger.info(this.stringify(message, data))
+  public info(...args: any[]) {
+    this.logger.info(this.stringify(args))
   }
 
-  public http(message: any, data?: any): void {
-    this.logger.http(this.stringify(message, data))
+  public http(...args: any[]) {
+    this.logger.http(this.stringify(args))
   }
 
-  public verbose(message: any, data?: any): void {
-    this.logger.verbose(this.stringify(message, data))
+  public verbose(...args: any[]) {
+    this.logger.verbose(this.stringify(args))
   }
 
-  public debug(message: any, data?: any): void {
-    this.logger.debug(this.stringify(message, data))
+  public debug(...args: any[]) {
+    this.logger.debug(this.stringify(args))
   }
 
-  public silly(message: any, data?: any): void {
-    this.logger.silly(this.stringify(message, data))
+  public silly(...args: any[]) {
+    this.logger.silly(this.stringify(args))
   }
 }

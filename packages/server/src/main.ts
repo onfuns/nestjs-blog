@@ -1,6 +1,6 @@
 import Config from '@/config'
 import { HttpExceptionFilter } from '@/filter/http.filter'
-import { ApiInterceptor } from '@/interceptor/api.interceptor'
+import { HttpInterceptor } from '@/interceptor/http.interceptor'
 import { ValidationPipe } from '@/pipe/validation.pipe'
 import { IS_DEV } from '@/util'
 import { NestFactory } from '@nestjs/core'
@@ -17,7 +17,7 @@ async function bootstrap() {
     logger: IS_DEV ? ['log', 'debug', 'warn', 'error'] : ['warn', 'error'],
   })
   app.useGlobalFilters(new HttpExceptionFilter())
-  app.useGlobalInterceptors(new ApiInterceptor())
+  app.useGlobalInterceptors(new HttpInterceptor())
   app.useGlobalPipes(new ValidationPipe())
   app.setGlobalPrefix(Config.base)
   app.enableCors()

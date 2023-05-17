@@ -9,8 +9,8 @@ import {
 import { Observable } from 'rxjs'
 import { map, tap } from 'rxjs/operators'
 @Injectable()
-export class ApiInterceptor implements NestInterceptor {
-  private logger = new LoggerService('ApiInterceptor')
+export class HttpInterceptor implements NestInterceptor {
+  private logger = new LoggerService('HTTP')
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const ctx = context.switchToHttp()

@@ -1,6 +1,6 @@
-import { IConfig } from './type'
+import { IConfig } from '.'
 
-export default {
+export const ProdConfig: IConfig = {
   db: {
     type: 'mysql',
     host: process.env.DB_HOST,
@@ -13,4 +13,4 @@ export default {
     synchronize: true,
   },
   jwtToken: process.env.JWT_TOKEN,
-} as IConfig
+}

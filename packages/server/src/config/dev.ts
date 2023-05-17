@@ -1,5 +1,6 @@
-import { IConfig } from './type'
-export default {
+import { IConfig } from '.'
+
+export const DevConfig: IConfig = {
   db: {
     type: 'mysql',
     host: 'localhost',
@@ -13,4 +14,4 @@ export default {
     logging: ['query', 'error'],
   },
   jwtToken: 'ONFUNS',
-} as IConfig
+}
