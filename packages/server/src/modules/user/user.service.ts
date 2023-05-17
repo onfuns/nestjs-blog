@@ -23,19 +23,18 @@ export class UserService {
     return token
   }
 
-  verifyToken(token: string) {
-    console.log(`token`, token)
+  verifyToken(token) {
+    if (!token) return false
     const { jwtToken } = config
     try {
       const decoded = jwt.verify(token, jwtToken)
-      if (decoded && decoded.secret === jwtToken) {
+      if (decoded?.secret === jwtToken) {
         return decoded
-      } else {
-        return false
       }
     } catch (err) {
-      return false
+      console.log('verifyToken error ', err)
     }
+    return false
   }
 
   async create(body: User): Promise<any> {

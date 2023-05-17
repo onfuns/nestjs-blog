@@ -1,4 +1,4 @@
-import Config from '@/config'
+import config from '@/config'
 import { User } from '@/modules/user/user.entity'
 import { UserService } from '@/modules/user/user.service'
 import {
@@ -27,11 +27,12 @@ export class UserGuard implements CanActivate {
     const NO_PERMISSION = this.reflector.get<string[]>('NO_PERMISSION', context.getHandler())
     if (NO_PERMISSION) return true
     /** token 鉴权 begin */
-    const token = request.headers['X-AUTH-ID-TOKEN'.toLowerCase()] as string
+    const token = request.headers['X-AUTH-ID-TOKEN'.toLowerCase()]
     console.log('X-AUTH-ID-TOKEN received:', token)
-    if (!token) return this.fail()
     const tokenInfo = await this.userService.verifyToken(token)
-    if (!tokenInfo) this.fail()
+    if (!tokenInfo) {
+      throw new HttpException('INVALID_TOKEN', HttpStatus.FORBIDDEN)
+    }
     /** token 鉴权 end */
 
     /** 接口鉴权 begin */
@@ -41,7 +42,7 @@ export class UserGuard implements CanActivate {
       const role = user.roles[i]
       if (role.enable === 1) auths.push(...(role.auths || []))
     }
-    const url = request.path.replace(Config.base, '')
+    const url = request.path.replace(config.base, '')
     //code 格式  /role/:id::POST::PUT::DELETE
     if (
       !auths?.some(({ code }: { code: string }) => {
@@ -56,8 +57,5 @@ export class UserGuard implements CanActivate {
     }
     /** 接口鉴权 end */
     return true
-  }
-  fail() {
-    throw new HttpException('INVALID_TOKEN', HttpStatus.FORBIDDEN)
   }
 }
