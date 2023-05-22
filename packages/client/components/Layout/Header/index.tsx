@@ -1,7 +1,7 @@
 import classnames from 'classnames'
 import Head from 'next/head'
 import { useEffect, useRef } from 'react'
-import styles from './style.module.less'
+import styles from './style.module.scss'
 
 export default function Header() {
   const headerRef = useRef()

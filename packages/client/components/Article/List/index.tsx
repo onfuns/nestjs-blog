@@ -2,7 +2,7 @@ import { Pagination } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
-import styles from './style.module.less'
+import styles from './style.module.scss'
 
 export default function List({ data, count = 0 }: { data: any[]; count: number }) {
   const router = useRouter()

@@ -1,6 +1,6 @@
 import classnames from 'classnames'
 import dayjs from 'dayjs'
-import styles from './style.module.less'
+import styles from './style.module.scss'
 
 export default function Footer() {
   return (

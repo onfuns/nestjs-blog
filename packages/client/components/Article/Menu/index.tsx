@@ -1,6 +1,6 @@
 import classnames from 'classnames'
 import { useRouter } from 'next/router'
-import styles from './style.module.less'
+import styles from './style.module.scss'
 
 const MenuPanel = ({ data = [] }: { data: any[] }) => {
   const router = useRouter()

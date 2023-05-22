@@ -6,7 +6,7 @@ import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
 import markdownIt from 'markdown-it'
 import markdownItAnchor from 'markdown-it-anchor'
-import styles from './style.module.less'
+import styles from './style.module.scss'
 
 type IArticle = {
   id: string

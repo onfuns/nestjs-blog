@@ -3,7 +3,7 @@ import { Button, Col, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { observer } from 'mobx-react'
 import { useEffect } from 'react'
-import styles from './style.module.less'
+import styles from './style.module.scss'
 
 export default observer(({ articeId }: { articeId: string }) => {
   const { commentStore } = useStore()

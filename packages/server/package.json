@@ -2,7 +2,6 @@
   "name": "nest-blog-server",
   "version": "1.0.0",
   "author": "onfuns",
-  "private": true,
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",

@@ -1,7 +1,7 @@
-:global {
-  @import url('@/styles/md.theme.less');
-}
 .page {
+  :global {
+    @import url('./md.theme.scss');
+  }
   padding: 10px 0;
   .container {
     display: flex;

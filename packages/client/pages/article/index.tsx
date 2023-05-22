@@ -4,7 +4,7 @@ import CarouselPanel from '@/components/CarouselPanel'
 import { findByValue } from '@/utils/util'
 import classnames from 'classnames'
 import markdownIt from 'markdown-it'
-import styles from './style.module.less'
+import styles from './style.module.scss'
 
 export default function Article({
   categoryList,

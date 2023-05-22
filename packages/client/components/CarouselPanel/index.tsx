@@ -1,5 +1,5 @@
 import { Carousel } from 'antd'
-import styles from './style.module.less'
+import styles from './style.module.scss'
 
 export default function CarouselPanel() {
   const carouselList = [
