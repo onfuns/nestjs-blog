@@ -25,16 +25,6 @@ ul li {
   font-size: 14px;
 }
 
-.main-container {
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  background: #f4f5f5;
-  min-height: calc(100vh - 40px);
-  padding: 60px 0 30px;
-}
-
-.page-container {
-  width: 1000px;
-  margin: 0 auto;
+:root {
+  --primary-color: #ff502c;
 }

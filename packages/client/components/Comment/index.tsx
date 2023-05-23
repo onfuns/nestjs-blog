@@ -3,7 +3,7 @@ import { Button, Col, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { observer } from 'mobx-react'
 import { useEffect } from 'react'
-import styles from './style.module.scss'
+import './style.scss'
 
 export default observer(({ articeId }: { articeId: string }) => {
   const { commentStore } = useStore()
@@ -16,7 +16,7 @@ export default observer(({ articeId }: { articeId: string }) => {
       message.success('评论成功，请耐心等待审核哦~')
       form.resetFields()
     } else {
-      message.error('失败啦，歇会再试吧~')
+      message.error('失败啦，歇会儿再试吧~')
     }
   }
 
@@ -27,11 +27,11 @@ export default observer(({ articeId }: { articeId: string }) => {
   const { result: { data = [] } = {} } = commentStore
 
   return (
-    <div className={styles.comment}>
-      <div className={styles.header}>评论</div>
-      <div className={styles.content}>
-        <img className={styles.avatar} src="/image/avatar.png" />
-        <Form className={styles.form} form={form}>
+    <div className="comment w-720 bg-#fff p-20 mt-20 border-r-4">
+      <div className="text-size-18 lh-30 fw-600 color-#252933 mb-10">评论</div>
+      <div className="flex items-start">
+        <img className="mr-16 w-40 h-40 border-r-50%" src="/image/avatar.png" />
+        <Form className="flex-[1-1-auto] relative" form={form}>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item name="name" rules={[{ required: true, message: '请输入昵称' }]}>
@@ -43,7 +43,7 @@ export default observer(({ articeId }: { articeId: string }) => {
                 name="url"
                 rules={[{ required: true, message: '请输入网址', pattern: /^https?/ }]}
               >
-                <Input placeholder="请输入网址" maxLength={50} />
+                <Input placeholder="请输入网址" maxLength={200} />
               </Form.Item>
             </Col>
           </Row>
@@ -54,31 +54,38 @@ export default observer(({ articeId }: { articeId: string }) => {
               placeholder="请输入内容"
             />
           </Form.Item>
-          <div className={styles.btns}>
+          <div className="flex justify-between">
             <Button type="primary" onClick={onSubmit}>
               立即评论
             </Button>
-            <span className={styles.tips}>请文明评论哦~</span>
+            <span className="color-#999">请文明评论哦~</span>
           </div>
         </Form>
       </div>
 
       {data?.length > 0 && (
-        <div className={styles.listContent}>
-          <div className={styles.header}>全部评论</div>
-          <div className={styles.list}>
+        <div className="mt-20">
+          <div className="text-size-18 lh-30 fw-600 color-#252933 mb-10">全部评论</div>
+          <div>
             {data?.map((item, index) => (
-              <div className={styles.listItem} key={index}>
-                <img className={styles.avatar} src="/image/avatar.png" />
-                <div className={styles.listRow}>
-                  <div className={styles.listMeta}>
-                    <a href={item.url} target="_blank" rel="noreferrer" className={styles.name}>
+              <div className="flex color-#515767 py-10" key={index}>
+                <img className="mr-16 w-40 h-40 border-r-50%" src="/image/avatar.png" />
+                <div className="flex-1">
+                  <div className="flex-center mb-10">
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="fw-500 text-size-15 color-#252933 max-w-130 lh-26 hidden text-ellipsis mb-0"
+                    >
                       {item.name}
                     </a>
-                    <span className={styles.time}>{dayjs(item.created_at).fromNow()}</span>
+                    <span className="color-#8a919f">{dayjs(item.created_at).fromNow()}</span>
                   </div>
                   <p>{item.content}</p>
-                  {item.reply && <div className={styles.replyContent}>回复：{item.reply}</div>}
+                  {item.reply && (
+                    <div className="p-16 bg-#f7f8fab3 border-r-4">回复：{item.reply}</div>
+                  )}
                 </div>
               </div>
             ))}

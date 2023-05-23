@@ -4,8 +4,9 @@
   "trailingComma": "all",
   "bracketSpacing": true,
   "jsxBracketSameLine": false,
-  "arrowParens": "avoid",
+  "arrowParens": "always",
   "requirePragma": false,
   "printWidth": 100,
-  "proseWrap": "never"
+  "proseWrap": "never",
+  "plugins": ["prettier-plugin-organize-imports"]
 }

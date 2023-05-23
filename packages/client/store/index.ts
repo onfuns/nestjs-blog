@@ -1,4 +1,4 @@
-import { isServer } from '@/utils/util'
+import { isServer } from '@/utils'
 import { enableStaticRendering } from 'mobx-react'
 import { createContext } from 'react'
 import { ArticleStore } from './article'

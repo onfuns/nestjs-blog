@@ -1,9 +1,4 @@
-import request from '@/utils/request'
+import { api } from '@/utils'
 
-export const getArticleList = async (params = {}) => {
-  return request({ url: '/article/list', params })
-}
-
-export const getArticle = async ({ id }) => {
-  return request({ url: `/article/${id}` })
-}
+export const getArticleList = async (params) => api.get('/article/list', params)
+export const getArticle = async ({ id }) => api.get(`/article/${id}`)

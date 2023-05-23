@@ -1,5 +1,3 @@
-import request from '@/utils/request'
+import { api } from '@/utils'
 
-export const getCategoryList = async () => {
-  return request({ url: '/category/list' })
-}
+export const getCategoryList = async () => api.get('/category/list')

@@ -20,8 +20,10 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    '@typescript-eslint/no-explicit-any': ['off'],
-    'react/display-name': ['off'],
-    '@typescript-eslint/no-extra-semi': ['off'],
+    '@typescript-eslint/no-explicit-any': 'off',
+    'react/display-name': 'off',
+    'react/no-unknown-property': 'off',
+    '@typescript-eslint/no-extra-semi': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
   },
 }

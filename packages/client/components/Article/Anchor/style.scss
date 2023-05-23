@@ -1,0 +1,61 @@
+.anchor-item {
+  a::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    margin-top: -2px;
+    width: 4px;
+    height: 4px;
+    background-color: #aaa;
+    border-radius: 50%;
+  }
+
+  &.h1 {
+    font-weight: 600;
+    & > a {
+      font-size: 18px;
+      &::before {
+        width: 6px;
+        height: 6px;
+      }
+    }
+  }
+  &.h2 {
+    font-weight: 600;
+  }
+  &.h3 {
+    padding-left: 15px;
+  }
+  &.h4 {
+    padding-left: 30px;
+  }
+  &.h5 {
+    padding-left: 45px;
+  }
+
+  &.active {
+    a {
+      color: var(--primary-color);
+      &::before {
+        background: var(--primary-color);
+      }
+    }
+  }
+}
+.anchor {
+  position: sticky;
+  top: 60px;
+  width: 260px;
+  margin-left: 20px;
+  min-height: 300px;
+  max-height: 600px;
+  overflow: auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 4px;
+  flex-shrink: 0;
+  align-self: flex-start;
+  .anchorItem {
+  }
+}

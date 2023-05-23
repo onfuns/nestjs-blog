@@ -1,30 +1,12 @@
-import PageFooter from '@/components/Layout/Footer'
-import PageHeader from '@/components/Layout/Header'
-import { useStore } from '@/hooks'
+import Layout from '@/components/Layout'
 import { RootStore } from '@/store'
 import '@/styles/global.css'
-import '@/utils/dayjs'
-import { isServer } from '@/utils/util'
 import '@fontsource/jetbrains-mono'
-import { ConfigProvider } from 'antd'
-import antd_zh_CN from 'antd/lib/locale/zh_CN'
-import { Provider } from 'mobx-react'
 import App from 'next/app'
+import 'uno.css'
 
-export default function CustomApp({ Component, pageProps = {}, initialMobxState }: any) {
-  const stores = isServer ? initialMobxState : useStore()
-
-  return (
-    <Provider {...stores}>
-      <ConfigProvider locale={antd_zh_CN}>
-        <PageHeader />
-        <div className="main-container">
-          <Component {...pageProps} />
-        </div>
-        <PageFooter />
-      </ConfigProvider>
-    </Provider>
-  )
+export default function CustomApp(props) {
+  return <Layout {...props} />
 }
 
 CustomApp.getInitialProps = async function (appContext) {

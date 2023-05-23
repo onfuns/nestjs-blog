@@ -1,16 +1,25 @@
 import classnames from 'classnames'
 import { useEffect, useState } from 'react'
-import styles from './style.module.scss'
+import './style.scss'
+
+export interface IAnchorItem {
+  title: string
+  tagName: string
+  index: number
+}
 
 export default function Anchor() {
   const [currentHeadingIndex, setCurrentHeadingIndex] = useState(0)
-  const [data, setData] = useState([])
+  const [anchor, setAnchor] = useState<IAnchorItem[]>([])
+
+  const getHeadings = () => {
+    return document.querySelector('.markdown-body').querySelectorAll('h2,h3,h4,h5')
+  }
 
   useEffect(() => {
-    const headings = document.querySelector('.markdown-body').querySelectorAll('h1,h2,h3,h4,h5,h6')
-
+    const headings = getHeadings()
     const observer = new IntersectionObserver(
-      entries => {
+      (entries) => {
         const io = entries[0]
         if (io.isIntersecting === true) {
           const index = Array.prototype.indexOf.call(headings, io.target)
@@ -36,33 +45,35 @@ export default function Anchor() {
       observer.observe(node)
       data.push({ title: node.textContent, tagName: node.tagName, index })
     })
-    setData(data)
+    setAnchor(data)
     return () => {
-      headings.forEach(node => observer.unobserve(node))
+      headings.forEach((node) => observer.unobserve(node))
     }
   }, [])
 
   const onChange = ({ index }) => {
-    const headings = document.querySelector('.markdown-body').querySelectorAll('h1,h2,h3,h4,h5,h6')
+    const headings = getHeadings()
     setCurrentHeadingIndex(index)
     headings[index].scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
-    <div className={styles.anchor}>
-      <ul className={classnames('anchor-list', styles.anchorList)}>
-        {data.map((item, index) => (
+    <div className="sticky top-60 w-260 ml-20 min-h-300 max-h-600 overflow-auto p-20 bg-#fff border-r-4 flex-shrink-0 flex-self-start ">
+      <ul className="anchor-list">
+        {anchor.map((item, index) => (
           <li
             key={index}
             data-anchor-index={item.index}
-            className={classnames({
-              ['anchor-item']: true,
-              [styles.anchorItem]: true,
-              [styles[`${item.tagName}`]]: true,
-              [styles.anchorActive]: currentHeadingIndex === index,
+            className={classnames('anchor-item', `${item.tagName}`, {
+              active: currentHeadingIndex === index,
             })}
           >
-            <a onClick={() => onChange(item)}>{item.title}</a>
+            <a
+              onClick={() => onChange(item)}
+              className="color-inherit relative block p-[4px_0_4px_15px]"
+            >
+              {item.title}
+            </a>
           </li>
         ))}
       </ul>

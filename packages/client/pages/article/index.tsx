@@ -1,24 +1,19 @@
-import ArticleList from '@/components/Article/List'
-import ArticleMenu from '@/components/Article/Menu'
-import CarouselPanel from '@/components/CarouselPanel'
-import { findByValue } from '@/utils/util'
-import classnames from 'classnames'
+import { ArticleCarousel, ArticleList, ArticleMenu, type IListProps } from '@/components/Article'
+import { findByValue } from '@/utils'
 import markdownIt from 'markdown-it'
-import styles from './style.module.scss'
 
-export default function Article({
-  categoryList,
-  articleData,
-}: {
+export interface IArticlePageProps {
   categoryList: any[]
-  articleData: { data: any[]; count: number }
-}) {
+  articleData: IListProps['result']
+}
+
+export default function Article({ categoryList, articleData }: IArticlePageProps) {
   return (
-    <div className={classnames('page-container', styles.page)}>
+    <div className="w-1000-center flex">
       <ArticleMenu data={categoryList} />
-      <div className={styles.content}>
-        <CarouselPanel />
-        <ArticleList data={articleData.data} count={articleData.count} />
+      <div className="w-1000 hidden">
+        <ArticleCarousel />
+        <ArticleList result={articleData} />
       </div>
     </div>
   )
@@ -48,7 +43,7 @@ export const getServerSideProps = async ({ req, query }) => {
     }
   }
   const articleData = await articleStore.get(params)
-  articleData?.data?.map(acticle => {
+  articleData?.data?.map((acticle) => {
     if (!acticle.description) {
       const more = acticle.content.indexOf('<!--more-->')
       if (more > -1) {
