@@ -1,6 +1,6 @@
 import { deleteComment, getCommentList, updateComment } from '@/actions/comment'
 import { ProTable, type ActionType, type ProColumns } from '@ant-design/pro-components'
-import { message, Popconfirm, Space, Switch } from 'antd'
+import { Popconfirm, Space, Switch, message } from 'antd'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
 import { CommentAdd } from './components/Add'
@@ -27,7 +27,7 @@ export default function CommentPage() {
       width: 250,
       ellipsis: true,
       render: (_, { article }) => (
-        <a href={`/article/${article?.id}`} target="__blank">
+        <a href={`/article/${article?.id}`} target="_blank" rel="noreferrer">
           {article?.title}
         </a>
       ),
