@@ -1,19 +1,22 @@
 import classnames from 'classnames'
 import { useEffect, useState } from 'react'
-import './style.scss'
+import styles from './style.module.scss'
 
+export interface IProps {
+  contentId: string
+}
 export interface IAnchorItem {
   title: string
   tagName: string
   index: number
 }
 
-export default function Anchor() {
+export default function Anchor({ contentId }: IProps) {
   const [currentHeadingIndex, setCurrentHeadingIndex] = useState(0)
   const [anchor, setAnchor] = useState<IAnchorItem[]>([])
 
   const getHeadings = () => {
-    return document.querySelector('.markdown-body').querySelectorAll('h2,h3,h4,h5')
+    return document.getElementById(contentId).querySelectorAll('h2,h3,h4,h5')
   }
 
   useEffect(() => {
@@ -58,13 +61,13 @@ export default function Anchor() {
   }
 
   return (
-    <div className="sticky top-60 w-260 ml-20 min-h-300 max-h-600 overflow-auto p-20 bg-#fff border-r-4 flex-shrink-0 flex-self-start ">
+    <div className="sticky top-60 w-260 ml-20 min-h-300 max-h-600 overflow-auto p-20 bg-#fff rd-4 flex-shrink-0 flex-self-start ">
       <ul className="anchor-list">
         {anchor.map((item, index) => (
           <li
             key={index}
             data-anchor-index={item.index}
-            className={classnames('anchor-item', `${item.tagName}`, {
+            className={classnames(styles.anchorItem, `${item.tagName}`, {
               active: currentHeadingIndex === index,
             })}
           >

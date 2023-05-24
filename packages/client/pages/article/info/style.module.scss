@@ -1,0 +1,5 @@
+.markdownBody {
+  :global {
+    @import './md.theme.scss';
+  }
+}

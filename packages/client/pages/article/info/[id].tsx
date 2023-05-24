@@ -1,11 +1,12 @@
 import { ArticleAnchor } from '@/components/Article'
 import Comment from '@/components/Comment'
+import classnames from 'classnames'
 import dayjs from 'dayjs'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
 import markdownIt from 'markdown-it'
 import markdownItAnchor from 'markdown-it-anchor'
-import './md.theme.scss'
+import styles from './style.module.scss'
 
 export interface IArticleInfoProps {
   id: string
@@ -24,7 +25,7 @@ export default function ArticleInfo({ article }: { article: IArticleInfoProps })
   return (
     <div className="w-1000-center py-10">
       <div className="flex w-100%">
-        <div className="p-24 bg-#fff border-r-4 flex-1">
+        <div className="p-24 bg-#fff rd-4 flex-1">
           <div className="mb-6 lh-1.4 text-size-30 fw-700 color-#303030 ml-0 indent-0 break-all">
             {article.title}
           </div>
@@ -49,11 +50,12 @@ export default function ArticleInfo({ article }: { article: IArticleInfoProps })
             )}
           </div>
           <div
-            className="markdown-body"
+            className={classnames(styles.markdownBody, 'break-words lh-[1.75]')}
+            id="article-info-content"
             dangerouslySetInnerHTML={{ __html: article.content }}
           ></div>
         </div>
-        <ArticleAnchor />
+        <ArticleAnchor contentId="article-info-content" />
       </div>
       {article.comment_flag === 1 && <Comment articeId={article.id} />}
     </div>

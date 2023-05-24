@@ -1,6 +1,6 @@
 import classnames from 'classnames'
 import { useRouter } from 'next/router'
-import './style.scss'
+import styles from './style.module.scss'
 
 export interface IIMenuItem {
   name: string
@@ -40,7 +40,7 @@ export default function MenuPanel({ data = [] }: IMenuProps) {
     const renderMenuItem = (item, children = []) => (
       <li
         key={item.name}
-        className={classnames('menu-item cursor-pointer relative', {
+        className={classnames(styles.menuItem, 'cursor-pointer relative', {
           active: router.asPath === `/category${item.ename}` || router.asPath === item.url,
         })}
       >
@@ -52,7 +52,7 @@ export default function MenuPanel({ data = [] }: IMenuProps) {
           {item.name}
         </a>
         {children.length ? (
-          <ul className="block min-w-160 bg-#fff border-r-4">
+          <ul className="block min-w-160 bg-#fff rd-4">
             {children.map((child) => renderMenuItem(child, child.children))}
           </ul>
         ) : null}
@@ -77,7 +77,7 @@ export default function MenuPanel({ data = [] }: IMenuProps) {
   return (
     <div className="sticky top-50 w-200 max-h-450 mr-10 flex-shrink-0">
       {[defauluMenu.concat(data), otherMenu].map((group, index) => (
-        <ul key={index} className="bg-#fff p-10 mb-10 border-r-4 hidden">
+        <ul key={index} className="bg-#fff p-10 mb-10 rd-4 overflow-hidden">
           {renderMenu(group)}
         </ul>
       ))}

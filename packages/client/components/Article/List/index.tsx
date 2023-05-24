@@ -12,7 +12,7 @@ export default function List(props: IListProps) {
   const router = useRouter()
 
   return (
-    <div className="border-r-4 hidden">
+    <div className="rd-4 overflow-hidden">
       {result?.data?.map((article, index) => (
         <div key={index} className="bg-#fff border-bottom-1-solid-#eee p-20">
           <div className="flex items-center color-#98a6ad">
@@ -26,7 +26,7 @@ export default function List(props: IListProps) {
             {article.title}
           </a>
           <div
-            className="relative mb-6 color-#98a6ad max-h-90 hidden webkit-clamp-4  text-ellipsis break-all"
+            className="relative mb-6 color-#98a6ad max-h-90 overflow-hidden webkit-clamp-4  text-ellipsis break-all"
             dangerouslySetInnerHTML={{ __html: article.description }}
           ></div>
           <div className="flex items-center color-#98a6ad">

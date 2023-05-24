@@ -11,7 +11,7 @@ export default function Article({ categoryList, articleData }: IArticlePageProps
   return (
     <div className="w-1000-center flex">
       <ArticleMenu data={categoryList} />
-      <div className="w-1000 hidden">
+      <div className="w-1000 overflow-hidden">
         <ArticleCarousel />
         <ArticleList result={articleData} />
       </div>

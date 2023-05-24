@@ -8,7 +8,7 @@
     "start:prod": "NODE_ENV=production next start -p 4001",
     "start:pm2": "pm2 start pm2-app.json",
     "build": "next build",
-    "lint": "eslint . --ext .ts,.tsx"
+    "eslint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {
     "@fontsource/jetbrains-mono": "^5.0.0",
@@ -32,9 +32,9 @@
     "@typescript-eslint/eslint-plugin": "^5.59.6",
     "@typescript-eslint/parser": "^5.59.6",
     "@unocss/preset-rem-to-px": "^0.52.0",
+    "@unocss/preset-uno": "^0.52.3",
     "@unocss/preset-wind": "^0.52.0",
     "@unocss/webpack": "^0.52.0",
-    "babel-plugin-import": "^1.13.6",
     "cross-env": "^7.0.3",
     "eslint": "^8.41.0",
     "eslint-plugin-react": "^7.32.2",
