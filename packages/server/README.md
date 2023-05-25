@@ -1,31 +1,31 @@
 ## 安装
 
 ```bash
-$ npm install
+$ yarn
 ```
 
 ## 启动
 
 ```bash
 # 开发
-$ npm run start
+$ yarn start
 
 # 开发监听
-$ npm run dev
+$ yarn dev
 
 # 生产
-$ npm run start:prod
+$ yarn start:prod
 ```
 
 ## 测试
 
 ```bash
 # 单元测试
-$ npm run test
+$ yarn test
 
 # 端对端测试
-$ npm run test:e2e
+$ yarn test:e2e
 
 # 覆盖率
-$ npm run test:cov
+$ yarn test:cov
 ```

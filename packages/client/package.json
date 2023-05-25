@@ -5,9 +5,11 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "dev": "cross-env NODE_ENV=development next dev -p 4001",
+    "build": "next build",
+    "build:docker": "yarn build && docker build -t nest-blog-client .",
     "start:prod": "NODE_ENV=production next start -p 4001",
     "start:pm2": "pm2 start pm2-app.json",
-    "build": "next build",
+    "start:docker": "docker run --name nest-blog-client -p 4001:4001 nest-blog-client",
     "eslint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {

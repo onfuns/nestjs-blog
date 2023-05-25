@@ -1,23 +1,23 @@
 ## 安装
 
 ```bash
-npm install
+yarn
 ```
 
 ## 开发
 
 ```bash
-npm run dev
+yarn dev
 ```
 
 ## 构建
 
 ```bash
-npm run build
+yarn build
 ```
 
 ## 生产
 
 ```bash
-npm run start:prod
+yarn start:prod
 ```

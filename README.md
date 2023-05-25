@@ -42,9 +42,9 @@
 
 ```bash
 # 开发
-$ npm run dev
+$ yarn dev
 # 生产
-$ npm run start:prod
+$ yarn start:prod
 ```
 
 ## 构建
@@ -52,10 +52,7 @@ $ npm run start:prod
 可分别进入各子目录单独构建，也可以在项目根目录统一构建，如在根目录分别执行
 
 ```bash
-
-$ npm run build:admin
-$ npm run build:server
-$ npm run build:client
+$ yarn build
 ```
 
 ## 部署
@@ -63,9 +60,9 @@ $ npm run build:client
 上传 `dist` 目录到服务器，同时参考 `nginx.conf` 设置代理，或自己集成 `docker` 启动
 
 ```bash
-$ sudo npm install pm2 -g
-$ cd client && npm install --production && npm run start:prod
-$ cd server && npm install --production && npm run start:prod
+$ sudo yarn add pm2 -g
+$ cd client && yarn --production && yarn start:prod
+$ cd server && yarn --production && yarn start:prod
 ```
 
 ## 数据库配置
