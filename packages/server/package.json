@@ -13,8 +13,8 @@
     "start:pm2": "pm2 start pm2-app.json",
     "eslint": "eslint \"{src,test}/**/*.ts\" --fix",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "docker:build": "docker build -t nest-blog-server .",
-    "docker:run": "docker run --name nest-blog-server -p 4000:4000 nest-blog-server"
+    "docker:build": "docker build --no-cache -t nest-blog-server .",
+    "docker:run": "docker run --name nest-blog-server -p 4000:4000 -v /etc/.env.production:/usr/share/server-prod/.env.production nest-blog-server"
   },
   "dependencies": {
     "@nestjs/common": "^9.4.0",
