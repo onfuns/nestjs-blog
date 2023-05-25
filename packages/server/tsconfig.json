@@ -17,5 +17,5 @@
     "allowJs": true,
     "skipLibCheck": true
   },
-  "exclude": ["node_modules", "logs", "dist", "uploads"]
+  "exclude": ["node_modules", "dist", "logs", "uploads"]
 }

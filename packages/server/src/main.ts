@@ -1,4 +1,9 @@
-import Config from '@/config'
+/** 注意：环境变量设置放在入口顶部 */
+import * as dotenv from 'dotenv'
+import { join } from 'path'
+dotenv.config({ path: join(__dirname, `../.env.${process.env.NODE_ENV}`) })
+/** ------------------ */
+import config from '@/config'
 import { HttpExceptionFilter } from '@/filter/http.filter'
 import { HttpInterceptor } from '@/interceptor/http.interceptor'
 import { ValidationPipe } from '@/pipe/validation.pipe'
@@ -7,9 +12,7 @@ import { NestFactory } from '@nestjs/core'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import * as cookieParse from 'cookie-parser'
-import { join } from 'path'
 import { AppModule } from './app.module'
-import './env'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -19,19 +22,19 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter())
   app.useGlobalInterceptors(new HttpInterceptor())
   app.useGlobalPipes(new ValidationPipe())
-  app.setGlobalPrefix(Config.base)
+  app.setGlobalPrefix(config.base)
   app.enableCors()
   app.use(cookieParse())
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
     prefix: '/uploads/',
   })
 
-  const config = new DocumentBuilder()
+  const swaggerConfig = new DocumentBuilder()
     .setTitle('API')
     .setDescription('API description')
     .setVersion('1.0')
     .build()
-  const document = SwaggerModule.createDocument(app, config)
+  const document = SwaggerModule.createDocument(app, swaggerConfig)
   IS_DEV &&
     SwaggerModule.setup('swagger', app, document, {
       swaggerOptions: {
