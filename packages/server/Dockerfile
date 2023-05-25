@@ -12,9 +12,11 @@ COPY . .
 RUN yarn build
 
 # 生产
-FROM node:18.16-alpine AS release
-ARG RELEASE_DIR=/usr/share/server-release
-WORKDIR $RELEASE_DIR
+FROM node:18.16-alpine AS production
+
+ARG PROD_DIR=/usr/share/server-prod
+WORKDIR $PROD_DIR
+ENV NODE_ENV production
 
 COPY package.json .yarnrc .env.production ./
 # 复制构建结果到当前工作区

@@ -12,5 +12,5 @@ export const ProdConfig: IConfig = {
     entityPrefix: 'rs_',
     synchronize: false,
   },
-  jwtToken: process.env.JWT_TOKEN,
+  jwtToken: process.env.JWT_TOKEN || 'BLOG',
 }
