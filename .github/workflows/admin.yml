@@ -34,10 +34,10 @@ jobs:
           DEPLOY_KEY: ${{ secrets.ACCESS_TOKEN }}
           ARGS: -avz --delete --exclude='*.pyc'
           SERVER_PORT: '22'
-          FOLDER: ./packages/admin/dist
+          FOLDER: ./admin.tar.gz
           SERVER_IP: ${{ secrets.SSH_HOST }}
           USERNAME: ${{ secrets.SSH_USERNAME }}
-          SERVER_DESTINATION: /opt/nestjs-blog/admin
+          SERVER_DESTINATION: /opt/nestjs-blog/
 
       - name: 重启服务
         uses: appleboy/ssh-action@v0.1.10
