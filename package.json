@@ -5,7 +5,7 @@
   "description": "blog developed by nestjs",
   "scripts": {
     "build": "yarn workspaces run build",
-    "prepare": "husky install"
+    "prepare": "npx husky install"
   },
   "repository": {
     "type": "git",
