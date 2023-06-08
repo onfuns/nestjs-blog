@@ -1,0 +1,54 @@
+name: 后台构建部署
+
+on:
+  workflow_dispatch:
+    branches:
+      - feature/v2.0.0
+
+jobs:
+  admin-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./packages/admin
+
+    steps:
+      - name: 获取代码
+        uses: actions/checkout@v3
+
+      - name: 安装 Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmmirror.com'
+
+      - name: 安装依赖
+        run: npm install
+
+      - name: 构建
+        run: npm run build
+
+      - name: 压缩
+        run: tar -zcvf admin.tar.gz dist
+
+      - name: 部署服务
+        uses: AEnterprise/rsync-deploy@v1.0.2
+        env:
+          DEPLOY_KEY: ${{ secrets.ACCESS_TOKEN }}
+          ARGS: -avz --delete --exclude='*.pyc'
+          SERVER_PORT: '22'
+          FOLDER: ./packages/admin/dist
+          SERVER_IP: ${{ secrets.SSH_HOST }}
+          USERNAME: ${{ secrets.SSH_USERNAME }}
+          SERVER_DESTINATION: /opt/nestjs-blog/admin
+
+      - name: 重启服务
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.ACCESS_TOKEN }}
+          script: |
+            cd /opt/nestjs-blog
+            mv ./admin ./admin-bak
+            tar -xzvf admin.tar.gz

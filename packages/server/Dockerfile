@@ -13,7 +13,7 @@ FROM node:18.16-alpine AS production
 WORKDIR /usr/share/server-prod
 ENV NODE_ENV production
 
-COPY package.json .yarnrc  ./
+COPY package.json  ./
 # 复制构建产物
 #COPY --from=build /usr/share/server-build/dist ./dist
 COPY dist/ ./dist
