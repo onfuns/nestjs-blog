@@ -34,7 +34,7 @@ jobs:
           DEPLOY_KEY: ${{ secrets.ACCESS_TOKEN }}
           ARGS: -avz --delete --exclude='*.pyc'
           SERVER_PORT: '22'
-          FOLDER: ./admin.tar.gz
+          FOLDER: ./packages/admin/admin.tar.gz
           SERVER_IP: ${{ secrets.SSH_HOST }}
           USERNAME: ${{ secrets.SSH_USERNAME }}
           SERVER_DESTINATION: /opt/nestjs-blog/
