@@ -7,7 +7,7 @@
     "build:admin": "cd admin && npm run build && cross-env BUILD_TYPE=admin node ../build",
     "build:client": "cd client && npm run build && cross-env BUILD_TYPE=client node ../build",
     "build:server": "cd server && npm run build && cross-env BUILD_TYPE=server node ../build",
-    "prepare": "husky install"
+    "prepare": "npx husky install"
   },
   "repository": {
     "type": "git",
