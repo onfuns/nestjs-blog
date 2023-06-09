@@ -6,8 +6,6 @@
     "prebuild": "rimraf dist",
     "dev": "vite dev",
     "build": "vite build",
-    "build:docker": "yarn build && docker build -t nest-blog-admin .",
-    "start:docker": "docker run --name nest-blog-admin -p 4002:80 nest-blog-admin",
     "prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
     "eslint": "eslint \"src/**/*.{ts,tsx}\""
   },

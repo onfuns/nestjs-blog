@@ -1,18 +1,16 @@
 {
   "name": "nest-blog-server",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": "onfuns",
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build && cp package.json ./dist",
-    "build:docker": "yarn build && docker build -t nest-blog-server .",
     "prettier": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "NODE_ENV=production PORT=4000 node ./dist/main",
     "start:pm2": "pm2 start pm2.json",
-    "start:docker": "docker run --name nest-blog-server -p 4000:4000 -v /etc/.env.production:/usr/share/server-prod/.env.production nest-blog-server",
     "eslint": "eslint \"{src,test}/**/*.ts\" --fix",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },

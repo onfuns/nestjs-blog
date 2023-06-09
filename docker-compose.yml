@@ -1,0 +1,33 @@
+version: '3.6'
+services:
+  admin-serivce:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: admin-service
+    image: admin-service:latest
+    container_name: admin-service
+    ports:
+      - '8088:80'
+
+  client-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: client-service
+    image: client-service:latest
+    container_name: client-service
+    ports:
+      - '4001:4001'
+
+  server-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: server-service
+    image: server-service:latest
+    container_name: server-service
+    ports:
+      - '4000:4000'
+    volumes:
+      - /etc/.blog.server.production:/etc/.blog.server.production
