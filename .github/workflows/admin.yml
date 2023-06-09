@@ -25,7 +25,7 @@ jobs:
         run: npm run build
 
       - name: 压缩
-        run: tar -zcvf admin.tar.gz dist
+        run: tar -zcvf admin.tar.gz -C  dist .
 
       - name: 部署服务
         uses: AEnterprise/rsync-deploy@v1.0.2
@@ -36,7 +36,7 @@ jobs:
           FOLDER: ./packages/admin/admin.tar.gz
           SERVER_IP: ${{ secrets.SSH_HOST }}
           USERNAME: ${{ secrets.SSH_USERNAME }}
-          SERVER_DESTINATION: /opt/nestjs-blog/deploy/admin
+          SERVER_DESTINATION: /opt/nestjs-blog/deploy/
 
       - name: 重启服务
         uses: appleboy/ssh-action@v0.1.10
@@ -45,6 +45,6 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.ACCESS_TOKEN }}
           script: |
-            cd /opt/nestjs-blog/deploy/admin
+            cd /opt/nestjs-blog/deploy
             tar -xzvf admin.tar.gz
-            mv ./dist ../../admin
+            mv ./admin ../apps/admin
