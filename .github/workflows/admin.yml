@@ -46,5 +46,7 @@ jobs:
           key: ${{ secrets.ACCESS_TOKEN }}
           script: |
             cd /opt/nestjs-blog/deploy
-            tar -xzvf admin.tar.gz
-            mv ./admin ../apps/admin
+            mkdir -p ./admin
+            tar -xzvf admin.tar.gz -C ./admin
+            mkdir -p ../apps
+            mv -fn  ./admin ../apps/
