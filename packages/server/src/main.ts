@@ -1,7 +1,7 @@
 /** 注意：环境变量设置放在入口顶部 */
 import * as dotenv from 'dotenv'
 import { join } from 'path'
-dotenv.config({ path: join(__dirname, `../.env.${process.env.NODE_ENV}`) })
+dotenv.config({ path: `/etc/.blog.server.${process.env.NODE_ENV}` })
 /** ------------------ */
 import config from '@/config'
 import { HttpExceptionFilter } from '@/filter/http.filter'
