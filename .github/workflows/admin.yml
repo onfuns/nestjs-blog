@@ -17,7 +17,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          registry-url: 'https://registry.npmmirror.com'
 
       - name: 安装依赖
         run: npm install
@@ -37,7 +36,7 @@ jobs:
           FOLDER: ./packages/admin/admin.tar.gz
           SERVER_IP: ${{ secrets.SSH_HOST }}
           USERNAME: ${{ secrets.SSH_USERNAME }}
-          SERVER_DESTINATION: /opt/nestjs-blog/
+          SERVER_DESTINATION: /opt/nestjs-blog/deploy/admin
 
       - name: 重启服务
         uses: appleboy/ssh-action@v0.1.10
@@ -46,6 +45,6 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.ACCESS_TOKEN }}
           script: |
-            cd /opt/nestjs-blog
-            mv ./admin ./admin-bak
+            cd /opt/nestjs-blog/deploy/admin
             tar -xzvf admin.tar.gz
+            mv ./dist ../../admin
