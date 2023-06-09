@@ -8,7 +8,7 @@ const { publicRuntimeConfig = {} } = getConfig()
 type IResResult = { success: boolean; message: string; data: any }
 
 const onError = (data: IResResult) => {
-  message.error(data.message || '请求出错，请重试')
+  !isServer && message.error(data?.message || '请求出错，请重试')
   return Promise.reject(data)
 }
 
@@ -38,7 +38,7 @@ const request = async (
     }
     return data
   } catch ({ response }) {
-    return onError(response.data)
+    return onError(response?.data)
   }
 }
 

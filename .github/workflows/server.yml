@@ -1,12 +1,9 @@
 name: 服务端构建部署
 
-on:
-  workflow_dispatch:
-    branches:
-      - feature/v2.0.0
+on: workflow_dispatch
 
 jobs:
-  server-deploy:
+  deploy:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -20,7 +17,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          registry-url: 'https://registry.npmmirror.com'
 
       - name: 安装依赖
         run: npm install
@@ -28,16 +24,19 @@ jobs:
       - name: 构建
         run: npm run build
 
+      - name: 压缩
+        run: tar -zcvf server.tar.gz  dist package.json pm2.json
+
       - name: 部署服务
         uses: AEnterprise/rsync-deploy@v1.0.2
         env:
           DEPLOY_KEY: ${{ secrets.ACCESS_TOKEN }}
           ARGS: -avz --delete --exclude='*.pyc'
           SERVER_PORT: '22'
-          FOLDER: ./packages/server/dist
+          FOLDER: ./packages/server/server.tar.gz
           SERVER_IP: ${{ secrets.SSH_HOST }}
           USERNAME: ${{ secrets.SSH_USERNAME }}
-          SERVER_DESTINATION: /opt/nestjs-blog/server
+          SERVER_DESTINATION: /opt/nestjs-blog/deploy/
 
       - name: 重启服务
         uses: appleboy/ssh-action@v0.1.10
@@ -46,6 +45,11 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.ACCESS_TOKEN }}
           script: |
-            cd /opt/nestjs-blog/server
-            npm install --production
+            cd /opt/nestjs-blog/deploy
+            mkdir -p ./server
+            tar -xzvf server.tar.gz -C ./server
+            mkdir -p ../apps
+            mv -fn  ./server ../apps/
+            cd ../apps/server
+            npm install --omit=dev
             npm run start:pm2

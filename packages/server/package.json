@@ -11,7 +11,7 @@
     "dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "NODE_ENV=production PORT=4000 node ./dist/main",
-    "start:pm2": "pm2 start pm2-app.json",
+    "start:pm2": "pm2 start pm2.json",
     "start:docker": "docker run --name nest-blog-server -p 4000:4000 -v /etc/.env.production:/usr/share/server-prod/.env.production nest-blog-server",
     "eslint": "eslint \"{src,test}/**/*.ts\" --fix",
     "test:e2e": "jest --config ./test/jest-e2e.json"
