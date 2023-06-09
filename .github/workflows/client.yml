@@ -1,0 +1,55 @@
+name: 前台构建部署
+
+on: workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./packages/client
+
+    steps:
+      - name: 获取代码
+        uses: actions/checkout@v3
+
+      - name: 安装 Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 安装依赖
+        run: npm install
+
+      - name: 构建
+        run: npm run build
+
+      - name: 压缩
+        run: tar -zcvf client.tar.gz  dist next.config.js package.json pm2.json
+
+      - name: 部署服务
+        uses: AEnterprise/rsync-deploy@v1.0.2
+        env:
+          DEPLOY_KEY: ${{ secrets.ACCESS_TOKEN }}
+          ARGS: -avz --delete --exclude='*.pyc'
+          SERVER_PORT: '22'
+          FOLDER: ./packages/client/client.tar.gz
+          SERVER_IP: ${{ secrets.SSH_HOST }}
+          USERNAME: ${{ secrets.SSH_USERNAME }}
+          SERVER_DESTINATION: /opt/nestjs-blog/deploy/
+
+      - name: 重启服务
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.ACCESS_TOKEN }}
+          script: |
+            cd /opt/nestjs-blog/deploy
+            mkdir -p ./client
+            tar -xzvf client.tar.gz -C ./client
+            mkdir -p ../apps
+            mv -fn  ./client ../apps/
+            cd ../apps/client
+            npm install --omit=dev
+            npm run start:pm2
