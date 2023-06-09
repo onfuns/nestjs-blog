@@ -25,7 +25,7 @@ jobs:
         run: npm run build
 
       - name: 压缩
-        run: tar -zcvf client.tar.gz  dist next.config.js package.json pm2.json
+        run: tar -zcvf client.tar.gz dist public next.config.js package.json pm2.json
 
       - name: 部署服务
         uses: AEnterprise/rsync-deploy@v1.0.2

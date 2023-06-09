@@ -2,9 +2,9 @@
 
 ## 技术栈
 
-- **Server**： `NestJS + TypeORM + Mysql` + `TypeScript`
-- **Client**： `NextJS` + `React` + `Antd` + `Mobx` + `TypeScript`
-- **Admin**： `UmiJS` + `React` + `Antd` + `Mobx` + `TypeScript`
+- **Server**： `NestJS` + `TypeORM` + `Mysql` + `TypeScript`
+- **Client**： `NextJS` + `Antd` + `Mobx` + `TypeScript`
+- **Admin**： `Vite` + `React` + `Antd` + `Mobx` + `TypeScript`
 
 ## 预览
 
@@ -38,61 +38,116 @@
 
 ## 启动
 
-分别进入 `server`、`client`、`admin` 对应目录启动
+进入 `server`、`client`、`admin` 对应目录启动：
 
 ```bash
 # 开发
-$ yarn dev
+yarn dev
 # 生产
-$ yarn start:prod
+yarn start:prod
+# pm2 启动
+yarn start:pm2
 ```
 
 ## 构建
 
-可分别进入各子目录单独构建，也可以在项目根目录统一构建，如在根目录分别执行
+可分别进入各子目录单独构建，也可以在项目根目录统一构建，输出目录分别为各子目录中的 `dist`。
 
 ```bash
-$ yarn build
+yarn build
 ```
 
 ## 部署
 
-上传 `dist` 目录到服务器，同时参考 `nginx.conf` 设置代理，或自己集成 `docker` 启动
+新建数据库`nest_blog`，本地可以导入 `server` 中的初始化数据 `init.sql`，生产环境可以使用 `Navicat`数据迁移。
+
+生产环境基于 nginx 代理，参考 `nginx.conf` 设置。同时需要设置生产环境相关配置，新建配置文件：
 
 ```bash
-$ sudo yarn add pm2 -g
-$ cd client && yarn --production && yarn start:prod
-$ cd server && yarn --production && yarn start:prod
+cd /etc && touch .blog.server.production
 ```
 
-## 数据库配置
-
-新建数据库`nest_blog`，本地可以导入 `server` 中的初始化数据 `init.sql`。本地数据库默认配置 `server/src/config/dev.ts` 。生产环境在 `server`目录新建 `.env.production` 文件，按需更改
+写入以下数据库配置：
 
 ```bash
-DB_HOST = localhost
-DB_USER = xxxxxx
-DB_PASS = xxxxxx
-DB_DATABASE = nest_blog
-JWT_TOKEN = xxxxxxxxxxxx
+DB_HOST = localhost       # 主机
+DB_USER = root            # 用户
+DB_PASS = 123456          # 密码
+DB_DATABASE =  xxxxxxxx   # 数据库
 ```
 
-## 功能分类
+#### Github Action 模式
+
+参考根目录 `.github/workflows` 中配置，注意 `secrets.ACCESS_TOKEN` 为目标机器中的私钥，且目标机器支持密钥登录。
+
+目标机器 `ssh` 配置如下：
+
+```bash
+# 制作密钥，一直回车，默认生成在 ~/.ssh 目录
+ssh-keygen
+# 生产鉴权 key
+cd ~/.ssh
+cat id_rsa.pub >> authorized_keys
+chmod 600 authorized_keys
+```
+
+编辑 `/etc/ssh/sshd_config` 文件，如无则新增：
+
+```bash
+
+RSAAuthentication yes
+PubkeyAuthentication yes
+PermitRootLogin yes
+```
+
+重启 `ssh` 服务：
+
+```bash
+service sshd restart
+```
+
+注意：`Action` 模式依赖 `pm2` 启动，需要在部署机器上全局安装
+
+```bash
+sudo yarn global add pm2
+```
+
+#### 手动模式
+
+进入子目录压缩打包文件上传到服务器，然后再手动安装启动：
+
+```bash
+# admin
+tar -zcvf admin.tar.gz dist
+# clinet
+tar -zcvf client.tar.gz dist public next.config.js package.json pm2.json
+# server
+tar -zcvf server.tar.gz dist package.json pm2.json
+```
+
+解压参考：
+
+```bash
+mkdir -p ./server
+tar -xzvf server.tar.gz -C ./server
+```
+
+## 功能
 
 #### 后台功能
 
-- [x] 文章增删改查
-- [x] 分类增删改查
-- [x] 标签增删改查
-- [x] 评论增删改查
-- [x] 登录 token 校验
-- [x] 权限增删改查
-- [x] 用户增删改查
-- [x] 首页面板统计
+- [x] 文章管理
+- [x] 分类管理
+- [x] 标签管理
+- [x] 评论管理
+- [x] 登录鉴权
+- [x] 权限管理
+- [x] 用户管理
+- [x] 首页面板
 - [x] 权限校验
 
 #### 前台功能
 
-- [x] 文章展示
 - [x] 分类
+- [x] 文章
 - [x] 评论

@@ -9,8 +9,8 @@ export default function Header() {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <meta name="description" content="node博客系统" />
         <meta name="keywords" content="node博客,nodejs博客,博客搭建" />
-        <link rel="shortcut icon" href="/image/logo.png" />
-        <Script src="/plugin/analysis.js" defer />
+        <link rel="shortcut icon" href="/images/logo.png" />
+        <Script src="/plugins/analysis.js" defer />
         <title>Nest-Blog演示系统</title>
       </Head>
       <div className="w-1000-center flex items-center justify-between">

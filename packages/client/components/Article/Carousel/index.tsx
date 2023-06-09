@@ -4,7 +4,7 @@ export default function Carousel() {
   const carouselList = [
     {
       url: 'https://hao.onfuns.com/',
-      img: '/image/demo-1.png',
+      img: '/images/demo-1.png',
     },
   ]
   return (
