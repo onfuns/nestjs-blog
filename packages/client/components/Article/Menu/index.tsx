@@ -1,4 +1,5 @@
 import classnames from 'classnames'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import styles from './style.module.scss'
 
@@ -27,7 +28,8 @@ export default function MenuPanel({ data = [] }: IMenuProps) {
 
   const renderIcon = ({ icon, icon_color }) => {
     if (!icon) return null
-    if (/^https?/.test(icon)) return <img className="w-16 h16 mr-8" />
+    if (/^https?/.test(icon))
+      return <Image className="mr-8" src={icon} width={16} height={16} alt="" />
     return (
       <i
         className={`iconfont ${icon} inline-block vertical-mid mr-8`}

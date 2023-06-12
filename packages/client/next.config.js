@@ -9,11 +9,7 @@ const nextConfig = {
     BACKEND_URL: BACKEND_URL,
   },
   webpack: (config, context) => {
-    config.plugins.push(
-      require('@unocss/webpack').default({
-        presets: [require('@unocss/preset-uno').default()],
-      }),
-    )
+    config.plugins.push(require('@unocss/webpack').default())
     if (context.buildId !== 'development') {
       config.cache = false
     }

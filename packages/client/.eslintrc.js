@@ -5,6 +5,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:@next/next/recommended',
   ],
   env: {
     node: true,
@@ -18,6 +19,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
+    warnOnUnsupportedTypeScriptVersion: false,
   },
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',

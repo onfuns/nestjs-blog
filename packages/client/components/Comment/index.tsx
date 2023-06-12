@@ -3,8 +3,13 @@ import { Button, Col, Form, Input, message, Row } from 'antd'
 import classnames from 'classnames'
 import dayjs from 'dayjs'
 import { observer } from 'mobx-react'
+import Image from 'next/image'
 import { useEffect } from 'react'
 import styles from './style.module.scss'
+
+const Avatar = () => (
+  <Image className="mr-16  border-r-50%" src="/images/avatar.png" width={40} height={40} alt="" />
+)
 
 export default observer(({ articeId }: { articeId: string }) => {
   const { commentStore } = useStore()
@@ -31,7 +36,7 @@ export default observer(({ articeId }: { articeId: string }) => {
     <div className={classnames(styles.commentPage, ' w-720 bg-#fff p-20 mt-20 rd-4')}>
       <div className="text-size-18 lh-30 fw-600 color-#252933 mb-10">评论</div>
       <div className="flex items-start">
-        <img className="mr-16 w-40 h-40 border-r-50%" src="/images/avatar.png" />
+        <Avatar />
         <Form className="flex-[1-1-auto] relative" form={form}>
           <Row gutter={16}>
             <Col span={12}>
@@ -70,7 +75,7 @@ export default observer(({ articeId }: { articeId: string }) => {
           <div>
             {data?.map((item, index) => (
               <div className="flex color-#515767 py-10" key={index}>
-                <img className="mr-16 w-40 h-40 border-r-50%" src="/images/avatar.png" />
+                <Avatar />
                 <div className="flex-1">
                   <div className="flex items-center justify-between  mb-10">
                     <a

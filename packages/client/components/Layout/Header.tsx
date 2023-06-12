@@ -10,9 +10,9 @@ export default function Header() {
         <meta name="description" content="node博客系统" />
         <meta name="keywords" content="node博客,nodejs博客,博客搭建" />
         <link rel="shortcut icon" href="/images/logo.png" />
-        <Script src="/plugins/analysis.js" defer />
         <title>Nest-Blog演示系统</title>
       </Head>
+      <Script src="/plugins/analysis.js" defer />
       <div className="w-1000-center flex items-center justify-between">
         <a href="/" className="text-size-18 font-comic">
           Nest-Blog
